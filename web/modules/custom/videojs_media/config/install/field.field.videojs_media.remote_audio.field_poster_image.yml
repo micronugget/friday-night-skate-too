@@ -1,0 +1,40 @@
+uuid: e3f9c530-54d1-48cf-9336-6dee492a3941
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_poster_image
+    - videojs_media.type.remote_audio
+  module:
+    - image
+_core:
+  default_config_hash: P5BeDr2d-li6oOI4cJGQInA_OqMx8yKGWQZvaTcy6cY
+id: videojs_media.remote_audio.field_poster_image
+field_name: field_poster_image
+entity_type: videojs_media
+bundle: remote_audio
+label: 'Poster Image'
+description: 'Optional image displayed with audio player.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: videojs_media/poster
+  file_extensions: 'png gif jpg jpeg webp'
+  max_filesize: ''
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  handler: 'default:file'
+  handler_settings: {  }
+  default_image:
+    uuid: null
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

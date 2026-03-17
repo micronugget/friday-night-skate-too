@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_archive
+id: moderator
+label: Moderator
+weight: 5
+is_admin: false
+permissions:
+  - 'access content'
+  - 'access content overview'
+  - 'view own unpublished content'
+  - 'view any unpublished content'
+  - 'create archive_media content'
+  - 'edit own archive_media content'
+  - 'edit any archive_media content'
+  - 'delete own archive_media content'
+  - 'delete any archive_media content'
+  - 'view archive_media revisions'
+  - 'revert archive_media revisions'
+  - 'delete archive_media revisions'
+  - 'view latest version'
+  - 'view all revisions'
+  - 'use archive_review transition publish'
+  - 'use archive_review transition send_back_to_draft'
+  - 'use archive_review transition archive'
+  - 'use archive_review transition restore'
+  - 'use archive_review transition create_new_draft'
+  - 'use archive_review transition submit_for_review'

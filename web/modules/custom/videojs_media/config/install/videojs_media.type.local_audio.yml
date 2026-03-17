@@ -1,0 +1,12 @@
+uuid: 2d871a16-bcc1-498b-abbd-745e317990e9
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - videojs_media
+_core:
+  default_config_hash: o6fNKXgsVllHebd_WdcsUChAYwn-B5-01ZC15jGJRuA
+id: local_audio
+label: 'Local Audio'
+description: 'Audio file hosted locally on your server.'

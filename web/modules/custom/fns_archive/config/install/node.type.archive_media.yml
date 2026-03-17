@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_archive
+  module:
+    - menu_ui
+third_party_settings:
+  content_moderation:
+    enabled: true
+    allowed_moderation_states:
+      - draft
+      - review
+      - published
+      - archived
+    default_moderation_state: draft
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Archive Media'
+type: archive_media
+description: 'Content type for Friday Night Skate archive media including images and videos with metadata.'
+help: 'Upload and organize images and videos from Friday Night Skate sessions. Media will be tagged with skate date, GPS coordinates, and other metadata.'
+new_revision: true
+preview_mode: 1
+display_submitted: true

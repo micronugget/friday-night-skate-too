@@ -1,0 +1,15 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "git remote": true,
+        "gh": true,
+        "true": true,
+        "ddev": true,
+        "git checkout": true,
+        "git add": true,
+        "git commit": true,
+        "git push": true,
+        "mkdir": true,
+        "rsync": true,
+        "mv": true
+    }
+}

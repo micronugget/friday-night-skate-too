@@ -1,0 +1,15 @@
+# VideoJS Media menu links.
+
+videojs_media.admin:
+  title: 'VideoJS Media'
+  description: 'Manage VideoJS Media content entities. These are reusable media items that can be referenced from nodes and other content types using Entity Reference fields.'
+  route_name: entity.videojs_media.collection
+  parent: system.admin_content
+  weight: 15
+
+videojs_media.types:
+  title: 'VideoJS Media types'
+  description: 'Manage VideoJS Media entity types (bundles). Configure fields, form displays, and view modes for each media type.'
+  route_name: entity.videojs_media_type.collection
+  parent: system.admin_structure
+  weight: 10

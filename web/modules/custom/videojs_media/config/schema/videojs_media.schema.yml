@@ -1,0 +1,31 @@
+# Schema for the VideoJS Media module configuration.
+
+videojs_media.type.*:
+  type: config_entity
+  label: 'VideoJS Media type'
+  mapping:
+    id:
+      type: machine_name
+      label: 'Machine-readable name'
+    label:
+      type: required_label
+      label: 'Label'
+    description:
+      type: text
+      label: 'Description'
+      nullable: true
+
+block.settings.videojs_media:
+  type: block_settings
+  label: 'VideoJS Media block settings'
+  mapping:
+    videojs_media_id:
+      type: integer
+      label: 'VideoJS Media entity ID'
+      nullable: true
+    view_mode:
+      type: string
+      label: 'View mode'
+    hide_title:
+      type: boolean
+      label: 'Hide title'

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - fns_archive
+id: archive_media_pattern
+label: 'Archive Media'
+type: 'canonical_entities:node'
+pattern: '/archive/[node:field_skate_date:entity:name]/[node:nid]'
+selection_criteria:
+  d4a5b9ea-05b3-4e88-89c6-7e1e91f006b7:
+    id: 'entity_bundle:node'
+    bundles:
+      archive_media: archive_media
+    negate: false
+    context_mapping:
+      node: node
+    uuid: d4a5b9ea-05b3-4e88-89c6-7e1e91f006b7
+selection_logic: and
+weight: -5
+relationships: {  }

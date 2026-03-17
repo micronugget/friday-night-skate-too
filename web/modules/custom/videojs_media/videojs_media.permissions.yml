@@ -1,0 +1,155 @@
+# Administrative permissions
+administer videojs media:
+  title: 'Administer VideoJS Media'
+  description: 'Full administrative access to VideoJS Media entities and types.'
+  restrict access: true
+
+administer videojs media types:
+  title: 'Administer VideoJS Media types'
+  description: 'Create, edit, and delete VideoJS Media types (bundles).'
+  restrict access: true
+
+# Local Video permissions
+create local_video videojs media:
+  title: 'Create Local Video VideoJS media'
+  description: 'Create new local video VideoJS media items.'
+
+edit own local_video videojs media:
+  title: 'Edit own Local Video VideoJS media'
+  description: 'Edit own local video VideoJS media items.'
+
+edit any local_video videojs media:
+  title: 'Edit any Local Video VideoJS media'
+  description: 'Edit any local video VideoJS media items.'
+
+delete own local_video videojs media:
+  title: 'Delete own Local Video VideoJS media'
+  description: 'Delete own local video VideoJS media items.'
+
+delete any local_video videojs media:
+  title: 'Delete any Local Video VideoJS media'
+  description: 'Delete any local video VideoJS media items.'
+
+view local_video videojs media:
+  title: 'View published Local Video VideoJS media'
+  description: 'View published local video VideoJS media items.'
+
+view unpublished local_video videojs media:
+  title: 'View unpublished Local Video VideoJS media'
+  description: 'View unpublished local video VideoJS media items.'
+
+# Local Audio permissions
+create local_audio videojs media:
+  title: 'Create Local Audio VideoJS media'
+  description: 'Create new local audio VideoJS media items.'
+
+edit own local_audio videojs media:
+  title: 'Edit own Local Audio VideoJS media'
+  description: 'Edit own local audio VideoJS media items.'
+
+edit any local_audio videojs media:
+  title: 'Edit any Local Audio VideoJS media'
+  description: 'Edit any local audio VideoJS media items.'
+
+delete own local_audio videojs media:
+  title: 'Delete own Local Audio VideoJS media'
+  description: 'Delete own local audio VideoJS media items.'
+
+delete any local_audio videojs media:
+  title: 'Delete any Local Audio VideoJS media'
+  description: 'Delete any local audio VideoJS media items.'
+
+view local_audio videojs media:
+  title: 'View published Local Audio VideoJS media'
+  description: 'View published local audio VideoJS media items.'
+
+view unpublished local_audio videojs media:
+  title: 'View unpublished Local Audio VideoJS media'
+  description: 'View unpublished local audio VideoJS media items.'
+
+# Remote Video permissions
+create remote_video videojs media:
+  title: 'Create Remote Video VideoJS media'
+  description: 'Create new remote video VideoJS media items.'
+
+edit own remote_video videojs media:
+  title: 'Edit own Remote Video VideoJS media'
+  description: 'Edit own remote video VideoJS media items.'
+
+edit any remote_video videojs media:
+  title: 'Edit any Remote Video VideoJS media'
+  description: 'Edit any remote video VideoJS media items.'
+
+delete own remote_video videojs media:
+  title: 'Delete own Remote Video VideoJS media'
+  description: 'Delete own remote video VideoJS media items.'
+
+delete any remote_video videojs media:
+  title: 'Delete any Remote Video VideoJS media'
+  description: 'Delete any remote video VideoJS media items.'
+
+view remote_video videojs media:
+  title: 'View published Remote Video VideoJS media'
+  description: 'View published remote video VideoJS media items.'
+
+view unpublished remote_video videojs media:
+  title: 'View unpublished Remote Video VideoJS media'
+  description: 'View unpublished remote video VideoJS media items.'
+
+# Remote Audio permissions
+create remote_audio videojs media:
+  title: 'Create Remote Audio VideoJS media'
+  description: 'Create new remote audio VideoJS media items.'
+
+edit own remote_audio videojs media:
+  title: 'Edit own Remote Audio VideoJS media'
+  description: 'Edit own remote audio VideoJS media items.'
+
+edit any remote_audio videojs media:
+  title: 'Edit any Remote Audio VideoJS media'
+  description: 'Edit any remote audio VideoJS media items.'
+
+delete own remote_audio videojs media:
+  title: 'Delete own Remote Audio VideoJS media'
+  description: 'Delete own remote audio VideoJS media items.'
+
+delete any remote_audio videojs media:
+  title: 'Delete any Remote Audio VideoJS media'
+  description: 'Delete any remote audio VideoJS media items.'
+
+view remote_audio videojs media:
+  title: 'View published Remote Audio VideoJS media'
+  description: 'View published remote audio VideoJS media items.'
+
+view unpublished remote_audio videojs media:
+  title: 'View unpublished Remote Audio VideoJS media'
+  description: 'View unpublished remote audio VideoJS media items.'
+
+# YouTube permissions
+create youtube videojs media:
+  title: 'Create YouTube VideoJS media'
+  description: 'Create new YouTube VideoJS media items.'
+
+edit own youtube videojs media:
+  title: 'Edit own YouTube VideoJS media'
+  description: 'Edit own YouTube VideoJS media items.'
+
+edit any youtube videojs media:
+  title: 'Edit any YouTube VideoJS media'
+  description: 'Edit any YouTube VideoJS media items.'
+
+delete own youtube videojs media:
+  title: 'Delete own YouTube VideoJS media'
+  description: 'Delete own YouTube VideoJS media items.'
+
+delete any youtube videojs media:
+  title: 'Delete any YouTube VideoJS media'
+  description: 'Delete any YouTube VideoJS media items.'
+
+view youtube videojs media:
+  title: 'View published YouTube VideoJS media'
+  description: 'View published YouTube VideoJS media items.'
+
+view unpublished youtube videojs media:
+  title: 'View unpublished YouTube VideoJS media'
+  description: 'View unpublished YouTube VideoJS media items.'

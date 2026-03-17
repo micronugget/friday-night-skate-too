@@ -1,0 +1,49 @@
+uuid: 1208a387-4f09-4545-ae07-da96bd622764
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.videojs_media.remote_audio.field_poster_image
+    - field.field.videojs_media.remote_audio.field_remote_url
+    - field.field.videojs_media.remote_audio.field_subtitle
+    - videojs_media.type.remote_audio
+  module:
+    - file
+_core:
+  default_config_hash: aPqM8crU5X9nRRhSVdYU7NXk9XTmTGT31C7P4vNfVg8
+id: videojs_media.remote_audio.default
+targetEntityType: videojs_media
+bundle: remote_audio
+mode: default
+content:
+  field_poster_image:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_remote_url:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_subtitle:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden:
+  created: true
+  name: true
+  uid: true

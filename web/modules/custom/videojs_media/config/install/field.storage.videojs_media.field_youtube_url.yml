@@ -1,0 +1,23 @@
+uuid: e7082365-36b6-4024-8a55-db27b5b1d6a0
+langcode: en
+status: true
+dependencies:
+  module:
+    - videojs_media
+_core:
+  default_config_hash: 8QU3ZSd2ROzk4AYKxtdCshSbQcQ83FLvYs8YLvyrBpg
+id: videojs_media.field_youtube_url
+field_name: field_youtube_url
+entity_type: videojs_media
+type: string
+settings:
+  max_length: 2048
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

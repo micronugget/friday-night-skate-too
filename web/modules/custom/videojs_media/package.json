@@ -1,0 +1,31 @@
+{
+  "name": "videojs_mediablock",
+  "version": "2.4.2",
+  "type": "module",
+  "description": "The VideoJS Media block module is an ADA/508 compliant media player that works well with the Media, Media Library, and Layout Builder modules in Drupal core.",
+  "author": "",
+  "license": "GNU General Public License, version 2",
+  "dependencies": {
+    "@videojs/http-streaming": "^3.0.0",
+    "@videojs/themes": "^1.0.1",
+    "npm": "^11.7.0",
+    "video.js": "^8.1.0",
+    "videojs-hotkeys": "^0.2.30",
+    "videojs-mobile-ui": "^1.1.1",
+    "videojs-youtube": "^3.0.1"
+  },
+  "devDependencies": {
+    "@eslint/css": "^0.10.0",
+    "@eslint/js": "^9.33.0",
+    "@eslint/json": "^0.13.1",
+    "@eslint/markdown": "^7.1.0",
+    "eslint": "^9.33.0",
+    "globals": "^16.3.0",
+    "typescript-eslint": "^8.39.1"
+  },
+  "overrides": {
+    "nth-check": ">=2.1.1",
+    "postcss": ">=8.5.6",
+    "css-select": ">=6.0.0"
+  }
+}

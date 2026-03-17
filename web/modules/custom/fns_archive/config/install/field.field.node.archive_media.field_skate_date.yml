@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_skate_date
+    - node.type.archive_media
+    - taxonomy.vocabulary.skate_dates
+  module:
+    - taxonomy
+id: node.archive_media.field_skate_date
+field_name: field_skate_date
+entity_type: node
+bundle: archive_media
+label: 'Skate Date'
+description: 'Select the Friday Night Skate session date for this media. Format: YYYY-MM-DD - Location/Description'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      skate_dates: skate_dates
+    sort:
+      field: name
+      direction: DESC
+    auto_create: false
+field_type: entity_reference

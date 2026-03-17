@@ -1,0 +1,51 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Player
+status: experimental
+description: 'The VideoJS Media module is an ADA/508 compliant, Responsive media player with support for local, remote, and YouTube video/audio.'
+group: Media player
+libraryOverrides:
+  dependencies:
+    - core/drupal
+    - core/once
+  css:
+    theme:
+      ../../node_modules/video.js/dist/video-js.css: {}
+      ../../node_modules/videojs-mobile-ui/dist/videojs-mobile-ui.css: {}
+  js:
+    ../../node_modules/video.js/dist/video.js: {}
+    ../../node_modules/@videojs/http-streaming/dist/videojs-http-streaming.js: {}
+    ../../node_modules/videojs-youtube/dist/Youtube.js: {}
+    ../../node_modules/videojs-hotkeys/videojs.hotkeys.min.js: {}
+    ../../node_modules/videojs-mobile-ui/dist/videojs-mobile-ui.js: {}
+    ./player.js: {}
+props:
+  type: object
+  required:
+    - entity_type
+    - bundle
+  properties:
+    entity_type:
+      type: string
+      title: Entity type
+    bundle:
+      type: string
+      title: Bundle type
+    field_media_file:
+      type: [string, 'null']
+      title: Media file reference
+    field_remote_url:
+      type: [string, 'null']
+      title: Remote URL
+    field_youtube_url:
+      type: [string, 'null']
+      title: YouTube URL
+    field_poster_image:
+      type: [string, 'null']
+      title: Poster image
+    field_subtitle:
+      type: [string, 'null']
+      title: Subtitle/caption files
+    enable_viewport_monitoring:
+      type: boolean
+      title: Enable auto-pause when scrolled out of view
+      default: false
