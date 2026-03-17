@@ -1,31 +1,35 @@
 ---
-name: Guidance — AI Agent Team Operational Framework
-description: Operational framework and handoff protocols for the AI agent team. Defines agent responsibilities, success metrics, and coordination procedures for this Drupal CMS project.
+name: Agent Team Guidance
+description: Operational framework and handoff protocols for the AI agent team. Defines agent responsibilities, success metrics, and coordination procedures.
 tags: [guidance, workflow, coordination, handoff, team]
 version: 1.0.0
 ---
 
 # Guidance: AI Agent Team Operational Framework
 
-This document provides the operational framework for the AI agent team working on this Drupal CMS project.
+This document provides the operational framework for the AI agent team working on this project.
 
 ## 1. Agent Team Overview
 
+**⚠️ Customize based on your project's available agents**
+
 Reference `.github/AGENT_DIRECTORY.md` for the complete list of available agents and their specializations.
 
-### Agent Roles & Success Metrics
+### Common Agent Roles & Success Metrics
 
 | Agent | Primary Output | Success Metric |
 | :--- | :--- | :--- |
 | **Architect** | Task assignments, workflows, architecture decisions | Project cohesion, feature completion |
-| **Drupal Developer** | Modules, themes, recipes, Drush commands | Code quality, Drupal standards compliance |
-| **Tester** | Test reports, PHPCS results, PHPUnit output | Zero regressions, coding standards pass |
+| **Developer** | Application code, features, integrations | Code quality, test coverage |
+| **Themer/Frontend Dev** | UI components, styles, templates | Performance, UX quality |
+| **UX/UI Designer** | Design specs, prototypes, design system | Visual quality, accessibility |
+| **Tester** | Test reports, bug logs, QA approval | Regression rate, test coverage |
 | **Technical Writer** | Documentation, guides, changelog | Documentation accuracy |
 | **Database Administrator** | Schema optimization, backup procedures | Query performance, data integrity |
-| **Performance Engineer** | Performance audits, caching config | Page load times, Core Web Vitals |
-| **Security Specialist** | Security audits, code reviews | Security posture, compliance |
-| **Environment Manager** | DDEV config, CI/CD pipelines | Environment parity |
-| **UX/UI Designer** | Design specs, frontend components | Visual quality, accessibility |
+| **Performance Engineer** | Performance audits, caching config | Core Web Vitals, load times |
+| **Security Specialist** | Security audits, vulnerability reports | Security posture, compliance |
+| **Environment Manager** | Environment config, CI/CD pipelines | Environment parity |
+| **Provisioner/Deployer** | Deployment procedures, rollback plans | Deployment success rate |
 
 ## 2. Terminal Command Best Practices (ALL AGENTS)
 
@@ -44,72 +48,164 @@ See `.github/copilot-terminal-guide.md` and `.github/TERMINAL_QUICK_REF.md` for 
 | **5. Limit Verbose Output** | `cmd \| head -50` | Prevent buffer overflow |
 
 ### Standard Command Pattern
+
+All agents should use this pattern:
+
 ```bash
 echo "=== [Operation Description] ===" && \
-ddev drush <command> 2>&1 | head -50 && \
+command --with-options 2>&1 && \
 EXIT_CODE=$? && \
-echo "=== Exit Code: $EXIT_CODE ==="
+echo "=== Exit Code: $EXIT_CODE ===" && \
+verification-command | grep "expected-output"
 ```
 
-## 3. Project-Specific Conventions
+### Agent-Specific Applications
 
-### Drupal Coding Standards (DO NOT violate)
-- All PHP code must pass `vendor/bin/phpcs --standard=Drupal,DrupalPractice`
-- Use FQCN for service calls
-- PHPDoc blocks on all classes, methods, and properties
-- Never hack core
+- **Developer Agents:** Use for dependency installs, builds, database operations
+- **Tester Agent:** Use for all test runs, coverage reports, lint checks
+- **Environment Manager:** Use for all environment operations (already implemented)
+- **Provisioner/Deployer:** Use for deployments, health checks, SSH operations
+- **Performance Engineer:** Use for benchmarks, load tests, profiling
+- **Security Specialist:** Use for security scans, vulnerability checks
 
-### Config Management
+### Handoff Requirement
+
+When handing off work that involved terminal commands, include:
+```markdown
+**Commands Executed:**
+\```bash
+echo "=== Operation ===" && command 2>&1 && echo "=== Done: $? ==="
+\```
+
+**Output Verified:** ✓ Exit code 0, expected output confirmed
+```
+
+## 3. Handoff Protocol System
+
+### Standard Handoff Document
+Every agent-to-agent transition must include:
+
+```markdown
+## [Agent] Handoff: [TASK-ID]
+**Status:** Complete / Blocked / Needs Work
+**Changes Made:**
+- [File/Component]: [Description]
+**Test Commands:**
+- `ddev [command]`
+**Validation:**
+- [ ] Tests pass
+- [ ] Standards met
+**Next Steps:** [For receiving agent]
+**Blockers:** [If any]
+```
+
+### Workflow Patterns
+
+#### Feature Development (Standard)
+```
+┌──────────┐    ┌────────────────┐    ┌────────┐    ┌──────────────────┐    ┌──────────┐
+│ Architect│───▶│Drupal Developer│───▶│ Tester │───▶│ Technical Writer │───▶│ Architect│
+└──────────┘    └────────────────┘    └────────┘    └──────────────────┘    └──────────┘
+    Task           Implementation       Testing        Documentation         Review
+  Assignment                                                                  & Merge
+```
+
+#### Media Feature (Friday Night Skate Specific)
+```
+┌──────────┐    ┌───────────┐    ┌────────────────┐    ┌────────┐    ┌────────┐    ┌──────────┐
+│ Architect│───▶│ Media Dev │───▶│Drupal Developer│───▶│ Themer │───▶│ Tester │───▶│ Architect│
+└──────────┘    └───────────┘    └────────────────┘    └────────┘    └────────┘    └──────────┘
+    Task          GPS/Media          Entity/Field        Display      Testing       Review
+  Assignment     Extraction          Integration         Layer
+```
+
+#### Frontend/Theme Development
+```
+┌──────────┐    ┌───────────────┐    ┌────────┐    ┌────────────────┐    ┌────────┐    ┌──────────┐
+│ Architect│───▶│ UX/UI Designer│───▶│ Themer │───▶│Drupal Developer│───▶│ Tester │───▶│ Architect│
+└──────────┘    └───────────────┘    └────────┘    └────────────────┘    └────────┘    └──────────┘
+    Task           Design Spec       Implementation    Twig/Preprocess    Testing       Review
+  Assignment                                                                            & Merge
+```
+
+## 3. DDEV Command Requirements
+
+**CRITICAL:** All CLI commands MUST use DDEV prefix.
+
 ```bash
-# ✅ CORRECT — export config to code before committing
-ddev drush cex -y
+# ✅ Correct
+ddev drush cr
+ddev composer require drupal/module
+ddev phpunit
+ddev phpstan analyze
 
-# ❌ WRONG — never leave config changes only in the database
-# (always export with drush cex)
-```
-
-### Recipe Structure
-```yaml
-# ✅ CORRECT — valid recipe.yml
-name: 'My Recipe'
-description: 'What this recipe does'
-type: 'Recipe'
-install:
-  - my_module
+# ❌ Wrong
+drush cr
+composer require drupal/module
+phpunit
+phpstan analyze
 ```
 
-## 4. Handoff Protocol
+## 4. Validation Checkpoints
 
-When one agent completes work, they should:
-1. Document what was done (files modified, logic changed)
-2. Specify what still needs to be done
-3. Identify the next agent in the workflow
-4. Provide context for the next agent
-5. Include test results or validation commands run
+### Before PR/Merge
+- [ ] `ddev phpunit` passes
+- [ ] `ddev phpstan` passes (level max)
+- [ ] `ddev exec phpcs --standard=Drupal` passes
+- [ ] `ddev drush cex` executed and config committed
+- [ ] Security review (if user-facing)
+- [ ] Documentation updated
 
-## 5. Standard Workflows
+### Git Hygiene
+- One feature per branch
+- Conventional commits: `feat:`, `fix:`, `refactor:`, `docs:`, `test:`
+- Config changes always committed with code
 
-### Module/Recipe Development
-```
-Architect → Drupal Developer → Tester → Technical Writer → Architect (Review)
-```
+## 5. Project-Specific Considerations
 
-### New Recipe Creation
-```
-Architect → Drupal Developer (recipe) → Tester (phpcs/phpunit) → Architect
-```
+### Media Workflow (GPS Preservation)
+1. User uploads file → stored in `private://`
+2. **Media Dev** extracts GPS via ffprobe/exif BEFORE external upload
+3. GPS data stored in Drupal fields
+4. File may be transferred to YouTube (metadata already preserved)
+5. Public view shows location data from Drupal, not from media file
 
-### Security Change
-```
-Architect → Security Specialist (review) → Drupal Developer (implement) → Tester → Security Specialist (validate)
-```
+### OpenLiteSpeed Compatibility
+- `.htaccess` rules need OLS context configuration
+- Test rewrite rules specifically for OLS
+- Document any Apache-specific features that need adaptation
 
-### Performance Optimization
-```
-Architect → Performance Engineer → Drupal Developer → Tester → Architect (Review)
-```
+### Responsive Images
+- Bootstrap 5 breakpoints: xs, sm, md, lg, xl, xxl
+- WebP as default format
+- Lazy loading for below-fold content
+- Masonry.js with imagesLoaded for proper layout
 
-### Documentation Update
-```
-Drupal Developer (change) → Technical Writer (update docs) → Architect (review)
-```
+## 6. Agent Communication Quick Reference
+
+| Need Help With... | Contact |
+|------------------|---------|
+| Architecture/Planning | @architect |
+| PHP/Drupal Code | @drupal-developer |
+| Media/GPS/Video | @media-dev |
+| Frontend/SCSS/JS | @themer |
+| Design/UX | @ux-ui-designer |
+| Testing/QA | @tester |
+| Documentation | @technical-writer |
+| Database/Queries | @database-administrator |
+| Performance | @performance-engineer |
+| Security | @security-specialist |
+| DDEV/Environment | @environment-manager |
+| Deployment | @provisioner-deployer |
+
+## 7. Iterative Improvement
+
+### Feedback Loops
+- When Tester finds recurring bug patterns → update Developer's guiding principles
+- When Performance issues found → update relevant agent constraints
+- When Handoff confusion occurs → clarify protocol in this guidance doc
+
+### Agent File Versioning
+- Agent `.md` files are version-controlled
+- Changes require PR review
+- Keep aligned with project complexity

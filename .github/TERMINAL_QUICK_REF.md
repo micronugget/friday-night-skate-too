@@ -14,56 +14,61 @@
 
 ## 📋 Copy-Paste Patterns
 
-### Composer Install
+**Note:** Adapt these patterns to your project's specific tools (Docker, DDEV, npm, etc.)
+
+### Start Development Environment
 ```bash
-echo "=== Composer Install ===" && \
-composer install 2>&1 | tail -20 && \
-echo "=== Exit: $? ==="
+echo "=== Starting Environment ===" && \
+dev-start-command 2>&1 && \
+echo "=== Status ===" && \
+dev-status-command | grep -E "STATUS|RUNNING"
 ```
 
-### Drush Cache Rebuild
+### Run Application Command
 ```bash
-echo "=== Cache Rebuild ===" && \
-ddev drush cr 2>&1 && \
-echo "=== Exit: $? ==="
+echo "=== Running: COMMAND ===" && \
+app-command --option 2>&1 && \
+echo "=== Exit Code: $? ==="
 ```
 
-### Drush Config Import
+### Install Package
 ```bash
-echo "=== Config Import ===" && \
-ddev drush cim -y 2>&1 && \
-echo "=== Exit: $? ==="
+echo "=== Installing: PACKAGE ===" && \
+package-manager install PACKAGE 2>&1 | tee /tmp/install.log && \
+echo "=== Done: Exit Code $? ==="
 ```
 
-### PHPUnit Tests
+### Run Tests
 ```bash
-echo "=== PHPUnit ===" && \
-vendor/bin/phpunit 2>&1 | tail -40 && \
-echo "=== Exit: $? ==="
+echo "=== Running Tests ===" && \
+test-command 2>&1 | tee /tmp/test.log && \
+EXIT_CODE=$? && \
+echo "=== Tests Exit Code: $EXIT_CODE ==="
 ```
 
-### PHPCS Coding Standards
+### Health Check
 ```bash
-echo "=== PHPCS ===" && \
-vendor/bin/phpcs --standard=Drupal,DrupalPractice web/modules/custom 2>&1 | head -50
+echo "=== Health Check ===" && \
+status-command | head -10 && \
+app-verify-command | grep -E "VERSION|STATUS"
 ```
 
 ## 🔍 Debugging Failed Commands
 
-If nothing happened or output is missing:
+If Copilot says "nothing happened":
 
 ```bash
-# Check Drupal status
-ddev drush status 2>&1 | head -20
+# Check what actually ran
+history | tail -5
 
-# List enabled modules
-ddev drush pm:list --status=enabled 2>&1 | head -30
+# Check DDEV status
+ddev list && ddev describe
 
-# Check recent log messages
-ddev drush watchdog:show --count=10 2>&1
+# Check for errors
+ddev logs | tail -50
 
-# Validate composer config
-composer validate 2>&1
+# Verify Drupal status
+ddev drush status
 ```
 
 ## ✅ Verification Checklist
@@ -71,17 +76,48 @@ composer validate 2>&1
 Before reporting "complete":
 
 - [ ] Command ran with `isBackground: false`
-- [ ] Output captured with `2>&1`
-- [ ] Exit code checked (0 = success)
-- [ ] Drupal status shows no errors
-- [ ] You actually READ the output and confirmed success
+- [ ] Output was captured with `2>&1`
+- [ ] Exit code was checked
+- [ ] Result was verified (file exists, service running, etc.)
+- [ ] You actually READ the output and can confirm success
 
 ## 🎯 Common Mistakes
 
 | ❌ Don't Do This | ✅ Do This Instead |
-|-----------------|-------------------|
-| `composer install` (no output capture) | Add `2>&1 \| tail -20` |
-| `isBackground: true` for output commands | `isBackground: false` |
-| `drush cim` without `-y` in automation | Use `drush cim -y` |
-| Long runs without `\| head -80` | Limit output |
-| Assuming success | Check `$?` |
+|------------------|-------------------|
+| `ddev start` | `echo "Starting..." && ddev start 2>&1 && echo "Done"` |
+| `isBackground: true` for commands needing output | `isBackground: false` |
+| `ddev cmd` without verification | `ddev cmd 2>&1 && ddev describe \| head -5` |
+| Long chains without markers | Add `echo` statements between steps |
+| Assuming success | Check `$?` or grep for success messages |
+
+## � GitHub CLI (`gh`) Gotcha
+
+`gh issue view --repo owner/repo` returns **exit code 1** when the org has
+Projects (classic) enabled, due to a GraphQL deprecation warning printed to
+stderr. This kills the command even though the data was fetched successfully.
+
+**Fix: always use `--json` + `2>/dev/null`:**
+
+```bash
+# ❌ Fails with exit code 1 (GraphQL deprecation warning)
+gh issue view 77 --repo micronugget/duccinisv3 2>&1
+
+# ✅ Correct — suppress stderr, request JSON
+gh issue view 77 --repo micronugget/duccinisv3 \
+  --json title,body,labels,state,number 2>/dev/null
+```
+
+The `--json` flag bypasses the text renderer that triggers the warning, and
+`2>/dev/null` drops the deprecation stderr so the exit code stays 0.
+
+## �📖 Full Documentation
+
+- **Comprehensive Guide:** `.github/copilot-terminal-guide.md`
+- **Command Patterns Script:** `.github/ddev-command-patterns.sh`
+- **Environment Manager Agent:** `.github/agents/environment-manager.agent.md`
+
+---
+
+**Print this and keep it next to your keyboard! 🖨️**
+

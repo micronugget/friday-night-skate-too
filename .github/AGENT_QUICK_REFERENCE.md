@@ -2,105 +2,115 @@
 
 ## 📋 All Available Specialized Agents
 
-### 🏗️ Core Development (2 agents)
+### 🔧 Core Development (4 agents)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ architect.agent.md          │ Planning, architecture, coordination│
-│ developer_drupal.agent.md   │ PHP, modules, themes, recipes, drush│
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│ Architect              │ Planning, architecture, coordination│
+│ developer_drupal.md    │ Backend, modules, hooks, workflows  │
+│ media-dev.agent.md     │ Video, YouTube, GPS metadata        │
+│ themer.agent.md        │ CSS, Bootstrap, Masonry, Swiper     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ### ✅ Quality & Documentation (2 agents)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ tester.agent.md             │ PHPUnit, PHPCS, coding standards   │
-│ technical-writer.agent.md   │ READMEs, guides, changelog         │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│ tester.md              │ PHPUnit, PHPStan, Nightwatch        │
+│ technical-writer.md    │ Docs, README, guides, tutorials     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### 🛡️ Specialists (5 agents)
+### 🚀 Infrastructure & Ops (3 agents)
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ security-specialist.agent.md│ Secrets, SSL, OWASP, hardening     │
-│ database-administrator.agent.md│ MySQL, backups, schema          │
-│ performance-engineer.agent.md│ Caching, Core Web Vitals, opcache │
-│ environment-manager.agent.md│ DDEV, CI/CD, GitHub Actions        │
-│ ux-ui-designer.agent.md     │ Theme design, CSS, accessibility   │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│ environment-manager.md │ DDEV, Docker, CI/CD                 │
+│ provisioner-deployer.md│ Production deployment, OLS          │
+│ developer_ansible.md   │ Infrastructure automation           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🛡️ Specialists (4 agents)
+```
+┌─────────────────────────────────────────────────────────────┐
+│ security-specialist.md │ Security audits, vulnerabilities    │
+│ performance-engineer.md│ Optimization, caching, Web Vitals   │
+│ database-administrator.md│ MySQL optimization, schema        │
+│ ux-ui-designer.md      │ Design, UX, accessibility           │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ## 🎯 Quick Task → Agent Matcher
 
 | I need to... | Use this agent |
-|---|---|
-| Write or fix a custom module | **developer_drupal.agent.md** |
-| Create or modify a recipe | **developer_drupal.agent.md** |
-| Update a Twig template | **developer_drupal.agent.md** |
-| Run PHPUnit / PHPCS | **tester.agent.md** |
-| Verify coding standards | **tester.agent.md** |
-| Write/update documentation | **technical-writer.agent.md** |
-| Review secrets / settings.php | **security-specialist.agent.md** |
-| Harden configuration | **security-specialist.agent.md** |
-| Tune caching / performance | **performance-engineer.agent.md** |
-| MySQL optimization / backups | **database-administrator.agent.md** |
-| Set up DDEV / staging | **environment-manager.agent.md** |
-| Design Drupal theme / CSS | **ux-ui-designer.agent.md** |
-| Plan architecture / roadmap | **architect.agent.md** |
+|--------------|----------------|
+| Build a Drupal module | **developer_drupal.md** |
+| Create content workflow | **developer_drupal.md** |
+| Handle video uploads | **media-dev.agent.md** |
+| Extract GPS from media | **media-dev.agent.md** |
+| Style components with CSS | **themer.agent.md** |
+| Create responsive layouts | **themer.agent.md** |
+| Write unit tests | **tester.md** |
+| Run PHPUnit/PHPStan | **tester.md** |
+| Write documentation | **technical-writer.md** |
+| Configure DDEV | **environment-manager.md** |
+| Deploy to production | **provisioner-deployer.md** |
+| Automate with Ansible | **developer_ansible.md** |
+| Review security | **security-specialist.md** |
+| Optimize performance | **performance-engineer.md** |
+| Tune MySQL queries | **database-administrator.md** |
+| Design user interface | **ux-ui-designer.md** |
+| Plan architecture | **architect.md** |
 
 ## 📂 File Locations
 
-All agents are in: `.github/agents/[agent-name].agent.md`
+All agents are in: `.github/agents/[agent-name].md`
 
 Example paths:
-- `.github/agents/developer_drupal.agent.md`
-- `.github/agents/security-specialist.agent.md`
-- `.github/agents/tester.agent.md`
+- `.github/agents/developer_drupal.md`
+- `.github/agents/security-specialist.md`
+- `.github/agents/themer.agent.md`
 
 ## 📖 More Info
 
 - **Full directory**: `.github/AGENT_DIRECTORY.md`
 - **Agent README**: `.github/agents/README.md`
-- **Guidance doc**: `.github/agents/guidance.agent.md`
-- **Terminal patterns**: `.github/copilot-terminal-guide.md`
+- **Guidance doc**: `.github/agents/guidance.md`
 
 ## 🔄 Common Workflows
 
 ```
-# Module/Recipe Development
+Feature Development:
 Architect → Drupal-Dev → Tester → Tech-Writer
 
-# New Recipe
-Architect → Drupal-Dev (recipe) → Tester → Tech-Writer
+Media Feature:
+Architect → Media-Dev → Drupal-Dev → Themer → Tester
 
-# Security Review
+Theme Work:
+Architect → UX-Designer → Themer → Tester
+
+Infrastructure:
+Architect → Env-Manager → Provisioner → Security → Tester
+
+Security Review:
 Security-Specialist → Drupal-Dev → Tester → Security-Specialist
-
-# Performance Change
-Architect → Performance-Eng → Drupal-Dev → Tester
 ```
 
 ## ⚡ Quick Commands
 
 ```bash
-# Cache rebuild
-ddev drush cr 2>&1
+# View all agents
+ls .github/agents/
 
-# Config export
-ddev drush cex -y 2>&1
+# View full agent directory
+cat .github/AGENT_DIRECTORY.md
 
-# Config import
-ddev drush cim -y 2>&1
+# View specific agent
+cat .github/agents/developer_drupal.agent.md
 
-# Coding standards
-vendor/bin/phpcs --standard=Drupal,DrupalPractice web/modules/custom 2>&1 | head -50
-
-# PHPUnit
-vendor/bin/phpunit 2>&1 | tail -40
-
-# Composer validate
-composer validate 2>&1
+# View agents README
+cat .github/agents/README.md
 ```
 
 ---
 
-*For detailed descriptions and decision tree, see: `.github/AGENT_DIRECTORY.md`*
+*For detailed descriptions, use cases, and decision tree, see: `.github/AGENT_DIRECTORY.md`*

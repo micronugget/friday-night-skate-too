@@ -1,198 +1,374 @@
-# Drupal CMS — AI Agent Directory
+# Specialized Agent Directory for GitHub Copilot
 
-This directory lists all available specialized agents for the Drupal CMS project.
+## Quick Reference: When to Use Which Agent
 
----
+This document provides a quick reference for GitHub Copilot to identify which specialized agent to delegate tasks to based on the work required.
 
-## 🏗️ Core Development Agents
+## 🎯 Core Development Agents
 
-### Architect
-**File**: `architect.agent.md`
+### Architect (Mission Control)
+**File**: `architect.md`  
 **Use For**:
-- High-level planning and task decomposition
-- Workflow orchestration across agents
-- Architecture decisions and system design
-- Resolving technical conflicts between agents
+- Task decomposition and workflow orchestration
+- System architecture decisions
+- Feature planning and roadmap
+- Cross-team coordination
+- Design pattern recommendations
 
-**Keywords**: architect, plan, design, coordinate, workflow, roadmap
+**Keywords**: architecture, planning, coordination, workflow, system design
 
 ---
 
 ### Drupal Developer
-**File**: `developer_drupal.agent.md`
+**File**: `developer_drupal.md`  
 **Use For**:
-- Custom module and theme development
-- Drupal recipes authoring
-- Drush command automation
-- Configuration management (`drush cex`/`cim`)
-- Deploy hook development
-- Composer dependency management
+- PHP backend development
+- Custom module development
+- Drupal hooks implementation
+- Configuration management
+- Entity and field management
+- Content type creation
+- Workflow and moderation systems
+- Drush commands and automation
 
-**Keywords**: drupal, php, module, theme, recipe, drush, composer, config, twig
+**Keywords**: drupal, php, module, hook, entity, content type, drush, configuration
+
+**Example Tasks**:
+- Creating content moderation workflows
+- Building custom modules
+- Implementing entity hooks
+- Configuration export/import
+
+---
+
+### Media Developer
+**File**: `media-dev.agent.md`  
+**Use For**:
+- VideoJS integration and configuration
+- YouTube API integration
+- GPS metadata extraction from media
+- FFprobe integration for video processing
+- Media field handling
+- Video player customization
+
+**Keywords**: video, media, youtube, gps, metadata, ffprobe, videojs
+
+**Example Tasks**:
+- Extracting GPS data from uploaded videos
+- Configuring VideoJS players
+- YouTube upload automation
+
+---
+
+### Themer (Frontend Specialist)
+**File**: `themer.agent.md`  
+**Use For**:
+- Radix 6 theme customization
+- Bootstrap 5 implementation
+- Responsive design and breakpoints
+- Masonry.js layouts
+- Swiper.js mobile interactions
+- CSS/SCSS development
+- Template (.html.twig) creation
+- Image optimization and WebP
+
+**Keywords**: theme, css, scss, bootstrap, radix, masonry, swiper, twig, responsive
+
+**Example Tasks**:
+- Creating responsive image galleries
+- Implementing mobile-friendly navigation
+- Custom Twig templates
+
+---
+
+## 🎨 Design & Frontend Agents
+
+### UX/UI Designer
+**File**: `ux-ui-designer.md`  
+**Use For**:
+- User experience design
+- Interface prototypes
+- Accessibility (WCAG) compliance
+- Design specifications
+- User flow diagrams
+- Wireframes and mockups
+
+**Keywords**: ux, ui, design, accessibility, wireframe, prototype, user flow
 
 ---
 
 ## ✅ Quality & Documentation Agents
 
 ### Tester (QA/QC)
-**File**: `tester.agent.md`
+**File**: `tester.md`  
 **Use For**:
-- PHPUnit test authoring and execution
-- PHPCS coding standards validation
-- Check mode analysis
-- Regression test planning
-- Post-deployment smoke testing
+- PHPUnit test writing
+- PHPStan static analysis
+- Nightwatch.js browser testing
+- Manual testing procedures
+- Test automation
+- Quality assurance
+- Bug validation
 
-**Keywords**: test, phpunit, phpcs, lint, check, validate, qa
+**Keywords**: test, phpunit, phpstan, qa, quality, validation, nightwatch
+
+**Example Tasks**:
+- Writing unit tests for modules
+- Creating kernel tests for workflows
+- Browser testing with Nightwatch
 
 ---
 
 ### Technical Writer
-**File**: `technical-writer.agent.md`
+**File**: `technical-writer.md`  
 **Use For**:
-- Updating `README*.md` files
-- Maintaining `changelog.md`
-- Step-by-step "How-To" guides
-- Documenting new recipe variables and config
+- README documentation
+- User guides and tutorials
+- API documentation
+- Changelog maintenance
+- Installation instructions
+- Configuration guides
+- Developer documentation
 
-**Keywords**: documentation, readme, guide, changelog, tutorial
+**Keywords**: documentation, readme, guide, tutorial, api docs, changelog
 
 ---
 
 ## 🔧 Infrastructure & Operations Agents
 
 ### Environment Manager
-**File**: `environment-manager.agent.md`
+**File**: `environment-manager.md`  
 **Use For**:
-- DDEV local environment setup
-- CI/CD pipeline configuration (GitHub Actions)
-- Environment parity between dev/staging/prod
-- Docker and container configuration
+- DDEV configuration
+- Docker setup
+- CI/CD pipeline configuration
+- Environment parity (dev/staging/prod)
+- Development environment troubleshooting
 
-**Keywords**: environment, ddev, staging, ci/cd, docker, github-actions
+**Keywords**: ddev, docker, environment, ci/cd, pipeline
+
+---
+
+### Provisioner/Deployer
+**File**: `provisioner-deployer.md`  
+**Use For**:
+- Production server deployment
+- OpenLiteSpeed configuration
+- SSL certificate management
+- Server provisioning
+- Deployment automation
+- Release management
+
+**Keywords**: deployment, production, server, openlitespeed, ssl, release
+
+---
+
+### Ansible Developer
+**File**: `developer_ansible.md`  
+**Use For**:
+- Infrastructure as code
+- Server automation with Ansible
+- Playbook development
+- Configuration management
+- Automated provisioning
+
+**Keywords**: ansible, automation, infrastructure, playbook, provisioning
 
 ---
 
 ## 🛡️ Specialist Agents
 
 ### Database Administrator
-**File**: `database-administrator.agent.md`
+**File**: `database-administrator.md`  
 **Use For**:
-- MySQL/MariaDB schema review
-- Database backup strategy
-- Query optimization and slow log analysis
-- Drupal database update procedures
+- MySQL 8.0 optimization
+- Database schema design
+- Query optimization
+- Backup strategies
+- Database migrations
+- Index management
 
-**Keywords**: database, mysql, mariadb, backup, restore, query, schema
+**Keywords**: database, mysql, optimization, schema, query, backup
 
 ---
 
 ### Performance Engineer
-**File**: `performance-engineer.agent.md`
+**File**: `performance-engineer.md`  
 **Use For**:
-- Drupal caching layer configuration
 - Core Web Vitals optimization
-- CSS/JS aggregation setup
-- PHP opcache and Composer autoload tuning
+- Caching strategies
+- Performance profiling
+- Load time optimization
+- Image optimization
+- CDN configuration
 
-**Keywords**: performance, caching, drupal, opcache, optimization, core-web-vitals
+**Keywords**: performance, optimization, caching, speed, web vitals
 
 ---
 
 ### Security Specialist
-**File**: `security-specialist.agent.md`
+**File**: `security-specialist.md`  
 **Use For**:
-- Drupal security audits
-- SSL/TLS configuration review
-- Secrets and settings.php review
-- OWASP Top 10 code reviews
-- Deployment security review
+- Security audits
+- Vulnerability assessments
+- File upload security
+- User permission auditing
+- XSS/CSRF protection
+- Security best practices
+- Privacy compliance
 
-**Keywords**: security, ssl, hardening, secrets, owasp, audit, permissions
+**Keywords**: security, vulnerability, audit, permissions, xss, csrf, privacy
 
 ---
 
-### UX/UI Designer
-**File**: `ux-ui-designer.agent.md`
+## 📚 Skills & Resources
+
+### Frontend Design Skill
+**File**: `skills/frontend-design/SKILL.md`  
 **Use For**:
-- Drupal theme design and Twig templates
-- CSS/SCSS component development
-- Accessible interface design (WCAG)
-- Frontend prototypes for Drupal sites
-
-**Keywords**: ux, ui, design, css, frontend, twig, theme, accessibility
-
----
-
-### Guidance
-**File**: `guidance.agent.md`
-**Use For**:
-- Understanding operational procedures
-- Handoff protocol reference
-- Standard workflow reference
-- Project conventions clarification
+- Design aesthetics guidelines
+- Van Gogh "Starry Night" inspiration
+- Visual design principles
+- Color palette guidance
 
 ---
 
 ## 🔄 Standard Workflows
 
-### Module/Recipe Development
+### Feature Development
 ```
 Architect → Drupal Developer → Tester → Technical Writer → Architect (Review)
 ```
 
-### New Recipe Creation
+### Media Feature (GPS/Video)
 ```
-Architect → Drupal Developer (recipe) → Tester (phpcs/phpunit) → Architect
-```
-
-### Security Change
-```
-Architect → Security Specialist (review) → Drupal Developer (implement) → Tester → Security Specialist (validate)
+Architect → Media Developer → Drupal Developer → Themer → Tester → Architect (Review)
 ```
 
-### Performance Optimization
+### Frontend/Theme Work
 ```
-Architect → Performance Engineer → Drupal Developer → Tester
+Architect → UX/UI Designer → Themer → Drupal Developer → Tester → Architect (Review)
 ```
 
-### Documentation Update
+### Infrastructure Changes
 ```
-Drupal Developer (change) → Technical Writer → Architect (review)
+Architect → Environment Manager → Provisioner/Deployer → Security Specialist → Tester → Architect (Review)
+```
+
+### Security Review
+```
+Security Specialist → Drupal Developer → Tester → Security Specialist (Validation)
 ```
 
 ---
 
 ## 🎯 Task Matching Guide
 
+### Use This Decision Tree:
+
 1. **Is it about planning/architecture?** → **Architect**
-2. **Is it writing a module, theme, or recipe?** → **Drupal Developer**
-3. **Is it about testing or coding standards?** → **Tester**
-4. **Is it about documentation?** → **Technical Writer**
-5. **Is it about dev/staging environments?** → **Environment Manager**
-6. **Is it about MySQL/database?** → **Database Administrator**
-7. **Is it about caching/performance?** → **Performance Engineer**
-8. **Is it about security/secrets/SSL?** → **Security Specialist**
-9. **Is it about CSS/UX/theme design?** → **UX/UI Designer**
+2. **Is it Drupal backend code?** → **Drupal Developer**
+3. **Is it about video/media processing?** → **Media Developer**
+4. **Is it about CSS/theme/frontend?** → **Themer**
+5. **Is it about user interface design?** → **UX/UI Designer**
+6. **Is it about testing?** → **Tester**
+7. **Is it about documentation?** → **Technical Writer**
+8. **Is it about DDEV/environments?** → **Environment Manager**
+9. **Is it about deployment?** → **Provisioner/Deployer**
+10. **Is it about automation scripts?** → **Ansible Developer**
+11. **Is it about database?** → **Database Administrator**
+12. **Is it about performance?** → **Performance Engineer**
+13. **Is it about security?** → **Security Specialist**
+
+---
+
+## 💡 Usage Examples
+
+### Example 1: Content Moderation Feature
+**Task**: Implement content moderation workflow for archive submissions
+
+**Agents to Use**:
+1. **Architect** - Plan the feature architecture
+2. **Drupal Developer** - Implement workflow, roles, permissions
+3. **Tester** - Write PHPUnit tests for workflow transitions
+4. **Technical Writer** - Document the moderation process
+5. **Security Specialist** - Review permission model
+
+### Example 2: Video Upload with GPS
+**Task**: Extract GPS metadata from uploaded videos
+
+**Agents to Use**:
+1. **Architect** - Design metadata extraction pipeline
+2. **Media Developer** - Implement FFprobe integration
+3. **Drupal Developer** - Create custom fields and storage
+4. **Security Specialist** - Review file upload security
+5. **Tester** - Test metadata extraction
+
+### Example 3: Responsive Gallery
+**Task**: Create mobile-friendly image gallery with Masonry
+
+**Agents to Use**:
+1. **UX/UI Designer** - Design gallery layout and interactions
+2. **Themer** - Implement Masonry.js and Swiper.js
+3. **Performance Engineer** - Optimize image loading
+4. **Tester** - Test on multiple devices
+
+### Example 4: Production Deployment
+**Task**: Deploy new features to production server
+
+**Agents to Use**:
+1. **Provisioner/Deployer** - Handle deployment process
+2. **Environment Manager** - Ensure config sync
+3. **Database Administrator** - Handle database updates
+4. **Security Specialist** - Security checklist
+5. **Tester** - Smoke testing after deployment
 
 ---
 
 ## 🚨 Important Notes
 
 ### All Agents Must:
-- Follow terminal command patterns from `.github/copilot-terminal-guide.md`
-- Follow **Drupal Coding Standards** for all PHP code
-- Never hack core — all customizations in custom modules/themes or config
-- Run `drush cex` before committing configuration changes
-- Use `ddev drush` for local Drush commands
+- Use `ddev` prefix for CLI commands (Drush, Composer, PHPUnit)
+- Follow Drupal Coding Standards and PSR-12
+- Use `declare(strict_types=1);` in PHP files
+- Export configuration with `ddev drush cex`
+- Run tests before committing
+- Clear cache with `ddev drush cr` after changes
 
 ### Handoff Protocol:
-When one agent completes work:
-1. Document what was done (files modified and how)
+When one agent completes work, they should:
+1. Document what was done
 2. Specify what still needs to be done
 3. Identify the next agent in the workflow
-4. Provide relevant test results or validation commands
+4. Provide context for the next agent
+
+### Agent Location:
+All agent definitions are in: `/home/runner/work/friday-night-skate/friday-night-skate/.github/agents/`
 
 ---
 
-*Last Updated: March 2026*
+## 📖 Additional Resources
+
+- **Agent README**: `.github/agents/README.md` - Full agent directory
+- **Guidance**: `.github/agents/guidance.md` - Operational framework
+- **Setup Instructions**: `.github/copilot-instructions.md` - Project standards
+- **Setup Script**: `.github/copilot-setup.sh` - Environment automation
+
+---
+
+## 🔍 Finding the Right Agent
+
+**Can't decide which agent?**
+
+1. Look at the **keywords** in each agent section
+2. Check the **example tasks** provided
+3. Follow the **decision tree** above
+4. When in doubt, start with **Architect** for planning
+
+**Multiple agents needed?**
+
+Follow the **standard workflows** section to see typical agent sequences for common tasks.
+
+---
+
+*Last Updated: 2026-01-29*
