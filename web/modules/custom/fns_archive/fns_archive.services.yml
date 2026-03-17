@@ -1,0 +1,10 @@
+services:
+  fns_archive.moderation_notifier:
+    class: Drupal\fns_archive\Service\ModerationNotifier
+    arguments:
+      - '@plugin.manager.mail'
+      - '@entity_type.manager'
+      - '@current_user'
+      - '@string_translation'
+      - '@logger.factory'
+      - '@content_moderation.moderation_information'

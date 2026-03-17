@@ -1,0 +1,25 @@
+uuid: 8e9100c1-2c04-49e1-9313-8c291d2d369f
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - videojs_media
+_core:
+  default_config_hash: lgzunCI2yVuzlmAiCeOJAA15c8T5U1sH594YYkPEU2g
+id: videojs_media.field_subtitle
+field_name: field_subtitle
+entity_type: videojs_media
+type: file
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+module: file
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

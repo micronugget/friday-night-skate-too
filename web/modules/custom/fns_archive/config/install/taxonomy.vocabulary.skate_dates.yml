@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_archive
+name: 'Skate Dates'
+vid: skate_dates
+description: 'Taxonomy for organizing Friday Night Skate sessions by date and location. Format: YYYY-MM-DD - Location/Description'
+weight: 0

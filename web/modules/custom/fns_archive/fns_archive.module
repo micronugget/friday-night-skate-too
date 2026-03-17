@@ -1,0 +1,232 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Primary module hooks for FNS Archive module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for node entities.
+ *
+ * Auto-populates the uploader field with the current user when creating a new
+ * archive_media node and extracts metadata from uploaded media files.
+ */
+function fns_archive_node_presave(EntityInterface $node): void {
+  if (!$node instanceof NodeInterface) {
+    return;
+  }
+
+  // Only process archive_media content type.
+  if ($node->bundle() !== 'archive_media') {
+    return;
+  }
+
+  // Only auto-populate on new nodes.
+  if ($node->isNew() && $node->hasField('field_uploader')) {
+    // If uploader field is empty, set it to the current user.
+    if ($node->get('field_uploader')->isEmpty()) {
+      $current_user = \Drupal::currentUser();
+      $node->set('field_uploader', $current_user->id());
+    }
+  }
+
+  // Extract and store metadata from media files.
+  if ($node->hasField('field_archive_media') && !$node->get('field_archive_media')->isEmpty()) {
+    try {
+      /** @var \Drupal\media\MediaInterface $media */
+      $media = $node->get('field_archive_media')->entity;
+
+      if ($media) {
+        $metadata_extractor = \Drupal::service('skating_video_uploader.metadata_extractor');
+        $metadata = NULL;
+
+        // Determine media type and extract metadata accordingly.
+        $media_bundle = $media->bundle();
+
+        // Get the source field configuration.
+        $source_config = $media->getSource()->getConfiguration();
+        if (!isset($source_config['source_field'])) {
+          return;
+        }
+
+        $source_field = $source_config['source_field'];
+        if (!$media->hasField($source_field) || $media->get($source_field)->isEmpty()) {
+          return;
+        }
+
+        /** @var \Drupal\file\FileInterface $file */
+        $file = $media->get($source_field)->entity;
+        if (!$file) {
+          return;
+        }
+
+        // Extract metadata based on media type.
+        if ($media_bundle === 'image') {
+          $metadata = $metadata_extractor->extractImageMetadata($file);
+        }
+        elseif ($media_bundle === 'video') {
+          $metadata = $metadata_extractor->extractVideoMetadata($file);
+        }
+
+        // Store metadata if extraction was successful.
+        if ($metadata && !empty($metadata)) {
+          $metadata_extractor->storeMetadata($node, $metadata);
+        }
+      }
+    }
+    catch (\Exception $e) {
+      \Drupal::logger('fns_archive')->error('Error extracting metadata: @error', ['@error' => $e->getMessage()]);
+    }
+  }
+
+  // Handle moderation state transitions for notifications.
+  // Note: Uses dynamic property for state tracking as hook_presave cannot use
+  // dependency injection. This approach is compatible with PHP 8.1+.
+  if ($node->hasField('moderation_state') && isset($node->original)) {
+    $original_state = $node->original->moderation_state->value ?? NULL;
+    $new_state = $node->moderation_state->value ?? NULL;
+
+    // Track state change for post-save processing.
+    if ($original_state !== $new_state) {
+      $node->fnsArchiveModerationChange = [
+        'from' => $original_state,
+        'to' => $new_state,
+      ];
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ *
+ * Sends notifications when new archive_media content is created directly in
+ * the "review" state. This is an edge case; most content transitions to review
+ * via hook_ENTITY_TYPE_update().
+ */
+function fns_archive_node_insert(EntityInterface $node): void {
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'archive_media') {
+    return;
+  }
+
+  // Check if node was created in review state.
+  if ($node->hasField('moderation_state')) {
+    $state = $node->moderation_state->value;
+    if ($state === 'review') {
+      \Drupal::service('fns_archive.moderation_notifier')
+        ->notifyOnSubmission($node);
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for node entities.
+ *
+ * Sends notifications based on moderation state transitions.
+ * Note: Uses \Drupal::service() as hook implementations cannot use dependency
+ * injection. This is acceptable Drupal practice for hooks.
+ */
+function fns_archive_node_update(EntityInterface $node): void {
+  if (!$node instanceof NodeInterface || $node->bundle() !== 'archive_media') {
+    return;
+  }
+
+  // Check for moderation state change tracked in presave.
+  if (isset($node->fnsArchiveModerationChange)) {
+    $change = $node->fnsArchiveModerationChange;
+    $notifier = \Drupal::service('fns_archive.moderation_notifier');
+
+    // Notify on submission for review.
+    if ($change['to'] === 'review' && $change['from'] !== 'review') {
+      $notifier->notifyOnSubmission($node);
+    }
+
+    // Notify on publication.
+    if ($change['to'] === 'published' && $change['from'] !== 'published') {
+      $notifier->notifyOnApproval($node);
+    }
+
+    // Notify on rejection (sent back to draft from review).
+    if ($change['to'] === 'draft' && $change['from'] === 'review') {
+      // Get reason from revision log, with safe field access.
+      $reason = '';
+      if ($node->hasField('revision_log') && !$node->get('revision_log')->isEmpty()) {
+        $reason = $node->revision_log->value;
+      }
+      $notifier->notifyOnRejection($node, $reason);
+    }
+  }
+}
+
+/**
+ * Implements hook_mail().
+ *
+ * Defines email templates for moderation notifications.
+ */
+function fns_archive_mail(string $key, array &$message, array $params): void {
+  $site_name = \Drupal::config('system.site')->get('name');
+  $entity_label = $params['entity_label'] ?? 'Content';
+
+  switch ($key) {
+    case 'submission':
+      $message['subject'] = t('[@site] New content submitted for review: @title', [
+        '@site' => $site_name,
+        '@title' => $entity_label,
+      ]);
+      $message['body'][] = t('Hello,');
+      $message['body'][] = '';
+      $message['body'][] = t('New content "@title" has been submitted for review by @author.', [
+        '@title' => $entity_label,
+        '@author' => $params['author_name'] ?? 'Unknown',
+      ]);
+      $message['body'][] = '';
+      $message['body'][] = t('View and moderate: @url', [
+        '@url' => $params['url'] ?? '',
+      ]);
+      break;
+
+    case 'approval':
+      $message['subject'] = t('[@site] Your content has been approved: @title', [
+        '@site' => $site_name,
+        '@title' => $entity_label,
+      ]);
+      $message['body'][] = t('Hello,');
+      $message['body'][] = '';
+      $message['body'][] = t('Your content "@title" has been approved and published by @moderator.', [
+        '@title' => $entity_label,
+        '@moderator' => $params['moderator_name'] ?? 'a moderator',
+      ]);
+      $message['body'][] = '';
+      $message['body'][] = t('View your content: @url', [
+        '@url' => $params['url'] ?? '',
+      ]);
+      break;
+
+    case 'rejection':
+      $message['subject'] = t('[@site] Your content needs revision: @title', [
+        '@site' => $site_name,
+        '@title' => $entity_label,
+      ]);
+      $message['body'][] = t('Hello,');
+      $message['body'][] = '';
+      $message['body'][] = t('Your content "@title" has been sent back to draft by @moderator.', [
+        '@title' => $entity_label,
+        '@moderator' => $params['moderator_name'] ?? 'a moderator',
+      ]);
+      if (!empty($params['reason'])) {
+        $message['body'][] = '';
+        $message['body'][] = t('Reason: @reason', [
+          '@reason' => $params['reason'],
+        ]);
+      }
+      $message['body'][] = '';
+      $message['body'][] = t('Edit your content: @url', [
+        '@url' => $params['url'] ?? '',
+      ]);
+      break;
+  }
+}

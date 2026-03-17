@@ -1,7 +1,7 @@
 ---
-description: "Close a GitHub issue on duccinisv4 — fetches issue details, explores the codebase, implements the fix, runs tests, exports config, commits, and reports commands for brave-mode approval."
+description: "Close a GitHub issue on friday-night-skate-too — fetches issue details, explores the codebase, implements the fix, runs tests, exports config, commits, and reports commands for brave-mode approval."
 name: "Close Issue"
-argument-hint: "GitHub issue URL or number (e.g. 30 or https://github.com/micronugget/duccinisv4/issues/30)"
+argument-hint: "GitHub issue URL or number (e.g. 1 or https://github.com/micronugget/friday-night-skate-too/issues/1)"
 agent: "agent"
 ---
 
@@ -15,12 +15,12 @@ Follow all rules in [copilot-instructions.md](../copilot-instructions.md) and [c
 
 | Category | Commands |
 |---|---|
-| DDEV environment | `ddev status`, `ddev describe`, `ddev exec …`, `ddev drush pm-list`, `ddev drush pm:list` |
+| DDEV environment | `ddev status`, `ddev describe`, `ddev exec …`, `ddev drush pm-list`, `ddev drush pm:list`, `ddev restart` |
 | Cache / config | `ddev drush cr`, `ddev drush cex` |
 | Code quality | `ddev exec vendor/bin/phpcs …`, `ddev exec vendor/bin/phpstan …`, `ddev exec vendor/bin/phpcbf …` |
 | Tests | `ddev exec vendor/bin/phpunit …` (all read-only test runs) |
 | Composer | `ddev composer install`, `ddev composer require …` (no destructive flags) |
-| Build | `ddev npm run dev`, `ddev exec "cd … && npm run dev"`, `ddev exec "cd web/themes/custom/duccinis_1984_olympics && npm run dev"` |
+| Build | `ddev npm run dev`, `ddev exec "cd … && npm run dev"`, `ddev exec "cd web/themes/custom/fridaynightskate && npm run dev"` |
 | Git (read) | `git status`, `git log`, `git diff`, `git branch`, `git show` |
 | Git (write, local) | `git add`, `git commit`, `git checkout`, `git checkout -b`, `git stash`, `git merge`, `git rebase`, `git cherry-pick`, `git push origin <feature-branch>` (non-force, feature/issue branches only) |
 | File reads | `cat`, `grep`, `find`, `head`, `tail`, `wc`, `ls`, `sort`, `sed -n '…p'` |
@@ -54,7 +54,7 @@ Follow all rules in [copilot-instructions.md](../copilot-instructions.md) and [c
 Run the following, replacing `$ISSUE` with the number extracted from the user's input:
 
 ```bash
-gh issue view $ISSUE --repo micronugget/duccinisv3 \
+gh issue view $ISSUE --repo micronugget/friday-night-skate-too \
   --json title,body,labels,state,number 2>/dev/null
 ```
 
@@ -78,17 +78,15 @@ Parse from the output:
 
 ## Step 2 — Create a Feature Branch
 
-> **⚠️ Branching rule for issues #94–141:** All migration epic branches **must base off `migration_branch`**, not `master`. PRs and merges target `migration_branch`; `migration_branch` → `master` only when the full epic is done.
-
 Before writing any code, create and check out a branch named `issue/$ISSUE-<slug>` where `<slug>` is a short kebab-case summary of the issue title:
 
 ```bash
-git checkout migration_branch && git checkout -b issue/$ISSUE-<slug>
+git checkout main && git checkout -b issue/$ISSUE-<slug>
 ```
 
-Example: `git checkout migration_branch && git checkout -b issue/94-scrub-api-keys`
+Example: `git checkout main && git checkout -b issue/1-fresh-install`
 
-This keeps `master` clean. For issues #94–141 the PR base is `migration_branch`, not `master`.
+This keeps `main` clean. PRs target `main`.
 
 ---
 
@@ -111,10 +109,10 @@ ddev start 2>&1 | tail -10
 
 Based on the issue title and labels, search for relevant files. Use `search_subagent` or direct searches — do **not** guess file locations. Pay special attention to:
 
-- `web/modules/custom/store_fulfillment/` — core business logic
-- `web/themes/custom/duccinis_1984_olympics/` — theme / Twig / SCSS
-- `config/sync/` — configuration
-- `web/modules/custom/` — other custom modules
+- `recipes/` — Drupal CMS recipes (modular feature sets)
+- `web/modules/custom/` — custom modules
+- `web/themes/custom/fridaynightskate/` — theme / Twig / SCSS
+- `web/sites/default/` — site configuration
 
 Load any relevant `.instructions.md` files from `.github/instructions/` before writing code.
 
@@ -136,7 +134,7 @@ Write code following all rules in `copilot-instructions.md`:
 - `declare(strict_types=1);` on every new PHP file
 - No `\Drupal::service()` inside service classes
 - Never modify `web/core/` or `vendor/`
-- Checkout pane visibility, AJAX, and billing ownership patterns per `store-fulfillment.instructions.md`
+- Follow recipe authoring conventions per `.github/instructions/drupal-recipes.instructions.md`
 
 ---
 
@@ -147,10 +145,12 @@ Run these in sequence. **Do not skip.** Each must pass before proceeding to the 
 ### 6a. Coding Standards
 ```bash
 echo "=== PHPCS ===" && \
-ddev exec vendor/bin/phpcs --standard=Drupal \
-  web/modules/custom/store_fulfillment/src \
+ddev exec vendor/bin/phpcs --standard=Drupal,DrupalPractice \
+  web/modules/custom \
   2>&1 | head -50
 ```
+
+> If `web/modules/custom/` is empty, skip this step.
 
 Fix any errors before continuing.
 
@@ -161,18 +161,11 @@ echo "=== Cache Rebuild ===" && ddev drush cr 2>&1 | tail -5
 
 ### 6c. Tests
 > **Frontend-only issues** (theme SCSS, Twig, libraries, JS — no PHP logic changed):  
-> The full suite can hang in this environment. Running `--filter` on the nearest
-> relevant test class is sufficient. Skip to step 6d if no PHP was modified.
->
-> ```bash
-> echo "=== PHPUnit (targeted) ==" && \
-> ddev exec vendor/bin/phpunit --testsuite=store_fulfillment \
->   --filter=OrderPlacementDeliveryRadiusValidatorTest \
->   --colors=never 2>&1 | tail -10
-> ```
+> Skip this step if no PHP was modified.
+
 ```bash
 echo "=== PHPUnit ===" && \
-ddev exec vendor/bin/phpunit --testsuite=store_fulfillment \
+ddev exec vendor/bin/phpunit \
   --colors=never 2>&1 | tail -20
 ```
 
@@ -208,9 +201,9 @@ git push origin issue/$ISSUE-<slug>
 ```
 
 ```bash
-# Open a PR targeting migration_branch (issues #94–141) or master (pre-#94)
-gh pr create --repo micronugget/duccinisv3 \
-  --base migration_branch \
+# Open a PR targeting main
+gh pr create --repo micronugget/friday-night-skate-too \
+  --base main \
   --head issue/$ISSUE-<slug> \
   --title "fix: close issue #$ISSUE — <short description>" \
   --body "Closes #$ISSUE"
@@ -218,7 +211,7 @@ gh pr create --repo micronugget/duccinisv3 \
 
 ```bash
 # Close the issue
-gh issue close $ISSUE --repo micronugget/duccinisv3 \
+gh issue close $ISSUE --repo micronugget/friday-night-skate-too \
   --comment "Implemented in commit $(git rev-parse --short HEAD). All tests pass."
 ```
 

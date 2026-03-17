@@ -1,0 +1,19 @@
+name: 'FNS Archive'
+type: module
+description: 'Friday Night Skate Archive - Taxonomy and content type for managing archive media with skate dates.'
+core_version_requirement: ^11.3
+package: 'Friday Night Skate'
+dependencies:
+  - drupal:node
+  - drupal:field
+  - drupal:taxonomy
+  - drupal:datetime
+  - drupal:text
+  - drupal:user
+  - drupal:media
+  - drupal:geofield
+  - drupal:pathauto
+  - drupal:image
+  - drupal:responsive_image
+  - drupal:content_moderation
+  - drupal:workflows

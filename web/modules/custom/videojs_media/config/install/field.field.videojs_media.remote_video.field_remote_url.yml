@@ -1,0 +1,21 @@
+uuid: 33282c37-abe7-4f77-9c1e-9173d888c559
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_remote_url
+    - videojs_media.type.remote_video
+_core:
+  default_config_hash: ghD2dPDsBE4v2dOTdHWV4ts-hYOzInhqz_aK419n_kw
+id: videojs_media.remote_video.field_remote_url
+field_name: field_remote_url
+entity_type: videojs_media
+bundle: remote_video
+label: 'Remote Video URL'
+description: 'URL to remote video (HLS, DASH, MP4, etc.).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

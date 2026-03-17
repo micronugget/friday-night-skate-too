@@ -1,0 +1,32 @@
+uuid: 27233f88-1fe8-4e31-8102-5fbcfa647747
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - image
+    - videojs_media
+_core:
+  default_config_hash: W8uy01y8KVJDSAY_kQ4qOKWducetZnSQ-yjchm40bEU
+id: videojs_media.field_poster_image
+field_name: field_poster_image
+entity_type: videojs_media
+type: image
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  default_image:
+    uuid: null
+    alt: ''
+    title: ''
+    width: null
+    height: null
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

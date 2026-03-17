@@ -1,0 +1,8 @@
+# Local task links for VideoJS Media.
+
+videojs_media.content_tab:
+  title: 'VideoJS Media'
+  route_name: entity.videojs_media.collection
+  base_route: system.admin_content
+  weight: 20
+  description: 'Manage VideoJS Media content that can be referenced in nodes and other content types.'

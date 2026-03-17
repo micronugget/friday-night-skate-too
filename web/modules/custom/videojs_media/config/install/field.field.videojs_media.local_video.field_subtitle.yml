@@ -1,0 +1,29 @@
+uuid: 688d2963-caf5-46f9-bb33-28eacac93e22
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_subtitle
+    - videojs_media.type.local_video
+  module:
+    - file
+_core:
+  default_config_hash: xteNeFfdVKV60F80H08S-vM1rxJrGx1fNgUoVjQYs_s
+id: videojs_media.local_video.field_subtitle
+field_name: field_subtitle
+entity_type: videojs_media
+bundle: local_video
+label: Subtitles/Captions
+description: 'Upload WebVTT (.vtt) subtitle files.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: videojs/subtitles
+  file_extensions: vtt
+  max_filesize: '5 MB'
+  description_field: true
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

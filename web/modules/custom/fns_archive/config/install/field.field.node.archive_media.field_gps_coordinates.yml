@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gps_coordinates
+    - node.type.archive_media
+  module:
+    - geofield
+id: node.archive_media.field_gps_coordinates
+field_name: field_gps_coordinates
+entity_type: node
+bundle: archive_media
+label: 'GPS Coordinates'
+description: 'GPS location where the media was captured. Can be extracted from image EXIF or video metadata.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geofield

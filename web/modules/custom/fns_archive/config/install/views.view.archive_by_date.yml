@@ -1,0 +1,266 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.thumbnail
+    - field.storage.node.field_skate_date
+    - field.storage.node.field_timestamp
+    - node.type.archive_media
+    - taxonomy.vocabulary.skate_dates
+  module:
+    - content_moderation
+    - node
+    - taxonomy
+    - user
+  enforced:
+    module:
+      - fns_archive
+id: archive_by_date
+label: 'Archive by Skate Date'
+module: views
+description: 'Displays archive media filtered by Skate Date taxonomy term with Masonry grid layout'
+tag: archive
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      # Title will be overridden by contextual filter
+      title: 'Archive'
+      # Access control
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      # Cache settings
+      cache:
+        type: tag
+        options: {  }
+      # Query settings
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+      # Empty text when no results
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'No archive media available for this date. <a href="/archive">View all archive dates</a>.'
+      # Exposed form (none for this view)
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      # Pager configuration - 50 items with full pager
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 50
+          total_pages: 0
+          id: 0
+          tags:
+            first: '« First'
+            previous: '‹ Previous'
+            next: 'Next ›'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '25, 50, 100, 200'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
+      # Display style - unformatted list for Masonry.js compatibility
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: 'masonry-item'
+          default_row_class: false
+          uses_fields: false
+      # Row style - rendered entity using thumbnail view mode
+      row:
+        type: 'entity:node'
+        options:
+          view_mode: thumbnail
+      # Fields (not used since we're using rendered entity row style)
+      fields: {  }
+      # Filters
+      filters:
+        # Filter by content type: Archive Media
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            archive_media: archive_media
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        # Filter by published status
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        # Filter by moderation state: Published only
+        moderation_state:
+          id: moderation_state
+          table: node_field_data
+          field: moderation_state
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: moderation_state_filter
+          operator: in
+          value:
+            published: published
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+      # Sort criteria - newest first by timestamp
+      sorts:
+        field_timestamp_value:
+          id: field_timestamp_value
+          table: node__field_timestamp
+          field: field_timestamp_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: field_timestamp_value
+          exposed: false
+          granularity: second
+      # Header (optional - can add breadcrumb or description)
+      header: {  }
+      # Footer (optional - can add statistics or links)
+      footer: {  }
+      # Relationships
+      relationships: {  }
+      # Arguments/Contextual filters
+      arguments:
+        # Contextual filter for Skate Date taxonomy term
+        field_skate_date_target_id:
+          id: field_skate_date_target_id
+          table: node__field_skate_date
+          field: field_skate_date_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: taxonomy_index_tid
+          default_action: empty
+          exception:
+            value: all
+            title_enable: false
+            title: All
+          title_enable: true
+          title: 'Archive: {{ arguments.field_skate_date_target_id }}'
+          default_argument_type: fixed
+          default_argument_options:
+            argument: ''
+          summary_options:
+            base_path: ''
+            count: true
+            override: false
+            items_per_page: 25
+          summary:
+            sort_order: asc
+            number_of_records: 0
+            format: default_summary
+          specify_validation: true
+          validate:
+            type: 'entity:taxonomy_term'
+            fail: empty
+          validate_options:
+            bundles:
+              skate_dates: skate_dates
+            access: true
+            operation: view
+            multiple: 0
+          break_phrase: false
+          not: false
+      # Display extenders
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.permissions'
+      tags: {  }
+  # Page display
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      # Path with contextual filter placeholder
+      path: 'archive/%'
+      # Menu settings (optional - can add to main menu)
+      menu:
+        type: none
+        title: Archive
+        description: ''
+        weight: 0
+        menu_name: main
+      # Display extenders
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - 'user.permissions'
+      tags: {  }

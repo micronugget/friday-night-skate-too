@@ -1,0 +1,23 @@
+uuid: 3c05ecd7-cfc3-4644-98a7-7c14c28588a6
+langcode: en
+status: true
+dependencies:
+  module:
+    - videojs_media
+_core:
+  default_config_hash: XLE719JAJqTWkn5mKy3LMLZ3nGUV2_QLdXKTjd_gErk
+id: videojs_media.field_remote_url
+field_name: field_remote_url
+entity_type: videojs_media
+type: string
+settings:
+  max_length: 2048
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

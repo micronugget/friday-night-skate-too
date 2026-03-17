@@ -1,0 +1,167 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - content_moderation
+    - node
+    - user
+  enforced:
+    module:
+      - fns_archive
+id: my_archive_content
+label: 'My Archive Content'
+module: views
+description: 'View for users to manage their own archive media submissions'
+tag: content
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'My Archive Uploads'
+      fields:
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: Title
+          exclude: false
+          alter:
+            alter_text: false
+          settings:
+            link_to_entity: true
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: created
+          plugin_id: field
+          label: Created
+          exclude: false
+          settings:
+            date_format: short
+        moderation_state:
+          id: moderation_state
+          table: node_field_data
+          field: moderation_state
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: field
+          label: Status
+          exclude: false
+          settings:
+            link: false
+        operations:
+          id: operations
+          table: node
+          field: operations
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: entity_operations
+          label: Operations
+          exclude: false
+          destination: true
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 25
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: "You haven't uploaded any archive media yet."
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+      filters:
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            archive_media: archive_media
+        uid:
+          id: uid
+          table: node_field_data
+          field: uid
+          entity_type: node
+          entity_field: uid
+          plugin_id: user_current
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value: '***CURRENT_USER***'
+      style:
+        type: table
+        options:
+          columns:
+            title: title
+            created: created
+            moderation_state: moderation_state
+            operations: operations
+          default: created
+          info:
+            title:
+              sortable: true
+              default_sort_order: asc
+            created:
+              sortable: true
+              default_sort_order: desc
+            moderation_state:
+              sortable: true
+              default_sort_order: asc
+            operations:
+              sortable: false
+      row:
+        type: fields
+  page_1:
+    id: page_1
+    display_title: Page
+    display_plugin: page
+    position: 1
+    display_options:
+      path: user/my-archive-content
+      menu:
+        type: normal
+        title: 'My Archive Uploads'
+        description: 'Manage your archive media submissions'
+        weight: 0
+        menu_name: account

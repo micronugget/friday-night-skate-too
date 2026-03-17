@@ -1,0 +1,73 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Install, update and uninstall functions for the FNS Archive module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Implements hook_install().
+ */
+function fns_archive_install(): void {
+  \Drupal::messenger()->addStatus(t('FNS Archive module has been installed. Taxonomy vocabulary "Skate Dates" and content type "Archive Media" have been created.'));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function fns_archive_uninstall(): void {
+  \Drupal::messenger()->addStatus(t('FNS Archive module has been uninstalled.'));
+}
+
+/**
+ * Install FNS Archive taxonomy and content type for existing sites.
+ */
+function fns_archive_update_10001(): string {
+  $config_path = \Drupal::service('extension.list.module')->getPath('fns_archive') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_factory = \Drupal::configFactory();
+
+  // List of config files to import.
+  $configs_to_import = [
+    'taxonomy.vocabulary.skate_dates',
+    'node.type.archive_media',
+    'field.storage.node.field_archive_media',
+    'field.field.node.archive_media.field_archive_media',
+    'field.storage.node.field_skate_date',
+    'field.field.node.archive_media.field_skate_date',
+    'field.storage.node.field_gps_coordinates',
+    'field.field.node.archive_media.field_gps_coordinates',
+    'field.storage.node.field_timestamp',
+    'field.field.node.archive_media.field_timestamp',
+    'field.storage.node.field_uploader',
+    'field.field.node.archive_media.field_uploader',
+    'field.storage.node.field_metadata',
+    'field.field.node.archive_media.field_metadata',
+    'core.entity_view_mode.node.thumbnail',
+    'core.entity_view_mode.node.modal',
+    'core.entity_form_display.node.archive_media.default',
+    'core.entity_view_display.node.archive_media.default',
+    'core.entity_view_display.node.archive_media.teaser',
+    'core.entity_view_display.node.archive_media.thumbnail',
+    'core.entity_view_display.node.archive_media.modal',
+    'pathauto.pattern.archive_media_pattern',
+  ];
+
+  foreach ($configs_to_import as $config_name) {
+    // Only import if the config doesn't already exist.
+    if (!$config_storage->exists($config_name)) {
+      $config_data = $source->read($config_name);
+      if ($config_data) {
+        $config_factory->getEditable($config_name)->setData($config_data)->save();
+        \Drupal::logger('fns_archive')->notice('Imported configuration: @config', ['@config' => $config_name]);
+      }
+    }
+  }
+
+  return t('Installed FNS Archive taxonomy vocabulary and content type for existing sites.');
+}

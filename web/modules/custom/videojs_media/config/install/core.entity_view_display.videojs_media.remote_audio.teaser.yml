@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.videojs_media.teaser
+    - field.field.videojs_media.remote_audio.field_poster_image
+    - videojs_media.type.remote_audio
+  module:
+    - image
+id: videojs_media.remote_audio.teaser
+targetEntityType: videojs_media
+bundle: remote_audio
+mode: teaser
+content:
+  field_poster_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_remote_url: true
+  field_subtitle: true
+  name: true
+  uid: true

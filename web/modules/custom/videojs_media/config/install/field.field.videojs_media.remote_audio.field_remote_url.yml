@@ -1,0 +1,21 @@
+uuid: 895f75da-48a1-460c-8ca5-a205dc1a941b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_remote_url
+    - videojs_media.type.remote_audio
+_core:
+  default_config_hash: S6RjgQftM4zdtyKhjKqr3dcwtgfEien_uWPdJWRzzxE
+id: videojs_media.remote_audio.field_remote_url
+field_name: field_remote_url
+entity_type: videojs_media
+bundle: remote_audio
+label: 'Remote Audio URL'
+description: 'URL to remote audio file (MP3, OGG, etc.).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,13 @@
+# Action links for VideoJS Media.
+
+videojs_media.add:
+  route_name: 'entity.videojs_media.add_page'
+  title: 'Add VideoJS Media'
+  appears_on:
+    - entity.videojs_media.collection
+
+videojs_media.type_add:
+  route_name: 'entity.videojs_media_type.add_form'
+  title: 'Add VideoJS Media type'
+  appears_on:
+    - entity.videojs_media_type.collection

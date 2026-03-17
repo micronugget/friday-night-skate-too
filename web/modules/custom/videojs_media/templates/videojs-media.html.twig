@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display a VideoJS media entity.
+ *
+ * Available variables:
+ * - videojs_media: The VideoJS media entity with limited access to object properties and methods.
+ * - content: All VideoJS media items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}. Use
+ *   {{ content|without('field_example') }} to temporarily suppress the printing
+ *   of a given child element.
+ * - attributes: HTML attributes for the containing element.
+ * - label: The VideoJS media name.
+ * - url: Direct URL of the current entity.
+ * - bundle: The bundle (type) of the VideoJS media.
+ * - view_mode: View mode; for example, "full" or "compact".
+ *
+ * @ingroup themeable
+ */
+#}
+<article{{ attributes.addClass('videojs-media', 'videojs-media--' ~ bundle|clean_class, view_mode ? 'videojs-media--' ~ view_mode|clean_class) }}>
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% endif %}
+
+  <div{{ content_attributes.addClass('videojs-media__content') }}>
+    {% include "videojs_media:player" with {
+      'entity_type': 'videojs_media',
+      'bundle': bundle,
+      'field_media_file': content.field_media_file,
+      'field_remote_url': content.field_remote_url,
+      'field_youtube_url': content.field_youtube_url,
+      'field_poster_image': content.field_poster_image,
+      'field_subtitle': content.field_subtitle,
+    } %}
+  </div>
+</article>

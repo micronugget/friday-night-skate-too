@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_uploader
+    - node.type.archive_media
+id: node.archive_media.field_uploader
+field_name: field_uploader
+entity_type: node
+bundle: archive_media
+label: 'Uploader'
+description: 'The user who uploaded this media. Auto-populated on creation.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:user'
+  handler_settings:
+    include_anonymous: false
+    filter:
+      type: _none
+    target_bundles: null
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+field_type: entity_reference

@@ -1,0 +1,117 @@
+{#
+  VideoJS player template (SDC)
+  Receives field content from videojs-media.html.twig template.
+  Fields are passed as render arrays with their values.
+#}
+{% set is_audio = bundle in ['local_audio', 'remote_audio'] %}
+
+<{{ is_audio ? 'audio' : 'video' }} id="videojs-player-{{ random() }}" class="video-js" playsinline webkit-playsinline
+       {% if field_poster_image %}
+         {% if field_poster_image[0]['#item'] %}
+           {% set poster_uri = field_poster_image[0]['#item'].entity.uri.value %}
+           {% if poster_uri %}poster="{{ file_url(poster_uri) }}"{% endif %}
+         {% elseif field_poster_image['#items'] %}
+           {% set poster_uri = field_poster_image['#items'].entity.uri.value %}
+           {% if poster_uri %}poster="{{ file_url(poster_uri) }}"{% endif %}
+         {% endif %}
+       {% endif %}
+       {% if enable_viewport_monitoring %}data-enable-viewport-monitoring="true"{% endif %}
+       data-setup='{"techOrder": ["html5", "youtube"], {{ is_audio ? "" : "\"fluid\": true, " }}"controls": true, "youtube": {"playsinline": 1}, "html5": {"vhs": {"overrideNative": true}}}'>
+
+  {# Local media file (audio or video) #}
+  {% if field_media_file %}
+    {% set items = field_media_file['#items'] ?? field_media_file[0]['#item'] ?? null %}
+    {% if items %}
+      {% if items.entity %}
+        {% set file_uri = items.entity.uri.value %}
+      {% elseif items[0] and items[0].entity %}
+        {% set file_uri = items[0].entity.uri.value %}
+      {% endif %}
+
+      {% if file_uri %}
+        {% set file_url_path = file_url(file_uri) %}
+        {% set file_extension = file_uri|split('.')|last|lower %}
+
+        {# Map file extensions to MIME types #}
+        {% set mime_types = {
+          'mp3': 'audio/mpeg',
+          'wav': 'audio/wav',
+          'ogg': 'audio/ogg',
+          'aac': 'audio/aac',
+          'm4a': 'audio/mp4',
+          'mp4': 'video/mp4',
+          'webm': 'video/webm',
+          'ogv': 'video/ogg',
+          'mov': 'video/quicktime',
+          'm3u8': 'application/vnd.apple.mpegurl',
+          'mpd': 'application/dash+xml'
+        } %}
+
+        <source
+          src="{{ file_url_path }}"
+          type="{{ mime_types[file_extension] ?? (is_audio ? 'audio/mpeg' : 'video/mp4') }}">
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+  {# Remote URL (audio or video) #}
+  {% if field_remote_url %}
+    {% set remote_url = null %}
+    {% if field_remote_url[0]['#context'] %}
+      {% set remote_url = field_remote_url[0]['#context'].value %}
+    {% elseif field_remote_url[0]['#url'] %}
+      {% set remote_url = field_remote_url[0]['#url'].toString() %}
+    {% elseif field_remote_url['#items'] %}
+      {% set remote_url = field_remote_url['#items'][0].uri %}
+    {% endif %}
+
+    {% if remote_url %}
+      {% set file_extension = remote_url|split('.')|last|split('?')|first|lower %}
+
+      {% set mime_types = {
+        'mp3': 'audio/mpeg',
+        'wav': 'audio/wav',
+        'ogg': 'audio/ogg',
+        'aac': 'audio/aac',
+        'm4a': 'audio/mp4',
+        'mp4': 'video/mp4',
+        'webm': 'video/webm',
+        'ogv': 'video/ogg',
+        'm3u8': 'application/vnd.apple.mpegurl',
+        'mpd': 'application/dash+xml'
+      } %}
+
+      <source
+        src="{{ remote_url }}"
+        type="{{ mime_types[file_extension] ?? (is_audio ? 'audio/mpeg' : 'video/mp4') }}">
+    {% endif %}
+  {% endif %}
+
+  {# YouTube #}
+  {% if field_youtube_url %}
+    {% if field_youtube_url[0]['#context'] %}
+      <source src="{{ field_youtube_url[0]['#context'].value }}"
+              type="video/youtube">
+    {% endif %}
+  {% endif %}
+
+  {# Closed-captions, subtitles #}
+  {% if field_subtitle %}
+    {% set subtitle_items = field_subtitle['#items'] ?? field_subtitle[0]['#item'] ?? null %}
+    {% if subtitle_items %}
+      {% set subtitle_uri = null %}
+      {% if subtitle_items.entity %}
+        {% set subtitle_uri = subtitle_items.entity.uri.value %}
+      {% elseif subtitle_items[0] and subtitle_items[0].entity %}
+        {% set subtitle_uri = subtitle_items[0].entity.uri.value %}
+      {% endif %}
+
+      {% if subtitle_uri %}
+        <track kind="captions"
+               src="{{ file_url(subtitle_uri) }}"
+               srclang="en" label="English" default>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+
+</{{ is_audio ? 'audio' : 'video' }}>

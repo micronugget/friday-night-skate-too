@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - videojs_media
+id: videojs_media.teaser
+label: Teaser
+targetEntityType: videojs_media
+cache: true

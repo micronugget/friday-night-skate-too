@@ -1,0 +1,29 @@
+uuid: 43e1c220-a8e1-43ae-a3cd-fe20f79fe8a7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_subtitle
+    - videojs_media.type.youtube
+  module:
+    - file
+_core:
+  default_config_hash: Krm3EE-DFMMxQRcXIhzPU4F_oEouYeUdKCVYjLFN7Y8
+id: videojs_media.youtube.field_subtitle
+field_name: field_subtitle
+entity_type: videojs_media
+bundle: youtube
+label: Subtitles/Captions
+description: 'Upload WebVTT (.vtt) subtitle files (overrides YouTube captions).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: videojs/subtitles
+  file_extensions: vtt
+  max_filesize: '5 MB'
+  description_field: true
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

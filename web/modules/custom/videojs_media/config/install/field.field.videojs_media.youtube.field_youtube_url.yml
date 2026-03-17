@@ -1,0 +1,21 @@
+uuid: af6da6d1-79e1-4b07-aa4b-0074206b0725
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_youtube_url
+    - videojs_media.type.youtube
+_core:
+  default_config_hash: XDieLku5BwxtZedEWh4cs23o9tG04MYnP2em-4bwMmc
+id: videojs_media.youtube.field_youtube_url
+field_name: field_youtube_url
+entity_type: videojs_media
+bundle: youtube
+label: 'YouTube URL'
+description: 'Full YouTube URL or video ID.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

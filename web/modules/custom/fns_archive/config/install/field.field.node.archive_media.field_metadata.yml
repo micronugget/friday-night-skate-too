@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_metadata
+    - node.type.archive_media
+  module:
+    - text
+id: node.archive_media.field_metadata
+field_name: field_metadata
+entity_type: node
+bundle: archive_media
+label: 'Metadata'
+description: 'JSON-formatted metadata extracted from EXIF (images) or ffprobe (videos). Auto-populated during upload.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

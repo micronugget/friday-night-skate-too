@@ -1,0 +1,40 @@
+uuid: f9abfa91-47ec-459f-b645-d08c2c5d931b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_poster_image
+    - videojs_media.type.youtube
+  module:
+    - image
+_core:
+  default_config_hash: 2hwfOzno7KmDH2J16h76LlurQh9_CLbp9eZVsZRWcyI
+id: videojs_media.youtube.field_poster_image
+field_name: field_poster_image
+entity_type: videojs_media
+bundle: youtube
+label: 'Poster Image'
+description: 'Optional custom poster image (YouTube thumbnail used by default).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: videojs_media/poster
+  file_extensions: 'png gif jpg jpeg webp'
+  max_filesize: ''
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: true
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  handler: 'default:file'
+  handler_settings: {  }
+  default_image:
+    uuid: null
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

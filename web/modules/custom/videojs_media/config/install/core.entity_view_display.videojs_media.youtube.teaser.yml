@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.videojs_media.teaser
+    - field.field.videojs_media.youtube.field_poster_image
+    - videojs_media.type.youtube
+  module:
+    - image
+id: videojs_media.youtube.teaser
+targetEntityType: videojs_media
+bundle: youtube
+mode: teaser
+content:
+  field_poster_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_subtitle: true
+  field_youtube_url: true
+  name: true
+  uid: true

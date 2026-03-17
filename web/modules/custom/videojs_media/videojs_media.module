@@ -1,0 +1,178 @@
+<?php
+
+/**
+ * @file
+ * VideoJS Media module.
+ *
+ * Provides a content entity-based VideoJS media player with support for
+ * local, remote, and YouTube video/audio using view modes.
+ */
+
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+/**
+ * Implements hook_help().
+ */
+function videojs_media_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.videojs_media':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The VideoJS Media module provides a content entity for embedding VideoJS players with support for local files, remote URLs, and YouTube videos. Each media type is implemented as a separate bundle with only the fields it needs.') . '</p>';
+      $output .= '<h3>' . t('Uses') . '</h3>';
+      $output .= '<dl>';
+      $output .= '<dt>' . t('Creating VideoJS Media') . '</dt>';
+      $output .= '<dd>' . t('Visit <a href=":add">Add VideoJS Media</a> to create a new media item. Choose from Local Video, Local Audio, Remote Video, Remote Audio, or YouTube.', [':add' => '/videojs-media/add']) . '</dd>';
+      $output .= '<dt>' . t('Managing VideoJS Media') . '</dt>';
+      $output .= '<dd>' . t('Manage all VideoJS Media items at <a href=":content">VideoJS Media content</a>.', [':content' => '/admin/content/videojs-media']) . '</dd>';
+      $output .= '<dt>' . t('Managing Types') . '</dt>';
+      $output .= '<dd>' . t('Configure VideoJS Media types (bundles) at <a href=":types">VideoJS Media types</a>.', [':types' => '/admin/structure/videojs-media/types']) . '</dd>';
+      $output .= '</dl>';
+      return $output;
+
+    case 'entity.videojs_media.collection':
+      $output = '<p>' . t('VideoJS Media items are <strong>reusable content entities</strong> that can be referenced from nodes and other content types.') . '</p>';
+      $output .= '<p><strong>' . t('How to use VideoJS Media in your content:') . '</strong></p>';
+      $output .= '<ol>';
+      $output .= '<li>' . t('Create VideoJS Media items here (click "Add VideoJS Media" above)') . '</li>';
+      $output .= '<li>' . t('Add an <strong>Entity Reference</strong> field to your content type (Structure → Content types → [Your Type] → Manage fields)') . '</li>';
+      $output .= '<li>' . t('Configure the field to reference <em>VideoJS Media</em> entity type') . '</li>';
+      $output .= '<li>' . t('When creating/editing content, you can now select VideoJS Media items') . '</li>';
+      $output .= '</ol>';
+      $output .= '<p>' . t('💡 <strong>Tip:</strong> Unlike blocks, VideoJS Media entities work like Media items—create them once, reference them anywhere.') . '</p>';
+      return $output;
+
+    default:
+  }
+  return NULL;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function videojs_media_theme() {
+  return [
+    'videojs_media' => [
+      'render element' => 'elements',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for VideoJS media templates.
+ *
+ * Default template: videojs-media.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - elements: An associative array containing the VideoJS media information
+ *     and any fields attached to the entity.
+ *   - attributes: HTML attributes for the containing element.
+ */
+function template_preprocess_videojs_media(array &$variables) {
+  $variables['view_mode'] = $variables['elements']['#view_mode'];
+  $variables['videojs_media'] = $variables['elements']['#videojs_media'];
+  $videojs_media = $variables['videojs_media'];
+
+  $variables['url'] = $videojs_media->toUrl('canonical')->toString();
+  $variables['label'] = $videojs_media->label();
+  $variables['bundle'] = $videojs_media->bundle();
+  // Check if we're viewing the entity on its canonical page.
+  $route_match = \Drupal::routeMatch();
+  $variables['page'] = $variables['view_mode'] == 'full' && $route_match->getRouteName() == 'entity.videojs_media.canonical' && $route_match->getParameter('videojs_media') == $videojs_media;
+
+  // Helpful $content variable for templates.
+  foreach (Element::children($variables['elements']) as $key) {
+    $variables['content'][$key] = $variables['elements'][$key];
+  }
+
+  // Add bundle-specific classes.
+  $variables['attributes']['class'][] = 'videojs-media';
+  $variables['attributes']['class'][] = 'videojs-media--' . $videojs_media->bundle();
+  $variables['attributes']['class'][] = 'videojs-media--' . $variables['view_mode'];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function videojs_media_theme_suggestions_videojs_media(array $variables) {
+  $suggestions = [];
+  $videojs_media = $variables['elements']['#videojs_media'];
+  $sanitized_view_mode = strtr($variables['elements']['#view_mode'], '.', '_');
+
+  $suggestions[] = 'videojs_media__' . $sanitized_view_mode;
+  $suggestions[] = 'videojs_media__' . $videojs_media->bundle();
+  $suggestions[] = 'videojs_media__' . $videojs_media->bundle() . '__' . $sanitized_view_mode;
+  $suggestions[] = 'videojs_media__' . $videojs_media->id();
+  $suggestions[] = 'videojs_media__' . $videojs_media->id() . '__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function videojs_media_videojs_media_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  // Add any preprocessing specific to viewing the entity.
+  // This is where you could add custom logic based on bundle type.
+  $bundle = $entity->bundle();
+
+  // Add bundle-specific preprocessing if needed.
+  switch ($bundle) {
+    case 'youtube':
+      // YouTube-specific preprocessing.
+      break;
+
+    case 'local_video':
+    case 'local_audio':
+      // Local media preprocessing.
+      break;
+
+    case 'remote_video':
+    case 'remote_audio':
+      // Remote media preprocessing.
+      break;
+  }
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ *
+ * Add VideoJS Media to the Navigation module's content section.
+ */
+function videojs_media_menu_links_discovered_alter(&$links) {
+  // Only add to navigation if the Navigation module is enabled and the route
+  // exists.
+  if (!\Drupal::moduleHandler()->moduleExists('navigation')) {
+    return;
+  }
+
+  try {
+    // Verify the route exists before adding the link.
+    \Drupal::service('router.route_provider')->getRouteByName('entity.videojs_media.collection');
+
+    // Add VideoJS Media as a top-level item in the Content navigation section.
+    // This makes it appear alongside Content, Media, Blocks, and Trash in the
+    // vertical admin navigation menu.
+    $links['navigation.videojs_media'] = [
+      'title' => t('VideoJS Media'),
+      'route_name' => 'entity.videojs_media.collection',
+      'menu_name' => 'content',
+      'provider' => 'videojs_media',
+      'weight' => 5,
+      'options' => [
+        'icon' => [
+          'pack_id' => 'videojs_media',
+          'icon_id' => 'videojs-media',
+        ],
+      ],
+    ];
+  }
+  catch (RouteNotFoundException $e) {
+    // Route doesn't exist yet, skip adding the link.
+  }
+}

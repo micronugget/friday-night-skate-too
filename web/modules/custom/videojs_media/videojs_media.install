@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the VideoJS Media module.
+ */
+
+use Drupal\Core\Config\FileStorage;
+
+/**
+ * Add Teaser view mode and view displays for all VideoJS Media bundles.
+ */
+function videojs_media_update_10001() {
+  $config_path = \Drupal::service('extension.list.module')->getPath('videojs_media') . '/config/install';
+  $source = new FileStorage($config_path);
+  $config_storage = \Drupal::service('config.storage');
+  $config_factory = \Drupal::configFactory();
+
+  // List of config files to import for the teaser view mode.
+  $configs_to_import = [
+    'core.entity_view_mode.videojs_media.teaser',
+    'core.entity_view_display.videojs_media.local_video.teaser',
+    'core.entity_view_display.videojs_media.local_audio.teaser',
+    'core.entity_view_display.videojs_media.remote_video.teaser',
+    'core.entity_view_display.videojs_media.remote_audio.teaser',
+    'core.entity_view_display.videojs_media.youtube.teaser',
+  ];
+
+  foreach ($configs_to_import as $config_name) {
+    // Only import if the config doesn't already exist.
+    if (!$config_storage->exists($config_name)) {
+      $config_data = $source->read($config_name);
+      if ($config_data) {
+        $config_factory->getEditable($config_name)->setData($config_data)->save();
+        \Drupal::logger('videojs_media')->notice('Imported configuration: @config', ['@config' => $config_name]);
+      }
+    }
+  }
+
+  return t('Added Teaser view mode for VideoJS Media entities.');
+}
