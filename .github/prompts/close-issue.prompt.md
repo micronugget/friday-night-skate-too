@@ -23,7 +23,7 @@ Follow all rules in [copilot-instructions.md](../copilot-instructions.md) and [c
 | Build | `ddev npm run dev`, `ddev exec "cd … && npm run dev"`, `ddev exec "cd web/themes/custom/fridaynightskate && npm run dev"` |
 | Git (read) | `git status`, `git log`, `git diff`, `git branch`, `git show` |
 | Git (write, local) | `git add`, `git commit`, `git checkout`, `git checkout -b`, `git stash`, `git merge`, `git rebase`, `git cherry-pick`, `git push origin <feature-branch>` (non-force, feature/issue branches only) |
-| File reads | `cat`, `grep`, `find`, `head`, `tail`, `wc`, `ls`, `sort`, `sed -n '…p'` |
+| File reads | `cat`, `grep`, `find` (including without `maxdepth` — required when locating v1 source paths 8+ levels deep), `head`, `tail`, `wc`, `ls`, `sort`, `sed -n '…p'` |
 | Drupal entity ops | `ddev drush entity:delete` (cleanup only) |
 | Drupal module ops | `ddev drush en <module> -y` (reversible with `ddev drush pm:uninstall`) |
 | Drupal module ops (post-enable sync) | `ddev drush cim -y` immediately after `ddev drush en … -y` + `ddev drush cex -y` — safe when used only to apply the newly-exported module list back; not to overwrite in-progress local config |
@@ -113,6 +113,12 @@ Based on the issue title and labels, search for relevant files. Use `search_suba
 - `web/modules/custom/` — custom modules
 - `web/themes/custom/fridaynightskate/` — theme / Twig / SCSS
 - `web/sites/default/` — site configuration
+
+**v1 source location** — when an issue says to port or copy from v1, the source lives at:
+```
+/home/lee/ams_projects/2025/week-21/v2/fridaynightskate/
+```
+Always copy from there rather than building from scratch. Use `find` **without** `maxdepth` when searching for v1 files — the path is 9 levels deep from `/home` and will be missed by shallow searches.
 
 Load any relevant `.instructions.md` files from `.github/instructions/` before writing code.
 
