@@ -1,3 +1,4 @@
+// phpcs:ignoreFile -- JavaScript file; PHP-specific sniffs (uppercase TRUE/FALSE etc.) do not apply.
 /**
  * @file
  * VideoJS player behavior for the player component.

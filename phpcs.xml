@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="fridaynightskate2">
+  <rule ref="Drupal"/>
+  <rule ref="DrupalPractice"/>
+  <!--
+    Exclude JavaScript/CSS asset directories from PHP-specific sniffs.
+    Rules like uppercase TRUE/FALSE/NULL do not apply to JavaScript files.
+  -->
+  <exclude-pattern>*/components/*</exclude-pattern>
+  <exclude-pattern>*/assets/*</exclude-pattern>
+</ruleset>

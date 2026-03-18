@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PHPUnit Configuration Example for VideoJS Media Module
+
+  Copy this file to phpunit.xml and customize for your environment:
+    cp phpunit.xml.dist phpunit.xml
+
+  The phpunit.xml file is git-ignored to allow per-environment customization.
+  
+  Bootstrap path: From web/modules/custom/videojs_media/ to web/core/tests/bootstrap.php
+  ../../../../core/tests/bootstrap.php = 4 levels up to web/, then core/tests/bootstrap.php
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         bootstrap="../../../../core/tests/bootstrap.php"
+         colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         beStrictAboutChangesToGlobalState="true"
+         cacheResult="false">
+  <php>
+    <ini name="error_reporting" value="32767"/>
+    <ini name="memory_limit" value="-1"/>
+    
+    <!-- Update these values for your environment -->
+    <env name="SIMPLETEST_BASE_URL" value="https://friday-night-skate.ddev.site"/>
+    <env name="SIMPLETEST_DB" value="mysql://db:db@db/db"/>
+    <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/var/www/html/web/sites/simpletest/browser_output"/>
+    <env name="BROWSERTEST_OUTPUT_BASE_URL" value="https://friday-night-skate.ddev.site"/>
+    
+    <!-- For non-DDEV environments, use values like:
+    <env name="SIMPLETEST_BASE_URL" value="http://localhost:8080"/>
+    <env name="SIMPLETEST_DB" value="mysql://drupal:drupal@localhost/drupal"/>
+    <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="/tmp/browser_output"/>
+    <env name="BROWSERTEST_OUTPUT_BASE_URL" value="http://localhost:8080"/>
+    -->
+  </php>
+  <testsuites>
+    <testsuite name="unit">
+      <directory>./tests/src/Unit</directory>
+    </testsuite>
+    <testsuite name="kernel">
+      <directory>./tests/src/Kernel</directory>
+    </testsuite>
+    <testsuite name="functional">
+      <directory>./tests/src/Functional</directory>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+    <exclude>
+      <directory>./tests</directory>
+      <directory>./vendor</directory>
+    </exclude>
+  </coverage>
+</phpunit>
