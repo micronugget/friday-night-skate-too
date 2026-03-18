@@ -1,0 +1,12 @@
+uuid: 8c02231e-4c89-4020-8479-824a55f7219d
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - videojs_media
+_core:
+  default_config_hash: 6Jp5QwudakGyqsrw0LJPDVikbqpPHyfhMclyqmYhwRQ
+id: youtube
+label: YouTube
+description: 'Video hosted on YouTube.'

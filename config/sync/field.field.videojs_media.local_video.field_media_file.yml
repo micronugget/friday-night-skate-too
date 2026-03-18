@@ -1,0 +1,29 @@
+uuid: b3e1e261-2753-4516-ac50-feb4adc383a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_media_file
+    - videojs_media.type.local_video
+  module:
+    - file
+_core:
+  default_config_hash: GNGLjvMQWWAlmHn_ZK72YB1FoC37yC4Sxim6zgjeWt8
+id: videojs_media.local_video.field_media_file
+field_name: field_media_file
+entity_type: videojs_media
+bundle: local_video
+label: 'Video File'
+description: 'Upload a local video file.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: videojs_media/video
+  file_extensions: 'mp4 webm ogv mov'
+  max_filesize: ''
+  handler: 'default:file'
+  handler_settings: {  }
+  description_field: false
+field_type: file

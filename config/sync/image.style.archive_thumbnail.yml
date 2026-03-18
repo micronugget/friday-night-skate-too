@@ -1,0 +1,23 @@
+uuid: fb57acfd-c753-418b-a53a-3bb27811a9bf
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: o9n-bVvCUEDJqCDhoO6Y8CDxqx1Zk-ITOoecYQNYqiI
+name: archive_thumbnail
+label: 'Archive Thumbnail'
+effects:
+  scale_and_crop:
+    uuid: scale_and_crop
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 400
+      height: 400
+      anchor: center-center
+  convert_webp:
+    uuid: convert_webp
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

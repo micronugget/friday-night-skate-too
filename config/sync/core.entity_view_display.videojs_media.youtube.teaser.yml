@@ -1,0 +1,36 @@
+uuid: 7b687ad4-7b80-4417-9df4-09380485c263
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.videojs_media.teaser
+    - field.field.videojs_media.youtube.field_poster_image
+    - field.field.videojs_media.youtube.field_subtitle
+    - field.field.videojs_media.youtube.field_youtube_url
+    - videojs_media.type.youtube
+  module:
+    - svg_image
+_core:
+  default_config_hash: FoRFQML3ytol62WBGLgaZrt-O8NPYx3QZyzSIlVudEk
+id: videojs_media.youtube.teaser
+targetEntityType: videojs_media
+bundle: youtube
+mode: teaser
+content:
+  field_poster_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_subtitle: true
+  field_youtube_url: true
+  name: true
+  uid: true

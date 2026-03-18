@@ -1,0 +1,12 @@
+uuid: 31657d17-3d45-49e5-822f-25d0dfd5e938
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - videojs_media
+_core:
+  default_config_hash: GotH-eNN0qhWTggn4FAoos4L67O89i9T6G6cjkYscOg
+id: remote_video
+label: 'Remote Video'
+description: 'Video file hosted remotely via URL (HLS, DASH, MP4, etc.).'

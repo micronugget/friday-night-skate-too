@@ -1,0 +1,36 @@
+uuid: 8de08e65-a304-4a59-b608-7e8d2f26db3b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.videojs_media.teaser
+    - field.field.videojs_media.local_video.field_media_file
+    - field.field.videojs_media.local_video.field_poster_image
+    - field.field.videojs_media.local_video.field_subtitle
+    - videojs_media.type.local_video
+  module:
+    - svg_image
+_core:
+  default_config_hash: friupvGFnBP34DnexuucBr8OC9JPGuNd8qB2rGPBYzg
+id: videojs_media.local_video.teaser
+targetEntityType: videojs_media
+bundle: local_video
+mode: teaser
+content:
+  field_poster_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_media_file: true
+  field_subtitle: true
+  name: true
+  uid: true

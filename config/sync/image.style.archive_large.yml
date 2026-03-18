@@ -1,0 +1,23 @@
+uuid: 6a1020b9-994d-4abc-bc41-36cc3b660262
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: CNua39TYTn7SrDoI4qSwn1CbU2G9XxRcppNEgFo0j4E
+name: archive_large
+label: 'Archive Large'
+effects:
+  scale_image:
+    uuid: scale_image
+    id: image_scale
+    weight: 1
+    data:
+      width: 1200
+      height: 900
+      upscale: false
+  convert_webp:
+    uuid: convert_webp
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

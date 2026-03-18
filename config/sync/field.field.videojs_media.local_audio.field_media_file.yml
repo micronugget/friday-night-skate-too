@@ -1,0 +1,29 @@
+uuid: 83c7156e-81f8-4fbd-abe2-0260781fbea8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_media_file
+    - videojs_media.type.local_audio
+  module:
+    - file
+_core:
+  default_config_hash: 8twgGszBn-AgR4gNfWfDmJiiU9QNJXAXdYCHh62qHnI
+id: videojs_media.local_audio.field_media_file
+field_name: field_media_file
+entity_type: videojs_media
+bundle: local_audio
+label: 'Audio File'
+description: 'Upload a local audio file.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: videojs_media/audio
+  file_extensions: 'mp3 ogg wav aac m4a'
+  max_filesize: ''
+  handler: 'default:file'
+  handler_settings: {  }
+  description_field: false
+field_type: file

@@ -1,0 +1,22 @@
+uuid: 540727e1-9494-41c5-bd62-c0fac61a0255
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - fridaynightskate
+_core:
+  default_config_hash: 4rF-hDdVLL9geylwMNW5XqqKMBUsw5lm361cJuGNNKo
+id: fridaynightskate_breadcrumbs
+theme: fridaynightskate
+region: header
+weight: -5
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: '0'
+  provider: system
+visibility: {  }

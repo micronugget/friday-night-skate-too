@@ -1,0 +1,23 @@
+uuid: 22a00d5b-5ef4-437e-8a86-2cf13985be34
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: zPIY177HpqTqcAfnKZlZYkxAD4zAPLFbB2YwvT0f3JE
+name: archive_full
+label: 'Archive Full'
+effects:
+  scale_image:
+    uuid: scale_image
+    id: image_scale
+    weight: 1
+    data:
+      width: 1920
+      height: 1440
+      upscale: false
+  convert_webp:
+    uuid: convert_webp
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

@@ -1,0 +1,20 @@
+uuid: 102c4cca-bbcc-4b29-9019-c6770f89ae90
+langcode: en
+status: true
+dependencies:
+  theme:
+    - fridaynightskate
+_core:
+  default_config_hash: N0jLWyWZAHt7lb0LjnnIDweUaD4yY8MkZP4B6OiAGfc
+id: fridaynightskate_page_title
+theme: fridaynightskate
+region: header
+weight: -2
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'Page title'
+  label_display: '0'
+  provider: core
+visibility: {  }

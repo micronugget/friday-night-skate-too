@@ -1,0 +1,14 @@
+uuid: b14a82fb-efed-4718-9a88-8e5cb6b86e76
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.skater
+  module:
+    - user
+id: user_add_role_action.skater
+label: 'Add the Skater role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: skater

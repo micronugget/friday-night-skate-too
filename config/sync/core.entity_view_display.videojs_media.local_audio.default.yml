@@ -1,0 +1,50 @@
+uuid: f660a7a8-c790-4ac5-86dd-b0711e41aca0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.videojs_media.local_audio.field_media_file
+    - field.field.videojs_media.local_audio.field_poster_image
+    - field.field.videojs_media.local_audio.field_subtitle
+    - videojs_media.type.local_audio
+  module:
+    - file
+    - svg_image
+_core:
+  default_config_hash: SjFVWC-KjdZ2sNeMS-uQfH2RAz332d1r_mN2IO-GNMw
+id: videojs_media.local_audio.default
+targetEntityType: videojs_media
+bundle: local_audio
+mode: default
+content:
+  field_media_file:
+    type: file_default
+    weight: 1
+    region: content
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+  field_poster_image:
+    type: image
+    weight: 2
+    region: content
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+  field_subtitle:
+    type: file_default
+    weight: 3
+    region: content
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+hidden:
+  created: true
+  name: true
+  uid: true

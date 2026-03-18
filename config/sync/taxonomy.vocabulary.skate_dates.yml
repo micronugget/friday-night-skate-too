@@ -1,0 +1,14 @@
+uuid: cb303472-3a8a-4095-a097-2d22faf949af
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_archive
+_core:
+  default_config_hash: gLF7Tf_4nZL4l5-_cFsB2dNnx6-O1JKjBssIvUZ9Yps
+name: 'Skate Dates'
+vid: skate_dates
+description: 'Taxonomy for organizing Friday Night Skate sessions by date and location. Format: YYYY-MM-DD - Location/Description'
+weight: 0
+new_revision: false

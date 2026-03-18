@@ -1,0 +1,14 @@
+uuid: f4b7c8dd-9c02-4dfe-a897-043864b81271
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.skater
+  module:
+    - user
+id: user_remove_role_action.skater
+label: 'Remove the Skater role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: skater

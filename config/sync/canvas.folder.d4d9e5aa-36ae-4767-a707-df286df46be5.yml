@@ -1,0 +1,14 @@
+uuid: d4d9e5aa-36ae-4767-a707-df286df46be5
+langcode: en
+status: true
+dependencies: {  }
+name: Layout
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.mercury.accordion
+  - sdc.mercury.accordion-container
+  - sdc.mercury.footer
+  - sdc.mercury.group
+  - sdc.mercury.navbar
+  - sdc.mercury.section

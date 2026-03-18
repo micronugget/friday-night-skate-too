@@ -1,0 +1,13 @@
+uuid: f5884ee8-832a-4db0-b281-214ef219ebbb
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: cKJ8XBTm6GQEc9KzA3WO26FDvQvX7EI_JXaIEJkpyMc
+id: node.modal
+label: Modal
+description: null
+targetEntityType: node
+cache: true

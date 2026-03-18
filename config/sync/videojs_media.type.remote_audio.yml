@@ -1,0 +1,12 @@
+uuid: 5b4ee6b0-8e3f-45c8-b76d-51b3c3f86095
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - videojs_media
+_core:
+  default_config_hash: sO-_lTOH1T3q4BvI_K0a1LD0I8YB9Z-R5hHHNQGtsgI
+id: remote_audio
+label: 'Remote Audio'
+description: 'Audio file hosted remotely via URL.'

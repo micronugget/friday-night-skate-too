@@ -1,0 +1,36 @@
+uuid: ebe2d81c-37c2-4341-bb98-f3a980278980
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.videojs_media.teaser
+    - field.field.videojs_media.remote_video.field_poster_image
+    - field.field.videojs_media.remote_video.field_remote_url
+    - field.field.videojs_media.remote_video.field_subtitle
+    - videojs_media.type.remote_video
+  module:
+    - svg_image
+_core:
+  default_config_hash: UAbiWjG7-vqorkEGPREBfThg6gNQKAWf7E-c7t7P4pY
+id: videojs_media.remote_video.teaser
+targetEntityType: videojs_media
+bundle: remote_video
+mode: teaser
+content:
+  field_poster_image:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  created: true
+  field_remote_url: true
+  field_subtitle: true
+  name: true
+  uid: true

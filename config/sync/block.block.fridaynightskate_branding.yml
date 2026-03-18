@@ -1,0 +1,25 @@
+uuid: a5b01bd6-fa58-4fcc-93e3-bc76a1e90351
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - fridaynightskate
+_core:
+  default_config_hash: QU2SyJUS4Fz_GlXaQSUfTkhMQ51QALYwKAJxLTbNBu8
+id: fridaynightskate_branding
+theme: fridaynightskate
+region: navbar_branding
+weight: -1
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

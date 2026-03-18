@@ -1,0 +1,51 @@
+uuid: 83ede0e9-6a7c-4a58-9f27-690204b43da6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.archive_media.field_archive_media
+    - field.field.node.archive_media.field_gps_coordinates
+    - field.field.node.archive_media.field_metadata
+    - field.field.node.archive_media.field_skate_date
+    - field.field.node.archive_media.field_timestamp
+    - field.field.node.archive_media.field_uploader
+    - node.type.archive_media
+  module:
+    - datetime
+    - user
+_core:
+  default_config_hash: lsbY81VstOUtQ6QedhWques8mq3xAVacsRFeH-2U1No
+id: node.archive_media.teaser
+targetEntityType: node
+bundle: archive_media
+mode: teaser
+content:
+  field_archive_media:
+    type: entity_reference_entity_view
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      link: false
+      view_mode: teaser
+    third_party_settings: {  }
+  field_skate_date:
+    type: datetime_default
+    weight: 2
+    region: content
+    label: inline
+    settings:
+      timezone_override: ''
+      format_type: short
+    third_party_settings: {  }
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_gps_coordinates: true
+  field_metadata: true
+  field_timestamp: true
+  field_uploader: true

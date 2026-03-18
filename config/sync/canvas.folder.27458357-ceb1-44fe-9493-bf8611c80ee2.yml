@@ -1,0 +1,9 @@
+uuid: 27458357-ceb1-44fe-9493-bf8611c80ee2
+langcode: en
+status: true
+dependencies: {  }
+name: Media
+configEntityTypeId: component
+weight: 0
+items:
+  - block.videojs_media_block

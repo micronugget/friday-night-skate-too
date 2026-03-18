@@ -1,0 +1,13 @@
+uuid: 9aa354e3-b5fa-458b-a013-d6f41966a04c
+langcode: en
+status: true
+dependencies:
+  module:
+    - videojs_media
+_core:
+  default_config_hash: 1VSDK7F-iqQBJkmhjE7h7LRpfAFiI2J0AF0Hg0w4cxI
+id: videojs_media.teaser
+label: Teaser
+description: null
+targetEntityType: videojs_media
+cache: true

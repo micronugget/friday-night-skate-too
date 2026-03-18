@@ -1,0 +1,31 @@
+uuid: 092983d4-4596-47e2-a4f4-8ac09fec516e
+langcode: en
+status: true
+dependencies:
+  module:
+    - content_moderation
+    - menu_ui
+  enforced:
+    module:
+      - fns_archive
+third_party_settings:
+  content_moderation:
+    enabled: true
+    allowed_moderation_states:
+      - draft
+      - review
+      - published
+      - archived
+    default_moderation_state: draft
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+_core:
+  default_config_hash: 1GRvLx1jU4Z3cBBgiY7qhD6-6L1b-zpHxbgXwHJP0Mc
+name: 'Archive Media'
+type: archive_media
+description: 'Content type for Friday Night Skate archive media including images and videos with metadata.'
+help: 'Upload and organize images and videos from Friday Night Skate sessions. Media will be tagged with skate date, GPS coordinates, and other metadata.'
+new_revision: true
+preview_mode: 1
+display_submitted: true
