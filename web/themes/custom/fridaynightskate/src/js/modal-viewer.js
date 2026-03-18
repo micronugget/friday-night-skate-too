@@ -170,28 +170,36 @@ import 'swiper/css/a11y';
           const isVideo = item.dataset.mediaType === 'video' || item.classList.contains('video-item');
           
           if (isVideo) {
-            // Create video player container
+            // Create video player container using safe DOM methods (no innerHTML).
             const videoId = item.dataset.videoId || `video-${index}`;
             const videoUrl = item.dataset.videoUrl || '';
-            
-            slide.innerHTML = `
-              <div class="video-container d-flex align-items-center justify-content-center h-100">
-                <video id="${videoId}" class="video-js vjs-default-skin" controls preload="none" 
-                       data-setup='{"fluid": true, "aspectRatio": "16:9"}'>
-                  <source src="${videoUrl}" type="video/mp4">
-                </video>
-              </div>
-            `;
+            const videoContainer = document.createElement('div');
+            videoContainer.className = 'video-container d-flex align-items-center justify-content-center h-100';
+            const videoEl = document.createElement('video');
+            videoEl.id = videoId;
+            videoEl.className = 'video-js vjs-default-skin';
+            videoEl.controls = true;
+            videoEl.preload = 'none';
+            videoEl.dataset.setup = '{"fluid": true, "aspectRatio": "16:9"}';
+            const sourceEl = document.createElement('source');
+            sourceEl.src = videoUrl;
+            sourceEl.type = 'video/mp4';
+            videoEl.appendChild(sourceEl);
+            videoContainer.appendChild(videoEl);
+            slide.appendChild(videoContainer);
           } else {
-            // Create image - prefer data-fullsize from parent, then from img
+            // Create image using safe DOM methods (no innerHTML).
             const imgSrc = item.dataset.fullsize || img?.dataset.fullsize || img?.src || '';
             const imgAlt = img?.alt || 'Archive media';
-            
-            slide.innerHTML = `
-              <div class="image-container d-flex align-items-center justify-content-center h-100">
-                <img src="${imgSrc}" alt="${imgAlt}" class="img-fluid" loading="lazy">
-              </div>
-            `;
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'image-container d-flex align-items-center justify-content-center h-100';
+            const imgEl = document.createElement('img');
+            imgEl.src = imgSrc;
+            imgEl.alt = imgAlt;
+            imgEl.className = 'img-fluid';
+            imgEl.loading = 'lazy';
+            imgContainer.appendChild(imgEl);
+            slide.appendChild(imgContainer);
           }
           
           // Store metadata from item data attributes
@@ -287,26 +295,29 @@ import 'swiper/css/a11y';
         
         if (!content) return;
         
-        let html = '<div class="metadata-items">';
-        
-        if (metadata.title) {
-          html += `<div class="metadata-item"><strong>Title:</strong> ${metadata.title}</div>`;
-        }
-        if (metadata.date) {
-          html += `<div class="metadata-item"><strong>Date:</strong> ${metadata.date}</div>`;
-        }
-        if (metadata.location) {
-          html += `<div class="metadata-item"><strong>Location:</strong> ${metadata.location}</div>`;
-        }
-        if (metadata.gps) {
-          html += `<div class="metadata-item"><strong>GPS:</strong> ${metadata.gps}</div>`;
-        }
-        if (metadata.uploader) {
-          html += `<div class="metadata-item"><strong>Uploaded by:</strong> ${metadata.uploader}</div>`;
-        }
-        
-        html += '</div>';
-        content.innerHTML = html;
+        // Build metadata using safe DOM methods — metadata values come from
+        // data attributes and must not be interpolated into innerHTML.
+        const metaContainer = document.createElement('div');
+        metaContainer.className = 'metadata-items';
+
+        const addMetaItem = (label, value) => {
+          const metaItem = document.createElement('div');
+          metaItem.className = 'metadata-item';
+          const strong = document.createElement('strong');
+          strong.textContent = label;
+          metaItem.appendChild(strong);
+          metaItem.appendChild(document.createTextNode(' ' + value));
+          metaContainer.appendChild(metaItem);
+        };
+
+        if (metadata.title) addMetaItem('Title:', metadata.title);
+        if (metadata.date) addMetaItem('Date:', metadata.date);
+        if (metadata.location) addMetaItem('Location:', metadata.location);
+        if (metadata.gps) addMetaItem('GPS:', metadata.gps);
+        if (metadata.uploader) addMetaItem('Uploaded by:', metadata.uploader);
+
+        content.innerHTML = '';
+        content.appendChild(metaContainer);
       }
 
       /**

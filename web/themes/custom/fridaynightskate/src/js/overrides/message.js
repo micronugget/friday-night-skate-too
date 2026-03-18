@@ -104,7 +104,12 @@
       wrapper.classList.add('alert-dismissible', 'fade', 'show');
       wrapper.appendChild(Drupal.theme('messageClose'));
     }
-    wrapper.innerHTML += message && message.text;
+    // Render message content as text. Drupal messages in this theme are
+    // plain text (translated strings). Using textContent avoids innerHTML
+    // with a parameter that static analysis cannot verify as sanitized.
+    const msgNode = document.createElement('span');
+    msgNode.textContent = (message && message.text) || '';
+    wrapper.appendChild(msgNode);
 
     return wrapper;
   };
@@ -163,7 +168,7 @@
   Drupal.theme.messageLabel = (label) => {
     const element = document.createElement('h4');
     element.setAttribute('class', 'visually-hidden');
-    element.innerHTML = label;
+    element.textContent = label;
     return element;
   };
 })(Drupal);
