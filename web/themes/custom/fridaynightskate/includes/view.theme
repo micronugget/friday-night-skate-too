@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Theme and preprocess functions for views.
+ */
+
+/**
+ * Implements hook_preprocess_views_view_unformatted().
+ *
+ * Add data attributes to masonry items for modal viewer integration.
+ */
+function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
+  $view = $variables['view'];
+  
+  // Only apply to archive views with masonry
+  if (strpos($view->id(), 'archive') === FALSE) {
+    return;
+  }
+  
+  foreach ($variables['rows'] as $id => $row) {
+    $entity = $view->result[$id]->_entity ?? NULL;
+    
+    if (!$entity) {
+      continue;
+    }
+    
+    // Add data attributes for modal viewer
+    $attributes = &$variables['rows'][$id]['attributes'];
+    
+    // Media type
+    if ($entity->hasField('field_media_video_file') && !$entity->get('field_media_video_file')->isEmpty()) {
+      $attributes->setAttribute('data-media-type', 'video');
+      
+      // Video URL
+      $video_file = $entity->get('field_media_video_file')->entity;
+      if ($video_file) {
+        $video_url = \Drupal::service('file_url_generator')->generateAbsoluteString($video_file->getFileUri());
+        $attributes->setAttribute('data-video-url', $video_url);
+        $attributes->setAttribute('data-video-id', 'video-' . $entity->id());
+      }
+    } else {
+      $attributes->setAttribute('data-media-type', 'image');
+    }
+    
+    // Date
+    if ($entity->hasField('field_event_date') && !$entity->get('field_event_date')->isEmpty()) {
+      $date = $entity->get('field_event_date')->value;
+      $formatted_date = \Drupal::service('date.formatter')->format(strtotime($date), 'custom', 'F j, Y');
+      $attributes->setAttribute('data-date', $formatted_date);
+    }
+    
+    // Location/GPS
+    if ($entity->hasField('field_gps_location') && !$entity->get('field_gps_location')->isEmpty()) {
+      $gps = $entity->get('field_gps_location')->value;
+      $attributes->setAttribute('data-gps', $gps);
+    }
+    
+    if ($entity->hasField('field_location_name') && !$entity->get('field_location_name')->isEmpty()) {
+      $location = $entity->get('field_location_name')->value;
+      $attributes->setAttribute('data-location', $location);
+    }
+    
+    // Uploader
+    if ($entity->hasField('uid')) {
+      $owner = $entity->getOwner();
+      if ($owner) {
+        $attributes->setAttribute('data-uploader', $owner->getDisplayName());
+      }
+    }
+    
+    // Full size image URL
+    if ($entity->hasField('field_media_image') && !$entity->get('field_media_image')->isEmpty()) {
+      $image = $entity->get('field_media_image')->entity;
+      if ($image) {
+        $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($image->getFileUri());
+        $attributes->setAttribute('data-fullsize', $image_url);
+      }
+    }
+  }
+}
+

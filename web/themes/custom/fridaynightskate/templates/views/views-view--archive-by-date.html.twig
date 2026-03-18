@@ -1,0 +1,75 @@
+{#
+/**
+ * @file
+ * Theme override for the Archive by Date view.
+ *
+ * Available variables:
+ * - rows: A list of row items.
+ * - title: The view title.
+ * - header: The view header.
+ * - footer: The view footer.
+ * - empty: The empty text.
+ * - pager: The pager.
+ * - exposed: Exposed widget form/info to display.
+ * - more: A link to view more, if any.
+ * - view: The view object.
+ */
+#}
+{{ attach_library('fridaynightskate/masonry-archive') }}
+{{ attach_library('fridaynightskate/modal-viewer') }}
+
+{% set classes = [
+  'archive-view',
+  'view-' ~ view.id()|clean_class,
+  'view-display-' ~ view.current_display|clean_class,
+] %}
+
+<div{{ attributes.addClass(classes) }}>
+  {% if title %}
+    <h1 class="view-title h2 mb-4">{{ title }}</h1>
+  {% endif %}
+
+  {% if header %}
+    <div class="view-header">
+      {{ header }}
+    </div>
+  {% endif %}
+
+  {% if exposed %}
+    <div class="view-filters">
+      {{ exposed }}
+    </div>
+  {% endif %}
+
+  {% if rows %}
+    <div class="masonry-grid" role="list" aria-label="{{ 'Archive media items'|t }}">
+      {# Column sizer for Masonry #}
+      <div class="masonry-sizer"></div>
+      
+      {# Grid items #}
+      {{ rows }}
+    </div>
+  {% elseif empty %}
+    <div class="view-empty">
+      {{ empty }}
+    </div>
+  {% endif %}
+
+  {% if pager %}
+    <div class="view-pager">
+      {{ pager }}
+    </div>
+  {% endif %}
+
+  {% if more %}
+    <div class="view-more">
+      {{ more }}
+    </div>
+  {% endif %}
+
+  {% if footer %}
+    <div class="view-footer">
+      {{ footer }}
+    </div>
+  {% endif %}
+</div>

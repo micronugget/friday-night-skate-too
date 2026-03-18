@@ -1,0 +1,396 @@
+/**
+ * Archive Masonry Grid Layout - Starry Night Edition
+ * Responsive grid with Bootstrap 5 breakpoints
+ * Atmospheric hover effects and celestial aesthetics
+ */
+
+.masonry-grid {
+  margin: 0 -12px; // Increased gutter for breathing room
+  position: relative;
+  z-index: 1;
+
+  // Clearfix
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  // Ambient background effect
+  &:before {
+    content: "";
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background: radial-gradient(
+      circle at 30% 40%,
+      rgba(0, 75, 135, 0.1) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+    z-index: -1;
+    animation: ambient-glow 10s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes ambient-glow {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+// Column sizer for responsive layout
+.masonry-sizer {
+  width: 100%;
+
+  // xs: 1 column (< 576px)
+  @media (max-width: 575.98px) {
+    width: 100%;
+  }
+
+  // sm: 2 columns (≥ 576px)
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    width: calc(50% - 16px);
+  }
+
+  // md: 3 columns (≥ 768px)
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    width: calc(33.333% - 16px);
+  }
+
+  // lg: 4 columns (≥ 992px)
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    width: calc(25% - 16px);
+  }
+
+  // xl: 5 columns (≥ 1200px)
+  @media (min-width: 1200px) {
+    width: calc(20% - 16px);
+  }
+}
+
+// Grid items - Starry aesthetic
+.masonry-item {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0 12px;
+  position: relative;
+  overflow: visible; // Allow glow effects
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 0.4s ease;
+
+  // Responsive widths matching sizer
+  // xs: 1 column (< 576px)
+  @media (max-width: 575.98px) {
+    width: 100%;
+  }
+
+  // sm: 2 columns (≥ 576px)
+  @media (min-width: 576px) and (max-width: 767.98px) {
+    width: 50%;
+  }
+
+  // md: 3 columns (≥ 768px)
+  @media (min-width: 768px) and (max-width: 991.98px) {
+    width: 33.333%;
+  }
+
+  // lg: 4 columns (≥ 992px)
+  @media (min-width: 992px) and (max-width: 1199.98px) {
+    width: 25%;
+  }
+
+  // xl: 5 columns (≥ 1200px)
+  @media (min-width: 1200px) {
+    width: 20%;
+  }
+
+  // Inner content wrapper - Atmospheric depth
+  .masonry-item__content {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      rgba(23, 42, 58, 0.8) 0%,
+      rgba(0, 75, 135, 0.6) 100%
+    );
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    // Subtle inner glow
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(
+        circle at 50% 0%,
+        rgba(255, 215, 0, 0.05) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+        filter 0.4s ease;
+      position: relative;
+      z-index: 0;
+    }
+  }
+
+  // Hover effects - Celestial elevation
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    filter: brightness(1.1);
+    z-index: 10;
+
+    .masonry-item__content {
+      border-color: rgba(255, 215, 0, 0.4);
+      box-shadow:
+        0 12px 32px rgba(0, 0, 0, 0.4),
+        0 0 24px rgba(255, 215, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+      &:before {
+        opacity: 1;
+      }
+
+      img {
+        transform: scale(1.08) rotate(1deg);
+        filter: brightness(1.05) contrast(1.05);
+      }
+    }
+
+    .masonry-item__metadata-icon {
+      opacity: 1;
+      transform: scale(1.1) rotate(360deg);
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.6);
+    }
+  }
+
+  // Active/focus state
+  &:active,
+  &:focus-within {
+    .masonry-item__content {
+      border-color: rgba(255, 215, 0, 0.6);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 0 32px rgba(255, 215, 0, 0.3);
+    }
+  }
+
+  // Metadata icon overlay - Golden star badge
+  .masonry-item__metadata-icon {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--starry-golden), var(--starry-golden-glow));
+    color: var(--starry-midnight);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    opacity: 0.85;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.3),
+      0 0 16px rgba(255, 215, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+
+    &:before {
+      content: "\1F4CD"; // 📍 emoji for location
+      font-size: 18px;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    &[data-has-video="true"] {
+      background: linear-gradient(135deg, var(--starry-swirl-cyan), var(--starry-aurora));
+
+      &:before {
+        content: "\25B6"; // ▶ play icon
+      }
+    }
+  }
+
+  // Lazy loading placeholder - Starry shimmer
+  &.masonry-item--loading {
+    .masonry-item__content {
+      background: linear-gradient(
+        90deg,
+        rgba(23, 42, 58, 0.6) 0%,
+        rgba(0, 75, 135, 0.8) 50%,
+        rgba(23, 42, 58, 0.6) 100%
+      );
+      background-size: 200% 100%;
+      animation: starry-shimmer 2s ease-in-out infinite;
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--starry-golden);
+        border-top-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+  }
+}
+
+@keyframes starry-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+// Link wrapper (no underline)
+.masonry-item a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+// Accessibility: Focus state - Golden outline
+.masonry-item:focus-within {
+  outline: 3px solid var(--starry-golden);
+  outline-offset: 4px;
+  border-radius: 20px;
+
+  .masonry-item__content {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.4),
+      0 0 32px rgba(255, 215, 0, 0.4);
+  }
+}
+
+// Entrance animations - Staggered
+.masonry-item {
+  animation: swirl-fade-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+@keyframes swirl-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) rotate(-3deg) scale(0.95);
+    filter: blur(4px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+// Stagger animations based on position
+@for $i from 1 through 30 {
+  .masonry-item:nth-child(#{$i}) {
+    animation-delay: #{$i * 0.05}s;
+  }
+}
+
+// Responsive glow intensity
+@media (max-width: 767.98px) {
+  .masonry-item:hover {
+    transform: translateY(-4px);
+
+    .masonry-item__content {
+      box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.3),
+        0 0 16px rgba(255, 215, 0, 0.15);
+    }
+  }
+
+  .masonry-item__metadata-icon {
+    width: 36px;
+    height: 36px;
+    bottom: 8px;
+    right: 8px;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .masonry-item__content {
+    border: 2px solid var(--starry-golden);
+
+    &:before {
+      display: none;
+    }
+  }
+
+  .masonry-item__metadata-icon {
+    border: 2px solid var(--starry-midnight);
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .masonry-item,
+  .masonry-grid:before {
+    animation: none;
+  }
+
+  .masonry-item:hover {
+    transform: none;
+
+    .masonry-item__content img {
+      transform: none;
+    }
+
+    .masonry-item__metadata-icon {
+      transform: none;
+    }
+  }
+}

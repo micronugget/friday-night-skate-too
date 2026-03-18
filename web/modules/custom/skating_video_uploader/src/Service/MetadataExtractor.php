@@ -97,7 +97,7 @@ class MetadataExtractor {
       }
 
       // Extract metadata using ffprobe command.
-      $metadata = $this->extractWithFfprobe($local_path);
+      $metadata = $this->extractWithFfProbe($local_path);
       if (!$metadata) {
         $this->loggerFactory->error('Failed to extract metadata from @uri', ['@uri' => $uri]);
         return NULL;
@@ -129,7 +129,7 @@ class MetadataExtractor {
    * @return array|null
    *   An array of metadata or NULL if extraction failed.
    */
-  protected function extractWithFfprobe(string $file_path): ?array {
+  protected function extractWithFfProbe(string $file_path): ?array {
     // Escape the file path for shell command.
     $escaped_path = escapeshellarg($file_path);
 
@@ -504,8 +504,8 @@ class MetadataExtractor {
         return NULL;
       }
 
-      // Use the existing extractWithFfprobe method.
-      return $this->extractWithFfprobe($local_path);
+      // Use the existing extractWithFfProbe method.
+      return $this->extractWithFfProbe($local_path);
     }
     catch (\Exception $e) {
       $this->loggerFactory->error('Error extracting video metadata: @error', ['@error' => $e->getMessage()]);

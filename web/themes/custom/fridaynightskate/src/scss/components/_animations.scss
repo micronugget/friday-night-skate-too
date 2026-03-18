@@ -1,0 +1,515 @@
+/**
+ * @file
+ * Animation library - Starry Night motion effects
+ * Swirling, organic, celestial animations
+ */
+
+// ============================================================================
+// Swirling Entrance Animations
+// ============================================================================
+
+@keyframes swirl-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) rotate(-5deg);
+    filter: blur(8px);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(1.05) rotate(2deg);
+    filter: blur(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+    filter: blur(0);
+  }
+}
+
+@keyframes swirl-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px) rotate(-10deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@keyframes swirl-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100px) rotate(10deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+// ============================================================================
+// Floating & Hovering Effects
+// ============================================================================
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes float-subtle {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  33% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+
+  66% {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(20px) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translateX(20px) rotate(-360deg);
+  }
+}
+
+// ============================================================================
+// Glow & Shimmer Effects
+// ============================================================================
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 8px rgba(255, 215, 0, 0.3),
+      0 0 16px rgba(255, 215, 0, 0.2),
+      0 0 24px rgba(255, 215, 0, 0.1);
+  }
+
+  50% {
+    box-shadow:
+      0 0 16px rgba(255, 215, 0, 0.5),
+      0 0 32px rgba(255, 215, 0, 0.3),
+      0 0 48px rgba(255, 215, 0, 0.2);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.8;
+    filter: brightness(1);
+  }
+
+  50% {
+    opacity: 1;
+    filter: brightness(1.3);
+  }
+}
+
+// ============================================================================
+// Ripple & Wave Effects
+// ============================================================================
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+
+  50% {
+    transform: translateY(-10px) scaleY(0.95);
+  }
+
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+// ============================================================================
+// Particle & Star Animations
+// ============================================================================
+
+@keyframes twinkle-advanced {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1);
+  }
+
+  25% {
+    opacity: 0.6;
+    transform: scale(1.2) rotate(90deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.5) rotate(180deg);
+    filter: brightness(1.5);
+  }
+
+  75% {
+    opacity: 0.6;
+    transform: scale(1.2) rotate(270deg);
+  }
+}
+
+@keyframes shooting-star {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(300px) translateY(300px);
+    opacity: 0;
+  }
+}
+
+@keyframes stardust {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-50px) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(0.5);
+  }
+}
+
+// ============================================================================
+// Reveal & Expand Animations
+// ============================================================================
+
+@keyframes reveal-up {
+  0% {
+    clip-path: inset(100% 0 0 0);
+    opacity: 0;
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+@keyframes expand-center {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes unfold {
+  0% {
+    transform: scaleY(0) rotateX(90deg);
+    opacity: 0;
+    transform-origin: top;
+  }
+
+  100% {
+    transform: scaleY(1) rotateX(0deg);
+    opacity: 1;
+    transform-origin: top;
+  }
+}
+
+// ============================================================================
+// Utility Animation Classes
+// ============================================================================
+
+.animate-swirl-in {
+  animation: swirl-in 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 4s ease-in-out infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0) 0%,
+    rgba(255, 215, 0, 0.3) 50%,
+    rgba(255, 215, 0, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-wave {
+  animation: wave 2s ease-in-out infinite;
+}
+
+// Stagger delays for sequential animations
+@for $i from 1 through 20 {
+  .animate-delay-#{$i} {
+    animation-delay: #{$i * 0.1}s;
+  }
+}
+
+// ============================================================================
+// Hover Animation Classes
+// ============================================================================
+
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-8px);
+  }
+}
+
+.hover-grow {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.hover-glow {
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow:
+      0 0 16px rgba(255, 215, 0, 0.4),
+      0 0 32px rgba(255, 215, 0, 0.2);
+  }
+}
+
+.hover-swirl {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: rotate(3deg) scale(1.02);
+  }
+}
+
+// ============================================================================
+// Page Transition Animations
+// ============================================================================
+
+.page-fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.page-slide-up {
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// ============================================================================
+// Loading Animations
+// ============================================================================
+
+.loading-stars {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 20px;
+
+  span {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--starry-golden);
+    border-radius: 50%;
+    animation: pulse-glow 1s ease-in-out infinite;
+
+    &:nth-child(1) {
+      left: 0;
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      left: 30px;
+      animation-delay: 0.2s;
+    }
+
+    &:nth-child(3) {
+      left: 60px;
+      animation-delay: 0.4s;
+    }
+  }
+}
+
+// ============================================================================
+// Scroll-triggered Animations (via Intersection Observer)
+// ============================================================================
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.scroll-reveal-scale {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+
+  &.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// ============================================================================
+// Performance Optimization
+// ============================================================================
+
+// Use will-change for animated elements
+.will-animate {
+  will-change: transform, opacity;
+}
+
+// GPU acceleration for smooth animations
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+// ============================================================================
+// Reduced Motion Respect
+// ============================================================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:before,
+  *:after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-float,
+  .animate-float-subtle,
+  .animate-glow,
+  .animate-shimmer,
+  .animate-pulse-glow,
+  .animate-wave {
+    animation: none;
+  }
+}

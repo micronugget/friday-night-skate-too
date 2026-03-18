@@ -1,0 +1,86 @@
+style:
+  css:
+    theme:
+      build/css/main.style.css: {}
+      https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap: { type: external, minified: true }
+  js:
+    build/js/main.script.js: {}
+    build/js/starry-night.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+drupal.ajax:
+  js:
+    src/js/overrides/ajax.js: {}
+  dependencies:
+    - core/drupal
+
+drupal.checkbox:
+  js:
+    src/js/overrides/checkbox.js: {}
+  dependencies:
+    - core/drupal
+
+drupal.dialog:
+  js:
+    src/js/overrides/dialog.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+
+drupal.dialog.ajax:
+  js:
+    src/js/overrides/dialog.ajax.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.ajax
+
+drupal.message:
+  js:
+    src/js/overrides/message.js: {}
+
+drupal.progress:
+  js:
+    src/js/overrides/progress.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+drupal.text:
+  js:
+    src/js/overrides/text.js: {}
+  dependencies:
+    - core/jquery
+    - core/once
+    - core/drupal
+
+jquery.validate:
+  js:
+    src/js/overrides/validate.js: {}
+  dependencies:
+    - core/jquery
+
+masonry-archive:
+  css:
+    theme:
+      build/css/main.style.css: {}
+  js:
+    build/js/archive-masonry.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupalSettings
+
+modal-viewer:
+  css:
+    theme:
+      build/css/main.style.css: {}
+  js:
+    build/js/modal-viewer.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupalSettings

@@ -101,7 +101,7 @@ class VideoProcessorTest extends UnitTestCase {
     $this->messenger->expects($this->once())
       ->method('addError');
 
-    $this->videoProcessor->processEntity($entity);
+    $result = $this->videoProcessor->processEntity($entity);
     $this->assertFalse($result);
   }
 
@@ -117,7 +117,7 @@ class VideoProcessorTest extends UnitTestCase {
     $this->messenger->expects($this->once())
       ->method('addError');
 
-    $this->videoProcessor->processEntity($videojs_media);
+    $result = $this->videoProcessor->processEntity($videojs_media);
     $this->assertFalse($result);
   }
 
@@ -138,7 +138,7 @@ class VideoProcessorTest extends UnitTestCase {
     $this->messenger->expects($this->once())
       ->method('addError');
 
-    $this->videoProcessor->processEntity($videojs_media);
+    $result = $this->videoProcessor->processEntity($videojs_media);
     $this->assertFalse($result);
   }
 
@@ -167,7 +167,7 @@ class VideoProcessorTest extends UnitTestCase {
     // Mock the YouTube uploader service call
     // Note: In real testing, we'd need to properly mock \Drupal::service()
     // For unit tests, this demonstrates the expected behavior.
-    $this->videoProcessor->processEntity($videojs_media);
+    $result = $this->videoProcessor->processEntity($videojs_media);
     // Result depends on YouTube upload success which we can't fully test in unit tests.
   }
 
@@ -191,7 +191,7 @@ class VideoProcessorTest extends UnitTestCase {
       ->with($videojs_media)
       ->willReturn($metadata);
 
-    $this->videoProcessor->processEntity($videojs_media);
+    $result = $this->videoProcessor->processEntity($videojs_media);
     // Result depends on YouTube upload success.
   }
 
