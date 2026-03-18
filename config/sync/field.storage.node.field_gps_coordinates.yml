@@ -1,0 +1,22 @@
+uuid: a74d481f-4828-4ba8-9703-42d825201505
+langcode: en
+status: true
+dependencies:
+  module:
+    - geofield
+    - node
+_core:
+  default_config_hash: fEMen0XeaDtZweGObcWeCFaBEq8SJWvvL9Y3uwI9UG4
+id: node.field_gps_coordinates
+field_name: field_gps_coordinates
+entity_type: node
+type: geofield
+settings:
+  backend: geofield_backend_default
+module: geofield
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

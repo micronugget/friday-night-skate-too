@@ -1,0 +1,24 @@
+uuid: bd2f5d0f-7ca1-4e07-9680-e7eb0ebe3dcb
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: s3zSV_8zo1DlL1CbtvdEO1dD2pUQuDRrYGvUqw2-8HU
+id: archive_media_pattern
+label: 'Archive Media'
+type: 'canonical_entities:node'
+pattern: '/archive/[node:field_skate_date:entity:name]/[node:nid]'
+selection_criteria:
+  d4a5b9ea-05b3-4e88-89c6-7e1e91f006b7:
+    id: 'entity_bundle:node'
+    bundles:
+      archive_media: archive_media
+    negate: false
+    context_mapping:
+      node: node
+    uuid: d4a5b9ea-05b3-4e88-89c6-7e1e91f006b7
+selection_logic: and
+weight: -5
+relationships: {  }

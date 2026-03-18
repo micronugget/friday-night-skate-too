@@ -1,0 +1,53 @@
+uuid: eb3edc0b-d268-44cf-bf68-3593033132cb
+langcode: en
+status: true
+dependencies:
+  theme:
+    - radix
+active_version: 0f4172aee02a1bfe
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        label_display:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+        field_utility_classes:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+        field_title_utility_classes:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+        field_item_utility_classes:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+    fallback_metadata:
+      slot_definitions: {  }
+label: Filed
+id: sdc.radix.field
+provider: radix
+source: sdc
+source_local_id: 'radix:field'

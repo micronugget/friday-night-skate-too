@@ -1,0 +1,22 @@
+uuid: 2576ae7a-9317-4ea1-ae69-d8ead59cc5b1
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - fridaynightskate
+_core:
+  default_config_hash: 56IT6PVXcBESrCQBZmdQs3qxT6Tf2fRUg6pmJZ2D9yc
+id: fridaynightskate_content
+theme: fridaynightskate
+region: content
+weight: -5
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

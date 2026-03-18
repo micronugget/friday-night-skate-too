@@ -1,0 +1,23 @@
+uuid: bf72fd93-39c6-48eb-b49a-067cb3ee3a72
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: uCVsZO-2S2dlEUyQvLvBEf_b-U82ziRacccEv2IZjac
+name: archive_medium
+label: 'Archive Medium'
+effects:
+  scale_image:
+    uuid: scale_image
+    id: image_scale
+    weight: 1
+    data:
+      width: 800
+      height: 600
+      upscale: false
+  convert_webp:
+    uuid: convert_webp
+    id: image_convert
+    weight: 2
+    data:
+      extension: webp

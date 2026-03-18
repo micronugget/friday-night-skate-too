@@ -1,0 +1,25 @@
+uuid: f413a158-4b49-43be-b5e5-bcbc58e03ff8
+langcode: en
+status: true
+dependencies:
+  module:
+    - videojs_media
+active_version: 4d108f8a5e151362
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: videojs_media_block
+        label: 'VideoJS Media'
+        label_display: '0'
+        provider: videojs_media
+        videojs_media_id: null
+        view_mode: default
+        hide_title: false
+    fallback_metadata:
+      slot_definitions: null
+label: 'VideoJS Media'
+id: block.videojs_media_block
+provider: videojs_media
+source: block
+source_local_id: videojs_media_block

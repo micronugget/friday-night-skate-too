@@ -1,0 +1,13 @@
+uuid: cd2269ed-1389-44f2-a201-a66617efe8e1
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: 1velf-eGYz8Udrz6n76zVcPNRpQpR8zmwOcJ3LKjAj4
+id: node.thumbnail
+label: Thumbnail
+description: null
+targetEntityType: node
+cache: true

@@ -1,0 +1,78 @@
+uuid: ffe24dce-bf1f-4e95-a55b-a5d156f2c2e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.archive_full
+    - image.style.archive_large
+    - image.style.archive_medium
+    - image.style.archive_thumbnail
+  theme:
+    - fridaynightskate
+_core:
+  default_config_hash: 925BhAiXuqoSdAqcz-aUVbYEtAnDm_6EgRzRKISOCZc
+id: archive_responsive
+label: 'Archive Responsive'
+image_style_mappings:
+  -
+    breakpoint_id: fridaynightskate.default.xs
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: archive_thumbnail
+  -
+    breakpoint_id: fridaynightskate.default.xs
+    multiplier: 2x
+    image_mapping_type: image_style
+    image_mapping: archive_medium
+  -
+    breakpoint_id: fridaynightskate.default.sm
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: archive_medium
+  -
+    breakpoint_id: fridaynightskate.default.sm
+    multiplier: 2x
+    image_mapping_type: image_style
+    image_mapping: archive_large
+  -
+    breakpoint_id: fridaynightskate.default.md
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: archive_medium
+  -
+    breakpoint_id: fridaynightskate.default.md
+    multiplier: 2x
+    image_mapping_type: image_style
+    image_mapping: archive_large
+  -
+    breakpoint_id: fridaynightskate.default.lg
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: archive_large
+  -
+    breakpoint_id: fridaynightskate.default.lg
+    multiplier: 2x
+    image_mapping_type: image_style
+    image_mapping: archive_full
+  -
+    breakpoint_id: fridaynightskate.default.xl
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: archive_large
+  -
+    breakpoint_id: fridaynightskate.default.xl
+    multiplier: 2x
+    image_mapping_type: image_style
+    image_mapping: archive_full
+  -
+    breakpoint_id: fridaynightskate.default.xxl
+    multiplier: 1x
+    image_mapping_type: image_style
+    image_mapping: archive_full
+  -
+    breakpoint_id: fridaynightskate.default.xxl
+    multiplier: 2x
+    image_mapping_type: image_style
+    image_mapping: archive_full
+breakpoint_group: fridaynightskate
+fallback_image_style: archive_medium

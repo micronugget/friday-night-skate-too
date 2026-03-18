@@ -1,5 +1,6 @@
 # Site-specific settings and files.
 /sites/*/settings*.php
+!/sites/default/settings.php
 /sites/*/services*.yml
 /sites/*/files
 /sites/*/private

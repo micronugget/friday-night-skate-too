@@ -1,0 +1,22 @@
+uuid: 6bd5b772-4ab6-48d5-9eed-fa1342f484b9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+_core:
+  default_config_hash: Krmbavw8f9m6G2eiIyoGQ9qJXpRQOgLSid9AcYZvuFI
+id: node.field_skate_date
+field_name: field_skate_date
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

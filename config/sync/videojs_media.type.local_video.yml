@@ -1,0 +1,12 @@
+uuid: dc014918-564f-4242-aee5-7f5ce7076b93
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - videojs_media
+_core:
+  default_config_hash: Uq5a022JRJRyW9IqUFdiSTZQNW_bjt8xUZUsIB2EBLs
+id: local_video
+label: 'Local Video'
+description: 'Video file hosted locally on your server.'

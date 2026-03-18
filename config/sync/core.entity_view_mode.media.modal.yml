@@ -1,0 +1,13 @@
+uuid: 7007e2a1-a5f4-4d70-bab7-4b184bddce45
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+_core:
+  default_config_hash: x9p_F9yiWM8fKS0bpDGcgNplHPqKT9bJBZac38JlTVU
+id: media.modal
+label: Modal
+description: null
+targetEntityType: media
+cache: true

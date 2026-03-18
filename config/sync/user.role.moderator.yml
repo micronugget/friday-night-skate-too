@@ -1,0 +1,40 @@
+uuid: 6918fbd0-b1fb-4033-b8f1-a05d4db250cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.archive_media
+    - workflows.workflow.archive_review
+  module:
+    - content_moderation
+    - node
+    - system
+  enforced:
+    module:
+      - fns_archive
+_core:
+  default_config_hash: GDm3hL3U1GKiT_xnRlHGCQImrf3e7xfypdVblK8R7mg
+id: moderator
+label: Moderator
+weight: 5
+is_admin: false
+permissions:
+  - 'access content'
+  - 'access content overview'
+  - 'create archive_media content'
+  - 'delete any archive_media content'
+  - 'delete archive_media revisions'
+  - 'delete own archive_media content'
+  - 'edit any archive_media content'
+  - 'edit own archive_media content'
+  - 'revert archive_media revisions'
+  - 'use archive_review transition archive'
+  - 'use archive_review transition create_new_draft'
+  - 'use archive_review transition publish'
+  - 'use archive_review transition restore'
+  - 'use archive_review transition send_back_to_draft'
+  - 'view all revisions'
+  - 'view any unpublished content'
+  - 'view archive_media revisions'
+  - 'view latest version'
+  - 'view own unpublished content'

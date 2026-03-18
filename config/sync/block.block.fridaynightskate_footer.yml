@@ -1,0 +1,27 @@
+uuid: 974d581e-70ca-48b1-8787-7c8e947f5ad9
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.footer
+  module:
+    - system
+  theme:
+    - fridaynightskate
+_core:
+  default_config_hash: xmd6UGqXgW9dpSaBPJf2JdXfQwTwWcz8wZk50wgrfYo
+id: fridaynightskate_footer
+theme: fridaynightskate
+region: footer
+weight: -5
+provider: null
+plugin: 'system_menu_block:footer'
+settings:
+  id: 'system_menu_block:footer'
+  label: 'Footer menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

@@ -1,0 +1,75 @@
+uuid: cc78251e-6b72-429f-b610-c380962c408b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.videojs_media.youtube.field_poster_image
+    - field.field.videojs_media.youtube.field_subtitle
+    - field.field.videojs_media.youtube.field_youtube_url
+    - image.style.thumbnail
+    - videojs_media.type.youtube
+  module:
+    - file
+    - svg_image
+_core:
+  default_config_hash: URqBLOSI1zneUGB1GtxZAH1VvogUN_req-BQENfSt7Y
+id: videojs_media.youtube.default
+targetEntityType: videojs_media
+bundle: youtube
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_poster_image:
+    type: image_image
+    weight: 2
+    region: content
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+  field_subtitle:
+    type: file_generic
+    weight: 3
+    region: content
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+  field_youtube_url:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: 'https://www.youtube.com/watch?v=VIDEO_ID'
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }
