@@ -22,7 +22,7 @@ Follow all rules in [copilot-instructions.md](../copilot-instructions.md) and [c
 | Composer | `ddev composer install`, `ddev composer require …` (no destructive flags) |
 | Build | `ddev npm run dev`, `ddev exec "cd … && npm run dev"`, `ddev exec "cd web/themes/custom/fridaynightskate && npm run dev"` |
 | Git (read) | `git status`, `git log`, `git diff`, `git branch`, `git show` |
-| Git (write, local) | `git add`, `git commit`, `git checkout`, `git checkout -b`, `git stash`, `git merge`, `git rebase`, `git cherry-pick`, `git push origin <feature-branch>` (non-force, feature/issue branches only) |
+| Git (write, local) | `git add`, `git commit`, `git checkout`, `git checkout -b`, `git stash`, `git merge`, `git rebase`, `git rebase main` (rebases feature branch onto updated main; reversible with `git rebase --abort`), `git cherry-pick`, `git push origin <feature-branch>` (non-force, feature/issue branches only) |
 | File reads | `cat`, `grep`, `find` (including without `maxdepth` — required when locating v1 source paths 8+ levels deep), `head`, `tail`, `wc`, `ls`, `sort`, `sed -n '…p'` |
 | Drupal entity ops | `ddev drush entity:delete` (cleanup only) |
 | Drupal module ops | `ddev drush en <module> -y` (reversible with `ddev drush pm:uninstall`) |
