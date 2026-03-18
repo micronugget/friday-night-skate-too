@@ -10,15 +10,12 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\videojs_media\VideoJsMediaInterface;
 
 /**
  * Service for processing video entities and coordinating metadata extraction and YouTube uploads.
  */
 class VideoProcessor {
-
-  use StringTranslationTrait;
 
   /**
    * The entity type manager.
@@ -119,7 +116,7 @@ class VideoProcessor {
       // Check if this is a VideoJS Media entity.
       if (!($entity instanceof VideoJsMediaInterface)) {
         $this->loggerFactory->error('Unsupported entity type @type', ['@type' => $entity->getEntityTypeId()]);
-        $this->messenger->addError($this->t('Unsupported entity type.'));
+        $this->messenger->addError(t('Unsupported entity type.'));
         return FALSE;
       }
 
@@ -127,7 +124,7 @@ class VideoProcessor {
       $bundle = $entity->bundle();
       if ($bundle !== 'local_video' && $bundle !== 'local_audio') {
         $this->loggerFactory->error('VideoJS Media entity must be local_video or local_audio, got @bundle', ['@bundle' => $bundle]);
-        $this->messenger->addError($this->t('Only local video and audio files can be processed.'));
+        $this->messenger->addError(t('Only local video and audio files can be processed.'));
         return FALSE;
       }
 
@@ -135,7 +132,7 @@ class VideoProcessor {
       $metadata = $this->metadataExtractor->extractMetadata($entity);
       if (!$metadata) {
         $this->loggerFactory->error('Failed to extract metadata from VideoJS Media entity @id', ['@id' => $entity->id()]);
-        $this->messenger->addError($this->t('Failed to extract metadata from the video.'));
+        $this->messenger->addError(t('Failed to extract metadata from the video.'));
         return FALSE;
       }
 
@@ -146,19 +143,19 @@ class VideoProcessor {
       $youtube_id = $this->youtubeUploader->uploadVideo($entity, $metadata);
       if (!$youtube_id) {
         $this->loggerFactory->error('Failed to upload video to YouTube for VideoJS Media entity @id', ['@id' => $entity->id()]);
-        $this->messenger->addError($this->t('Failed to upload the video to YouTube. Please check the YouTube API configuration.'));
+        $this->messenger->addError(t('Failed to upload the video to YouTube. Please check the YouTube API configuration.'));
         return FALSE;
       }
 
       // Update the metadata with the YouTube ID.
       $this->updateYouTubeId($entity->id(), $youtube_id);
 
-      $this->messenger->addStatus($this->t('Video successfully processed and uploaded to YouTube with ID: @id', ['@id' => $youtube_id]));
+      $this->messenger->addStatus(t('Video successfully processed and uploaded to YouTube with ID: @id', ['@id' => $youtube_id]));
       return TRUE;
     }
     catch (\Exception $e) {
       $this->loggerFactory->error('Error processing entity: @error', ['@error' => $e->getMessage()]);
-      $this->messenger->addError($this->t('Error processing the video: @error', ['@error' => $e->getMessage()]));
+      $this->messenger->addError(t('Error processing the video: @error', ['@error' => $e->getMessage()]));
       return FALSE;
     }
   }

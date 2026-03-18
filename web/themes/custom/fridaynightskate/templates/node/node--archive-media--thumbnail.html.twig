@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * Theme override for Archive Media nodes in thumbnail view mode.
+ *
+ * Available variables:
+ * - node: The node entity with limited access to object properties and methods.
+ * - label: The title of the node.
+ * - content: All node items. Use {{ content }} to print them all,
+ *   or print a subset such as {{ content.field_example }}.
+ * - url: Direct URL of the current node.
+ * - attributes: HTML attributes for the containing element.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the main title tag that appears in the template.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the main title tag that appears in the template.
+ */
+#}
+{% set has_metadata = node.field_metadata is not empty and not node.field_metadata.isEmpty() %}
+{% set is_video = node.field_archive_media.entity.bundle() == 'video' %}
+
+{%
+  set classes = [
+    'masonry-item',
+    'node',
+    'node--type-' ~ node.bundle()|clean_class,
+    'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }} role="listitem">
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  <div class="masonry-item__content">
+    <a href="{{ url }}" 
+       aria-label="{{ 'View media from'|t }} {{ label }}"
+       data-node-id="{{ node.id() }}"
+       data-has-metadata="{{ has_metadata ? 'true' : 'false' }}"
+       data-is-video="{{ is_video ? 'true' : 'false' }}">
+      
+      {# Render the media field (image/video thumbnail) #}
+      {% if content.field_archive_media %}
+        {{ content.field_archive_media }}
+      {% endif %}
+
+      {# Metadata icon overlay if metadata exists #}
+      {% if has_metadata or is_video %}
+        <span class="masonry-item__metadata-icon" 
+              aria-hidden="true"
+              data-has-video="{{ is_video ? 'true' : 'false' }}">
+        </span>
+      {% endif %}
+    </a>
+  </div>
+</article>

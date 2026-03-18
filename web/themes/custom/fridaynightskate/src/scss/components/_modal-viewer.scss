@@ -1,0 +1,512 @@
+/**
+ * @file
+ * Modal viewer styles - Starry Night Edition
+ * Cinematic experience with Swiper navigation and atmospheric depth
+ */
+
+// Modal viewer component
+.modal-viewer {
+  // Modal customizations - Deep space backdrop
+  #mediaModal {
+    .modal-content {
+      background: linear-gradient(
+        135deg,
+        rgba(10, 10, 15, 0.98) 0%,
+        rgba(15, 26, 46, 0.98) 100%
+      );
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      box-shadow:
+        0 16px 64px rgba(0, 0, 0, 0.8),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 1060;
+      padding: 1.5rem;
+      background: linear-gradient(
+        180deg,
+        rgba(15, 26, 46, 0.9) 0%,
+        transparent 100%
+      );
+      border: none;
+    }
+
+    .btn-close {
+      width: 56px;
+      height: 56px;
+      opacity: 0.8;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background-size: 28px;
+      background-color: rgba(255, 215, 0, 0.1);
+      border-radius: 50%;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+      &:hover {
+        opacity: 1;
+        transform: rotate(90deg) scale(1.1);
+        background-color: rgba(255, 215, 0, 0.2);
+        border-color: var(--starry-golden);
+        box-shadow:
+          0 8px 24px rgba(0, 0, 0, 0.4),
+          0 0 24px rgba(255, 215, 0, 0.4);
+      }
+
+      &:focus {
+        outline: 3px solid var(--starry-golden);
+        outline-offset: 4px;
+        background-color: rgba(255, 215, 0, 0.3);
+      }
+    }
+
+    .modal-body {
+      min-height: 70vh;
+
+      @media (max-width: 575.98px) {
+        min-height: 100vh;
+      }
+    }
+  }
+
+  // Swiper customizations - Cinematic experience
+  .modal-swiper {
+    width: 100%;
+    height: 100%;
+    min-height: 70vh;
+    position: relative;
+
+    // Ambient glow effect
+    &:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      background: radial-gradient(
+        circle,
+        rgba(255, 215, 0, 0.05) 0%,
+        transparent 70%
+      );
+      pointer-events: none;
+      z-index: 0;
+      animation: ambient-pulse 4s ease-in-out infinite;
+    }
+
+    @media (max-width: 575.98px) {
+      min-height: 100vh;
+    }
+
+    .swiper-slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+
+      .image-container,
+      .video-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 2rem;
+        position: relative;
+
+        @media (max-width: 575.98px) {
+          padding: 1rem;
+        }
+
+        // Decorative corner accents
+        &:before,
+        &:after {
+          content: "";
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          border: 2px solid var(--starry-golden);
+          opacity: 0.3;
+          transition: opacity 0.3s ease;
+        }
+
+        &:before {
+          top: 0;
+          left: 0;
+          border-right: none;
+          border-bottom: none;
+        }
+
+        &:after {
+          bottom: 0;
+          right: 0;
+          border-left: none;
+          border-top: none;
+        }
+
+        &:hover:before,
+        &:hover:after {
+          opacity: 0.7;
+        }
+      }
+
+      img {
+        max-height: 80vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.5),
+          0 0 48px rgba(255, 215, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          transform: scale(1.02);
+          box-shadow:
+            0 12px 48px rgba(0, 0, 0, 0.6),
+            0 0 64px rgba(255, 215, 0, 0.15);
+        }
+
+        @media (max-width: 575.98px) {
+          max-height: 90vh;
+        }
+      }
+
+      .video-js {
+        width: 100%;
+        max-width: 1200px;
+        border-radius: 12px;
+        box-shadow:
+          0 8px 32px rgba(0, 0, 0, 0.5),
+          0 0 48px rgba(58, 143, 183, 0.1);
+      }
+    }
+  }
+
+  @keyframes ambient-pulse {
+    0%,
+    100% {
+      opacity: 0.5;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+      opacity: 0.8;
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+  }
+
+  // Navigation arrows - Golden celestial buttons
+  .swiper-button-prev,
+  .swiper-button-next {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 215, 0, 0.15) 0%,
+      rgba(255, 201, 71, 0.1) 100%
+    );
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 50%;
+    color: var(--starry-golden);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    &:after {
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 215, 0, 0.3) 0%,
+        rgba(255, 201, 71, 0.2) 100%
+      );
+      border-color: var(--starry-golden);
+      color: var(--starry-golden-bright);
+      transform: scale(1.15);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 0 32px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    &:focus {
+      outline: 3px solid var(--starry-golden);
+      outline-offset: 4px;
+    }
+
+    &:active {
+      transform: scale(1.05);
+    }
+
+    // Hide on mobile to prioritize touch gestures
+    @media (max-width: 767.98px) {
+      display: none;
+    }
+  }
+
+  // Metadata toggle button - Golden star
+  .metadata-toggle {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1050;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--starry-golden), var(--starry-golden-glow));
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.4),
+      0 0 24px rgba(255, 215, 0, 0.3);
+    color: var(--starry-midnight);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, var(--starry-golden-bright), var(--starry-golden));
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.15) rotate(90deg);
+      box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.5);
+
+      &:before {
+        opacity: 1;
+      }
+    }
+
+    &:focus {
+      outline: 3px solid var(--starry-golden);
+      outline-offset: 4px;
+    }
+
+    &[aria-expanded="true"] {
+      background: linear-gradient(135deg, var(--starry-swirl-cyan), var(--starry-aurora));
+      border-color: var(--starry-aurora);
+      color: #fff;
+      transform: rotate(180deg);
+    }
+
+    svg {
+      width: 28px;
+      height: 28px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    @media (max-width: 575.98px) {
+      bottom: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  // Metadata panel - Atmospheric glass card
+  .metadata-panel {
+    position: absolute;
+    bottom: 96px;
+    right: 24px;
+    max-width: 420px;
+    width: 90%;
+    border-radius: 16px;
+    background: linear-gradient(
+      135deg,
+      rgba(23, 42, 58, 0.95) 0%,
+      rgba(0, 75, 135, 0.9) 100%
+    );
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.6),
+      0 0 32px rgba(255, 215, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1045;
+
+    &.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    @media (max-width: 575.98px) {
+      bottom: 80px;
+      right: 16px;
+      max-width: calc(100% - 32px);
+    }
+
+    .metadata-content {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .metadata-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+      transition: all 0.3s ease;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &:hover {
+        background: rgba(255, 215, 0, 0.05);
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+      }
+
+      strong {
+        color: var(--starry-golden-glow);
+        display: block;
+        margin-bottom: 0.35rem;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+      }
+
+      span {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+  }
+}
+
+// Touch target sizes for mobile (44x44px minimum)
+@media (hover: none) {
+  .modal-viewer {
+    .btn-close,
+    .metadata-toggle {
+      min-width: 48px;
+      min-height: 48px;
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .modal-viewer {
+    #mediaModal .modal-content {
+      border: 3px solid var(--starry-golden);
+    }
+
+    .swiper-button-prev,
+    .swiper-button-next {
+      background: rgba(255, 215, 0, 0.3);
+      border: 3px solid var(--starry-golden);
+    }
+
+    .metadata-toggle {
+      border: 3px solid var(--starry-midnight);
+    }
+
+    .metadata-panel {
+      border: 2px solid var(--starry-golden);
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .modal-viewer {
+    .swiper-slide,
+    .btn-close,
+    .swiper-button-prev,
+    .swiper-button-next,
+    .metadata-panel,
+    .metadata-toggle,
+    .modal-swiper:before {
+      transition: none;
+      animation: none;
+    }
+
+    .btn-close:hover {
+      transform: none;
+    }
+
+    .swiper-button-prev:hover,
+    .swiper-button-next:hover {
+      transform: none;
+    }
+
+    .metadata-toggle:hover {
+      transform: none;
+    }
+  }
+}
+
+// Dark mode adjustments (enhanced for Starry Night)
+@media (prefers-color-scheme: dark) {
+  .modal-viewer {
+    #mediaModal .modal-content {
+      background: linear-gradient(
+        135deg,
+        rgba(5, 5, 8, 0.99) 0%,
+        rgba(10, 15, 30, 0.99) 100%
+      );
+      box-shadow:
+        0 20px 80px rgba(0, 0, 0, 0.9),
+        0 0 48px rgba(255, 215, 0, 0.1);
+    }
+  }
+}
+
+// Swiper pagination customization (if enabled)
+.modal-viewer {
+  .swiper-pagination {
+    bottom: 20px;
+
+    .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      background: rgba(255, 215, 0, 0.3);
+      border: 1px solid rgba(255, 215, 0, 0.5);
+      opacity: 0.6;
+      transition: all 0.3s ease;
+
+      &:hover {
+        opacity: 0.8;
+        transform: scale(1.2);
+      }
+
+      &-active {
+        background: var(--starry-golden);
+        opacity: 1;
+        box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+      }
+    }
+  }
+}

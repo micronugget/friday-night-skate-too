@@ -109,7 +109,7 @@
           $wrapper.find('.file-count-message').remove();
 
           const countMsg = Drupal.t('@count file(s) selected', {'@count': files.length});
-          $('<div class="alert alert-info mt-2 file-count-message">' + countMsg + '</div>').insertAfter($description);
+          $('<div>').addClass('alert alert-info mt-2 file-count-message').text(countMsg).insertAfter($description);
         }
       });
     },
@@ -143,8 +143,7 @@
           const errorMsg = Drupal.t('Invalid YouTube URL(s): @urls', {
             '@urls': invalidUrls.join(', ')
           });
-          $('<div class="alert alert-danger youtube-validation-error mt-2">' + errorMsg + '</div>')
-            .insertAfter($(this));
+          $('<div>').addClass('alert alert-danger youtube-validation-error mt-2').text(errorMsg).insertAfter($(this));
         }
       });
     }
@@ -156,9 +155,9 @@
       attach: function (context) {
         const $fileInput = $('input[type="file"][accept*="image"]', context).once('camera-hint');
         if ($fileInput.length > 0 && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-          const $hint = $('<div class="alert alert-info mt-2"><small>📷 ' +
-            Drupal.t('Tap to use your camera or select from gallery') +
-            '</small></div>');
+          const $hint = $('<div>').addClass('alert alert-info mt-2').append(
+            $('<small>').text('📷 ' + Drupal.t('Tap to use your camera or select from gallery'))
+          );
           $fileInput.closest('.form-item').find('.description').after($hint);
         }
       }

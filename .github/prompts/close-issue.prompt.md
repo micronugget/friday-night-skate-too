@@ -35,6 +35,7 @@ Follow all rules in [copilot-instructions.md](../copilot-instructions.md) and [c
 | GitHub CLI (API read) | `gh api repos/…/secret-scanning/alerts …`, `gh api repos/…/secret-scanning/alerts/$N/locations …` — read-only security state queries |
 | Drupal PHP eval | `ddev drush php:eval "…"` (read-only operations: UUID generation, entity queries, service calls with no side effects) |
 | PHPStan baseline | `ddev exec vendor/bin/phpstan analyze … --generate-baseline=phpstan-baseline.php` — writes a local baseline file; analysis only, no side effects |
+| Theme/module copy from v1 | `mkdir -p web/themes/custom` and `rsync -a --exclude=node_modules <v1-source>/ <v2-dest>/` — additive file copy, no existing files deleted |
 
 **Always ask before running:**
 - `git push origin master` or `git push origin main` — pushes to the default branch, visible to all collaborators
@@ -183,7 +184,48 @@ If any UI configuration was changed, or any `.yml` files in `config/sync/` were 
 ```bash
 echo "=== Config Export ===" && ddev drush cex -y 2>&1 | tail -10
 ```
+### 6e. Rebase onto latest main (MANDATORY before push)
 
+**Always run this before pushing.** Other PRs may have merged to `main` since you branched, causing conflicts in the PR.
+
+```bash
+# Check if main has moved ahead
+git fetch origin main 2>&1 | tail -3 && \
+git log --oneline origin/main ^HEAD | head -5
+```
+
+If any commits appear, rebase:
+```bash
+git stash  # if you have unstaged changes
+git rebase origin/main 2>&1
+# Resolve any conflicts, then:
+git rebase --continue 2>&1
+git stash pop  # if you stashed
+```
+
+**Conflict resolution rules when porting files from v1:**
+- Files that also exist on `main` from another issue branch: keep **your** version if it has PHPCS/quality fixes over the raw v1 copy; otherwise keep `main`'s version
+- `.info.yml` `core_version_requirement`: always keep `main`'s value (it reflects the project's actual minimum Drupal version)
+- When in doubt: `git checkout --theirs <file>` for your PHPCS-fixed versions, `git checkout --ours <file>` for `main`'s authoritative values
+
+### 6f. JavaScript DOM XSS check
+
+If any `.js` files were added or modified:
+```bash
+grep -rn "innerHTML\|\$('<\|\$(\"<" web/modules/custom web/themes/custom 2>/dev/null | \
+  grep -v '/build/' | grep -v 'node_modules' | head -20
+```
+
+**Never concatenate user-derived values into jQuery `$()` or `innerHTML`.** Use instead:
+```javascript
+// UNSAFE — CodeQL flags this as DOM XSS:
+$('<div class="alert">' + userMsg + '</div>')
+
+// SAFE — create element, set text separately:
+$('<div>').addClass('alert').text(userMsg)
+```
+
+If the grep above returns hits with `$(` or `innerHTML` containing `+` and a variable, fix them before proceeding.
 ---
 
 ## Step 7 — Commit

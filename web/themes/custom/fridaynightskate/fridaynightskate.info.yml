@@ -1,0 +1,38 @@
+name: fridaynightskate
+description: "Starry Night Edition - An atmospheric Radix 6 subtheme inspired by Van Gogh's masterpiece. Features swirling gradients, celestial aesthetics, and golden accents on a deep night sky palette. Based on Bootstrap 5 with Masonry and Swiper integration."
+screenshot: screenshot.png
+'alt text': 'fridaynightskate theme screenshot'
+core_version_requirement: ^11
+engine: twig
+type: theme
+'base theme': radix
+starterkit: true
+'interface translation project': fridaynightskate
+'interface translation server pattern': themes/custom/fridaynightskate/translations/%language.po
+regions:
+  navbar_branding: 'Navbar branding'
+  navbar_left: 'Navbar left'
+  navbar_right: 'Navbar right'
+  header: Header
+  content: Content
+  page_bottom: 'Page bottom'
+  footer: Footer
+libraries:
+  - fridaynightskate/style
+ckeditor5-stylesheets:
+  - build/css/main.style.css
+libraries-extend:
+  core/drupal.ajax:
+    - fridaynightskate/drupal.ajax
+  core/drupal.checkbox:
+    - fridaynightskate/drupal.checkbox
+  core/drupal.message:
+    - fridaynightskate/drupal.message
+  core/drupal.progress:
+    - fridaynightskate/drupal.progress
+  clientside_validation_jquery/cv.jquery.validate:
+    - fridaynightskate/jquery.validate
+version: 6.0.2
+project: radix
+datestamp: 1746711574
+generator: 'radix_starterkit:6.0.2'

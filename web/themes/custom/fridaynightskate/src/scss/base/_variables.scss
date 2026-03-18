@@ -1,0 +1,155 @@
+/**
+ * Starry Night Design System
+ * Van Gogh-inspired color palette and variables
+ * Bold, swirling, celestial aesthetic
+ */
+
+// ============================================================================
+// Starry Night Color Palette
+// ============================================================================
+
+// Primary Colors - Deep night sky
+$starry-night-sky: #172a3a;
+$starry-deep-blue: #004b87;
+$starry-midnight: #0f1a2e;
+$starry-dark-bg: #0a0f1e;
+
+// Golden accents - Stars and highlights
+$starry-golden: #ffd700;
+$starry-golden-glow: #ffc947;
+$starry-golden-bright: #ffeb3b;
+
+// Swirl colors - Movement and depth
+$starry-swirl-blue: #1e5a7d;
+$starry-swirl-cyan: #3a8fb7;
+$starry-swirl-teal: #2c9aa8;
+
+// Atmospheric accents
+$starry-horizon: #4a5e8b;
+$starry-cloud: #5b7aa7;
+$starry-village-light: #ffa500;
+
+// Complementary colors for depth
+$starry-deep-purple: #2d1b4e;
+$starry-violet: #5b3a8f;
+$starry-aurora: #00d9ff;
+
+// ============================================================================
+// Bootstrap Variable Overrides
+// ============================================================================
+
+// Core theme colors
+$primary: $starry-golden;
+$secondary: $starry-swirl-cyan;
+$dark: $starry-midnight;
+$light: $starry-horizon;
+$info: $starry-aurora;
+$warning: $starry-village-light;
+
+// Body settings
+$body-bg: $starry-dark-bg;
+$body-color: #e8ebed;
+
+// Typography
+$font-family-sans-serif: "Raleway", "Segoe UI", system-ui, -apple-system, sans-serif;
+$font-family-serif: "Cormorant Garamond", "Georgia", serif;
+$headings-font-family: $font-family-serif;
+$headings-font-weight: 600;
+$headings-color: $starry-golden;
+
+// Fluid typography
+$h1-font-size: clamp(2.5rem, 5vw, 4rem);
+$h2-font-size: clamp(2rem, 4vw, 3rem);
+$h3-font-size: clamp(1.5rem, 3vw, 2.25rem);
+$h4-font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+
+// Links
+$link-color: $starry-golden-glow;
+$link-hover-color: $starry-golden-bright;
+$link-decoration: none;
+
+// Border radius - Organic shapes
+$border-radius: 12px;
+$border-radius-sm: 8px;
+$border-radius-lg: 20px;
+
+// Shadows - Atmospheric depth
+$box-shadow-sm: 0 2px 12px rgba($starry-golden, 0.1);
+$box-shadow: 0 4px 24px rgba($starry-golden, 0.15);
+$box-shadow-lg: 0 8px 48px rgba($starry-golden, 0.2);
+
+// Animation timings
+$transition-base: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fade: opacity 0.3s ease-in-out;
+$transition-collapse: height 0.35s ease;
+
+// Component-specific variables
+$navbar-dark-color: rgba($starry-golden-glow, 0.85);
+$navbar-dark-hover-color: $starry-golden-bright;
+$navbar-dark-active-color: $starry-golden;
+$navbar-dark-brand-color: $starry-golden;
+$navbar-dark-brand-hover-color: $starry-golden-bright;
+
+// Card customization
+$card-bg: rgba($starry-night-sky, 0.8);
+$card-border-color: rgba($starry-swirl-cyan, 0.2);
+$card-cap-bg: rgba($starry-deep-blue, 0.5);
+
+// Modal customization
+$modal-content-bg: rgba($starry-midnight, 0.98);
+$modal-content-border-color: rgba($starry-golden, 0.2);
+$modal-backdrop-bg: $starry-dark-bg;
+$modal-backdrop-opacity: 0.9;
+
+// Form controls
+$input-bg: rgba($starry-night-sky, 0.6);
+$input-border-color: rgba($starry-swirl-cyan, 0.3);
+$input-focus-border-color: $starry-golden-glow;
+$input-focus-box-shadow: 0 0 0 0.25rem rgba($starry-golden, 0.25);
+$input-color: $body-color;
+$input-placeholder-color: rgba($body-color, 0.5);
+
+// Buttons
+$btn-border-radius: $border-radius;
+$btn-border-radius-sm: $border-radius-sm;
+$btn-border-radius-lg: $border-radius-lg;
+
+// ============================================================================
+// Custom CSS Variables for Dynamic Theming
+// ============================================================================
+:root {
+  // Color system (RGB values for rgba() usage)
+  --starry-night-sky-rgb: 23, 42, 58;
+  --starry-deep-blue-rgb: 0, 75, 135;
+  --starry-midnight-rgb: 15, 26, 46;
+  --starry-dark-bg-rgb: 10, 15, 30;
+  --starry-golden-rgb: 255, 215, 0;
+  --starry-golden-glow-rgb: 255, 201, 71;
+  --starry-golden-bright-rgb: 255, 235, 59;
+  --starry-swirl-blue-rgb: 30, 90, 125;
+  --starry-swirl-cyan-rgb: 58, 143, 183;
+  --starry-swirl-teal-rgb: 44, 154, 168;
+  
+  // Hex values for solid colors
+  --starry-night-sky: #{$starry-night-sky};
+  --starry-deep-blue: #{$starry-deep-blue};
+  --starry-midnight: #{$starry-midnight};
+  --starry-dark-bg: #{$starry-dark-bg};
+  --starry-golden: #{$starry-golden};
+  --starry-golden-glow: #{$starry-golden-glow};
+  --starry-golden-bright: #{$starry-golden-bright};
+  --starry-swirl-blue: #{$starry-swirl-blue};
+  --starry-swirl-cyan: #{$starry-swirl-cyan};
+  --starry-swirl-teal: #{$starry-swirl-teal};
+  --starry-horizon: #{$starry-horizon};
+  --starry-cloud: #{$starry-cloud};
+  --starry-village-light: #{$starry-village-light};
+  --starry-deep-purple: #{$starry-deep-purple};
+  --starry-violet: #{$starry-violet};
+  --starry-aurora: #{$starry-aurora};
+
+  // Animation variables
+  --swirl-speed: 20s;
+  --particle-speed: 30s;
+  --glow-pulse: 3s;
+}
