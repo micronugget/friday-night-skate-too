@@ -35,6 +35,7 @@ Follow all rules in [copilot-instructions.md](../copilot-instructions.md) and [c
 | GitHub CLI (API read) | `gh api repos/…/secret-scanning/alerts …`, `gh api repos/…/secret-scanning/alerts/$N/locations …` — read-only security state queries |
 | Drupal PHP eval | `ddev drush php:eval "…"` (read-only operations: UUID generation, entity queries, service calls with no side effects) |
 | PHPStan baseline | `ddev exec vendor/bin/phpstan analyze … --generate-baseline=phpstan-baseline.php` — writes a local baseline file; analysis only, no side effects |
+| Theme/module copy from v1 | `mkdir -p web/themes/custom` and `rsync -a --exclude=node_modules <v1-source>/ <v2-dest>/` — additive file copy, no existing files deleted |
 
 **Always ask before running:**
 - `git push origin master` or `git push origin main` — pushes to the default branch, visible to all collaborators
