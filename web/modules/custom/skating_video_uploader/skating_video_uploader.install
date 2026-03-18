@@ -1,0 +1,126 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Skating Video Uploader module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function skating_video_uploader_schema() {
+  $schema['skating_video_metadata'] = [
+    'description' => 'Stores GPS and timecode metadata for videos.',
+    'fields' => [
+      'id' => [
+        'description' => 'Primary Key: Unique metadata ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'videojs_media_id' => [
+        'description' => 'The ID of the VideoJS Media entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'file_id' => [
+        'description' => 'The ID of the file entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'youtube_id' => [
+        'description' => 'The YouTube video ID if uploaded.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'latitude' => [
+        'description' => 'GPS latitude.',
+        'type' => 'float',
+        'not null' => FALSE,
+      ],
+      'longitude' => [
+        'description' => 'GPS longitude.',
+        'type' => 'float',
+        'not null' => FALSE,
+      ],
+      'altitude' => [
+        'description' => 'GPS altitude.',
+        'type' => 'float',
+        'not null' => FALSE,
+      ],
+      'creation_time' => [
+        'description' => 'Video creation timestamp.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ],
+      'duration' => [
+        'description' => 'Video duration in seconds.',
+        'type' => 'float',
+        'not null' => FALSE,
+      ],
+      'timecode_data' => [
+        'description' => 'Serialized timecode data.',
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => FALSE,
+      ],
+      'consent_given' => [
+        'description' => 'Whether user consent was given for metadata collection and YouTube upload.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'created' => [
+        'description' => 'The Unix timestamp when the metadata was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'changed' => [
+        'description' => 'The Unix timestamp when the metadata was most recently updated.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+    'indexes' => [
+      'videojs_media_id' => ['videojs_media_id'],
+      'file_id' => ['file_id'],
+      'youtube_id' => ['youtube_id'],
+    ],
+    'foreign keys' => [
+      'videojs_media_entity' => [
+        'table' => 'videojs_media',
+        'columns' => ['videojs_media_id' => 'id'],
+      ],
+      'file_entity' => [
+        'table' => 'file_managed',
+        'columns' => ['file_id' => 'fid'],
+      ],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function skating_video_uploader_install() {
+  \Drupal::messenger()->addStatus(t('Skating Video Uploader module has been installed.'));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function skating_video_uploader_uninstall() {
+  \Drupal::messenger()->addStatus(t('Skating Video Uploader module has been uninstalled.'));
+}

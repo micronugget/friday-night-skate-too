@@ -1,0 +1,12 @@
+services:
+  skating_video_uploader.metadata_extractor:
+    class: Drupal\skating_video_uploader\Service\MetadataExtractor
+    arguments: ['@entity_type.manager', '@logger.factory', '@file_system', '@database']
+
+  skating_video_uploader.processor:
+    class: Drupal\skating_video_uploader\Service\VideoProcessor
+    arguments: ['@entity_type.manager', '@logger.factory', '@skating_video_uploader.metadata_extractor', '@config.factory', '@messenger', '@skating_video_uploader.youtube_uploader', '@database']
+
+  skating_video_uploader.youtube_uploader:
+    class: Drupal\skating_video_uploader\Service\YouTubeUploader
+    arguments: ['@entity_type.manager', '@logger.factory', '@config.factory', '@messenger', '@file_system']

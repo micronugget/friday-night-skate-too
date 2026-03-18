@@ -1,0 +1,23 @@
+skating_video_uploader.youtube_settings:
+  path: '/admin/config/media/skating-video-uploader'
+  defaults:
+    _form: '\Drupal\skating_video_uploader\Form\YouTubeSettingsForm'
+    _title: 'Skating Video Uploader Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+skating_video_uploader.youtube_oauth_callback:
+  path: '/admin/config/media/skating-video-uploader/youtube/oauth-callback'
+  defaults:
+    _controller: '\Drupal\skating_video_uploader\Controller\YouTubeAuthController::handleOauthCallback'
+    _title: 'YouTube OAuth Callback'
+  requirements:
+    _permission: 'administer site configuration'
+
+skating_video_uploader.bulk_upload:
+  path: '/skate/upload'
+  defaults:
+    _form: '\Drupal\skating_video_uploader\Form\BulkUploadForm'
+    _title: 'Upload Media'
+  requirements:
+    _permission: 'create archive_media content'
