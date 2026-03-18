@@ -154,8 +154,39 @@ Create `.idea/terminal.xml` if it doesn't exist:
 | Check Status | `ddev describe \| head -10` | `false` |
 | Drush Commands | `ddev drush cmd --yes 2>&1 && echo "Complete"` | `false` |
 | Config status | `ddev drush cst --format=json 2>&1` | `false` |
+| Drush (hang guard) | `timeout 20 ddev drush cmd … 2>&1 && echo "Complete"` | `false` |
 
 ### 6a. Known DDEV / Drush ANSI Quirks
+
+#### Drush commands that may hang — always wrap with `timeout`
+
+Some `ddev drush` commands (`updb`, `cr`, `cex`, `pm:enable`) can silently wait
+for interactive confirmation when run non-interactively, causing the agent to
+block indefinitely.
+
+**Fix — always prefix with `timeout N`:**
+
+```bash
+# ❌ Can hang waiting for a prompt:
+ddev drush cr 2>&1
+
+# ✅ Safe — aborts after 20 s if the command stalls:
+timeout 20 ddev drush cr 2>&1; echo "Exit: $?"
+
+# ✅ Combine with explicit -y flag for commands that prompt:
+timeout 30 ddev drush cex -y 2>&1 | tail -5
+timeout 30 ddev drush updb -y 2>&1 | tail -5
+```
+
+Recommended timeout values by command:
+
+| Command | Timeout |
+|---------|---------|
+| `ddev drush cr` | `20` s |
+| `ddev drush cex -y` | `30` s |
+| `ddev drush updb -y` | `60` s |
+| `ddev drush config:status` | `20` s |
+| `ddev drush pm:enable … -y` | `60` s |
 
 #### `ddev drush config:status` / `ddev drush cst` — ANSI bold error
 

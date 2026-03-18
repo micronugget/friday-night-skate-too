@@ -1,0 +1,11 @@
+bulk_upload:
+  version: 1.0
+  css:
+    theme:
+      css/bulk-upload.css: {}
+  js:
+    js/bulk-upload.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.ajax
+    - core/jquery

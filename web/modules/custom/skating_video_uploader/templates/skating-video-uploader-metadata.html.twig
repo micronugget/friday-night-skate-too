@@ -1,0 +1,88 @@
+{#
+/**
+ * @file
+ * Default theme implementation to display video metadata.
+ *
+ * Available variables:
+ * - metadata: An array containing video metadata:
+ *   - videojs_media_id: The VideoJS Media entity ID
+ *   - file_id: The file entity ID
+ *   - youtube_id: The YouTube video ID (if uploaded)
+ *   - latitude: GPS latitude
+ *   - longitude: GPS longitude
+ *   - altitude: GPS altitude
+ *   - creation_time: Video creation timestamp
+ *   - duration: Video duration in seconds
+ *   - timecode_data: Serialized timecode data
+ *   - consent_given: Whether user consent was given
+ *   - created: Unix timestamp when metadata was created
+ *   - changed: Unix timestamp when metadata was last updated
+ * - videojs_media: The VideoJS Media entity (optional)
+ *
+ * @ingroup themeable
+ */
+#}
+<div{{ attributes.addClass('skating-video-metadata') }}>
+  {% if metadata %}
+    <div class="metadata-container">
+      <h3>{{ 'Video Metadata'|t }}</h3>
+      
+      {% if metadata.youtube_id %}
+        <div class="metadata-item metadata-youtube">
+          <strong>{{ 'YouTube Video ID'|t }}:</strong>
+          <a href="https://www.youtube.com/watch?v={{ metadata.youtube_id }}" target="_blank" rel="noopener">
+            {{ metadata.youtube_id }}
+          </a>
+        </div>
+      {% endif %}
+      
+      {% if metadata.latitude and metadata.longitude %}
+        <div class="metadata-item metadata-location">
+          <strong>{{ 'GPS Location'|t }}:</strong>
+          <span class="coordinates">
+            {{ metadata.latitude|number_format(6, '.', ',') }}, {{ metadata.longitude|number_format(6, '.', ',') }}
+            {% if metadata.altitude %}
+              ({{ metadata.altitude|number_format(1, '.', ',') }}m)
+            {% endif %}
+          </span>
+          <a href="https://www.google.com/maps?q={{ metadata.latitude }},{{ metadata.longitude }}" 
+             target="_blank" 
+             rel="noopener" 
+             class="map-link">
+            {{ 'View on Map'|t }}
+          </a>
+        </div>
+      {% endif %}
+      
+      {% if metadata.creation_time %}
+        <div class="metadata-item metadata-creation-time">
+          <strong>{{ 'Recorded'|t }}:</strong>
+          {{ metadata.creation_time }}
+        </div>
+      {% endif %}
+      
+      {% if metadata.duration %}
+        <div class="metadata-item metadata-duration">
+          <strong>{{ 'Duration'|t }}:</strong>
+          {% set minutes = (metadata.duration / 60)|round(0, 'floor') %}
+          {% set seconds = (metadata.duration % 60)|round(0) %}
+          {{ minutes }}:{{ '%02d'|format(seconds) }}
+        </div>
+      {% endif %}
+      
+      {% if metadata.timecode_data %}
+        <div class="metadata-item metadata-timecode">
+          <strong>{{ 'Timecode Data'|t }}:</strong>
+          <details>
+            <summary>{{ 'Show Details'|t }}</summary>
+            <pre>{{ metadata.timecode_data }}</pre>
+          </details>
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="no-metadata">
+      <p>{{ 'No metadata available for this video.'|t }}</p>
+    </div>
+  {% endif %}
+</div>

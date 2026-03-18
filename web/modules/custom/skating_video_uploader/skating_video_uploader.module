@@ -1,0 +1,107 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Contains skating_video_uploader.module.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\videojs_media\VideoJsMediaInterface;
+
+/**
+ * Implements hook_help().
+ */
+function skating_video_uploader_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.skating_video_uploader':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Skating Video Uploader module collects GPS and timecode metadata from videos and uploads them to YouTube with user consent.') . '</p>';
+      $output .= '<h3>' . t('Features') . '</h3>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Extracts GPS location data from video files') . '</li>';
+      $output .= '<li>' . t('Preserves timecode metadata before YouTube upload') . '</li>';
+      $output .= '<li>' . t('Uploads videos to YouTube with user consent') . '</li>';
+      $output .= '<li>' . t('Integrates with VideoJS Media entities') . '</li>';
+      $output .= '</ul>';
+      $output .= '<h3>' . t('Configuration') . '</h3>';
+      $output .= '<p>' . t('Configure YouTube API credentials at <a href=":url">Skating Video Uploader Settings</a>.', [
+        ':url' => '/admin/config/media/skating-video-uploader',
+      ]) . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function skating_video_uploader_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add consent checkbox to VideoJS Media forms for video types.
+  if (strpos($form_id, 'videojs_media_') === 0 && 
+      (strpos($form_id, '_local_video_') !== FALSE || 
+       strpos($form_id, '_remote_video_') !== FALSE)) {
+    
+    $form['youtube_upload'] = [
+      '#type' => 'details',
+      '#title' => t('YouTube Upload & Metadata'),
+      '#open' => TRUE,
+      '#weight' => 50,
+    ];
+
+    $form['youtube_upload']['youtube_consent'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Upload to YouTube and preserve metadata'),
+      '#description' => t('By checking this box, you consent to upload this video to YouTube and allow the collection of GPS coordinates, timecode, and other metadata. This metadata will be preserved on this website for the skating community.'),
+      '#weight' => 10,
+      '#default_value' => FALSE,
+    ];
+
+    // Add a submit handler to process the upload and metadata collection.
+    $form['actions']['submit']['#submit'][] = 'skating_video_uploader_form_submit';
+  }
+}
+
+/**
+ * Custom submit handler for VideoJS Media forms.
+ */
+function skating_video_uploader_form_submit($form, FormStateInterface $form_state) {
+  // Check if consent was given.
+  if ($form_state->getValue('youtube_consent')) {
+    // Get the entity from the form state.
+    $entity = $form_state->getFormObject()->getEntity();
+
+    // Process the entity for metadata extraction and YouTube upload.
+    \Drupal::service('skating_video_uploader.processor')->processEntity($entity);
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function skating_video_uploader_entity_presave(EntityInterface $entity) {
+  // Check if this is a VideoJS Media entity with local video.
+  if ($entity instanceof VideoJsMediaInterface && 
+      ($entity->bundle() == 'local_video' || $entity->bundle() == 'local_audio')) {
+    // Extract metadata from the video file.
+    \Drupal::service('skating_video_uploader.metadata_extractor')->extractMetadata($entity);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function skating_video_uploader_theme() {
+  return [
+    'skating_video_uploader_metadata' => [
+      'variables' => [
+        'metadata' => NULL,
+        'videojs_media' => NULL,
+      ],
+      'template' => 'skating-video-uploader-metadata',
+    ],
+  ];
+}

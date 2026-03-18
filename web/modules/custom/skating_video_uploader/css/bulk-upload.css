@@ -1,0 +1,161 @@
+/**
+ * @file
+ * Styles for the bulk upload form.
+ */
+
+.bulk-upload-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Progress indicator */
+.progress-steps {
+  counter-reset: step;
+}
+
+.progress-steps .step {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  color: #6c757d;
+}
+
+.progress-steps .step::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: -50%;
+  width: 100%;
+  height: 2px;
+  background-color: #dee2e6;
+  z-index: -1;
+}
+
+.progress-steps .step:first-child::before {
+  display: none;
+}
+
+.progress-steps .step .step-number {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  border: 2px solid #dee2e6;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.progress-steps .step .step-label {
+  display: block;
+  font-size: 0.875rem;
+}
+
+.progress-steps .step.active .step-number {
+  background-color: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+}
+
+.progress-steps .step.active .step-label {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.progress-steps .step.completed .step-number {
+  background-color: #198754;
+  color: white;
+  border-color: #198754;
+}
+
+.progress-steps .step.completed::before {
+  background-color: #198754;
+}
+
+.progress-steps .step.active::before {
+  background: linear-gradient(to right, #198754 0%, #198754 50%, #dee2e6 50%, #dee2e6 100%);
+}
+
+/* File upload area */
+.bulk-file-upload {
+  border: 2px dashed #0d6efd;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.bulk-file-upload:hover,
+.bulk-file-upload:focus {
+  border-color: #0b5ed7;
+  background-color: #f8f9fa;
+}
+
+.bulk-file-upload.dragover {
+  background-color: #e7f1ff;
+  border-color: #0b5ed7;
+}
+
+/* File list */
+.file-list .file-item {
+  padding: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.file-list .file-item .badge {
+  min-width: 30px;
+}
+
+/* YouTube URLs */
+.youtube-urls {
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bulk-upload-form {
+    padding: 1rem;
+  }
+
+  .progress-steps .step .step-label {
+    font-size: 0.75rem;
+  }
+
+  .progress-steps .step .step-number {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 0.875rem;
+  }
+
+  .progress-steps .step::before {
+    top: 16px;
+  }
+}
+
+/* Touch-friendly buttons */
+@media (max-width: 576px) {
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+}
+
+/* Metadata extraction animation */
+.metadata-extraction-progress .progress-bar {
+  transition: width 0.6s ease;
+}
+
+/* Camera capture hint */
+input[type="file"][accept*="image"] {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  input[type="file"][capture] {
+    /* Mobile devices will show camera option */
+  }
+}

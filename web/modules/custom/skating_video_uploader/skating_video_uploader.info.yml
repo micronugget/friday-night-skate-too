@@ -1,0 +1,13 @@
+name: 'Skating Video Uploader'
+type: module
+description: 'Collects GPS and timecode metadata from videos and uploads them to YouTube with user consent.'
+core_version_requirement: ^11.3
+package: 'Custom'
+dependencies:
+  - drupal:config
+  - drupal:field
+  - drupal:file
+  - drupal:serialization
+  - drupal:user
+  - videojs_media:videojs_media
+configure: skating_video_uploader.youtube_settings
