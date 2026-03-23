@@ -32,7 +32,7 @@
         "drupal/drupal_cms_site_template_base": "^1@dev",
         "drupal/drupal_cms_starter": "^2",
         "drupal/file_upload_secure_validator": "^2",
-        "drupal/geofield": "^1",
+        "drupal/geofield": "^10",
         "drupal/radix": "^6",
         "drupal/recipe_installer_kit": "^1.0.4",
         "drupal/webform": "@beta",
