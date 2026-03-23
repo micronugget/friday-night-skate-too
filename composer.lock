@@ -4124,16 +4124,16 @@
         },
         {
             "name": "drupal/drupal_cms_seo_tools",
-            "version": "2.0.4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_seo_tools.git",
-                "reference": "77074468c5c521229c3e1abc1981f294e28aa81b"
+                "reference": "df474de4fe548812992f9435d21d63f3b9270a49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_seo_tools/repository/archive.zip?sha=77074468c5c521229c3e1abc1981f294e28aa81b",
-                "reference": "77074468c5c521229c3e1abc1981f294e28aa81b",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_seo_tools/repository/archive.zip?sha=df474de4fe548812992f9435d21d63f3b9270a49",
+                "reference": "df474de4fe548812992f9435d21d63f3b9270a49",
                 "shasum": ""
             },
             "require": {
@@ -4169,9 +4169,9 @@
             ],
             "description": "Adds common search engine optimisation tools such as meta tags, XML sitemap, robots.txt management and more.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_seo_tools/-/tree/2.0.4"
+                "source": "https://git.drupalcode.org/project/drupal_cms_seo_tools/-/tree/2.1.0"
             },
-            "time": "2026-03-12T17:25:13+00:00"
+            "time": "2026-03-20T22:14:05+00:00"
         },
         {
             "name": "drupal/drupal_cms_site_template_base",
@@ -20641,5 +20641,5 @@
     "prefer-lowest": false,
     "platform": {},
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
