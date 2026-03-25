@@ -3873,16 +3873,16 @@
         },
         {
             "name": "drupal/drupal_cms_forms",
-            "version": "2.0.4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_forms.git",
-                "reference": "edb381a2bc4622deb98744b6df51b94bc2bec983"
+                "reference": "288c3214f61a0d767b86affe83dccd47f44faab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_forms/repository/archive.zip?sha=edb381a2bc4622deb98744b6df51b94bc2bec983",
-                "reference": "edb381a2bc4622deb98744b6df51b94bc2bec983",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_forms/repository/archive.zip?sha=288c3214f61a0d767b86affe83dccd47f44faab1",
+                "reference": "288c3214f61a0d767b86affe83dccd47f44faab1",
                 "shasum": ""
             },
             "require": {
@@ -3898,9 +3898,9 @@
             ],
             "description": "Adds a simple contact form, and tools for building forms.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_forms/-/tree/2.0.4"
+                "source": "https://git.drupalcode.org/project/drupal_cms_forms/-/tree/2.1.0"
             },
-            "time": "2026-03-12T17:25:13+00:00"
+            "time": "2026-03-20T22:14:05+00:00"
         },
         {
             "name": "drupal/drupal_cms_google_analytics",
