@@ -2534,17 +2534,17 @@
         },
         {
             "name": "drupal/canvas",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/canvas.git",
-                "reference": "1.3.1"
+                "reference": "1.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/canvas-1.3.1.zip",
-                "reference": "1.3.1",
-                "shasum": "3e25c5508d1ea88b9181143815cb029e13cfa032"
+                "url": "https://ftp.drupal.org/files/projects/canvas-1.3.2.zip",
+                "reference": "1.3.2",
+                "shasum": "11804ca6dc7509c742fc1ed14c1014557731e35d"
             },
             "require": {
                 "drupal/core": "^11.2",
@@ -2569,8 +2569,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.3.1",
-                    "datestamp": "1774058291",
+                    "version": "1.3.2",
+                    "datestamp": "1774394884",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2603,6 +2603,10 @@
             ],
             "authors": [
                 {
+                    "name": "akhil babu",
+                    "homepage": "https://www.drupal.org/user/3632866"
+                },
+                {
                     "name": "amangrover90",
                     "homepage": "https://www.drupal.org/user/3602433"
                 },
@@ -2617,6 +2621,10 @@
                 {
                     "name": "bnjmnm",
                     "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "chandu7929",
+                    "homepage": "https://www.drupal.org/user/2907229"
                 },
                 {
                     "name": "effulgentsia",
@@ -2647,6 +2655,10 @@
                     "homepage": "https://www.drupal.org/user/161058"
                 },
                 {
+                    "name": "kunal.sachdev",
+                    "homepage": "https://www.drupal.org/user/3685163"
+                },
+                {
                     "name": "larowlan",
                     "homepage": "https://www.drupal.org/user/395439"
                 },
@@ -2657,6 +2669,10 @@
                 {
                     "name": "longwave",
                     "homepage": "https://www.drupal.org/user/246492"
+                },
+                {
+                    "name": "marcus_johansson",
+                    "homepage": "https://www.drupal.org/user/385947"
                 },
                 {
                     "name": "mglaman",
@@ -2685,6 +2701,10 @@
                 {
                     "name": "tim.plunkett",
                     "homepage": "https://www.drupal.org/user/241634"
+                },
+                {
+                    "name": "utkarsh_33",
+                    "homepage": "https://www.drupal.org/user/3727088"
                 },
                 {
                     "name": "wim leers",
@@ -3832,16 +3852,16 @@
         },
         {
             "name": "drupal/drupal_cms_content_type_base",
-            "version": "2.0.4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_content_type_base.git",
-                "reference": "8163aca13723e89e5d62010869371f59688bee17"
+                "reference": "9599a9d8e7a5443c574290d29e1ad719e93e2716"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_content_type_base/repository/archive.zip?sha=8163aca13723e89e5d62010869371f59688bee17",
-                "reference": "8163aca13723e89e5d62010869371f59688bee17",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_content_type_base/repository/archive.zip?sha=9599a9d8e7a5443c574290d29e1ad719e93e2716",
+                "reference": "9599a9d8e7a5443c574290d29e1ad719e93e2716",
                 "shasum": ""
             },
             "require": {
@@ -3867,9 +3887,9 @@
             ],
             "description": "Provides basic tools for creating content.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_content_type_base/-/tree/2.0.4"
+                "source": "https://git.drupalcode.org/project/drupal_cms_content_type_base/-/tree/2.1.0"
             },
-            "time": "2026-03-12T17:25:13+00:00"
+            "time": "2026-03-20T22:14:05+00:00"
         },
         {
             "name": "drupal/drupal_cms_forms",
@@ -3904,16 +3924,16 @@
         },
         {
             "name": "drupal/drupal_cms_google_analytics",
-            "version": "2.0.4",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_google_analytics.git",
-                "reference": "598782a08859a4cf48585ed66bae70129b576c72"
+                "reference": "fd5aaaf51dfbc8da82a245c271f5e1f82ac367ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_google_analytics/repository/archive.zip?sha=598782a08859a4cf48585ed66bae70129b576c72",
-                "reference": "598782a08859a4cf48585ed66bae70129b576c72",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_google_analytics/repository/archive.zip?sha=fd5aaaf51dfbc8da82a245c271f5e1f82ac367ad",
+                "reference": "fd5aaaf51dfbc8da82a245c271f5e1f82ac367ad",
                 "shasum": ""
             },
             "require": {
@@ -3931,9 +3951,9 @@
             ],
             "description": "Adds tracking of website traffic using Google Analytics and Google Tag Manager. Requires a Google Tag Manager ID.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_google_analytics/-/tree/2.0.4"
+                "source": "https://git.drupalcode.org/project/drupal_cms_google_analytics/-/tree/2.1.0"
             },
-            "time": "2026-03-12T17:25:13+00:00"
+            "time": "2026-03-20T22:14:05+00:00"
         },
         {
             "name": "drupal/drupal_cms_helper",
@@ -4702,44 +4722,33 @@
         },
         {
             "name": "drupal/eca",
-            "version": "3.0.11",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/eca.git",
-                "reference": "3.0.11"
+                "reference": "3.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/eca-3.0.11.zip",
-                "reference": "3.0.11",
-                "shasum": "88eec94b1ebe2074bbf3b6da8a612c151b48d26e"
+                "url": "https://ftp.drupal.org/files/projects/eca-3.1.0.zip",
+                "reference": "3.1.0",
+                "shasum": "c75edf48499fca80854f0efc7b4287b4f613ccf8"
             },
             "require": {
                 "dragonmantank/cron-expression": "^3.1",
-                "drupal/core": "^11.2",
-                "drupal/modeler_api": "^1.0",
+                "drupal/core": "^11.3 || ^12.0",
+                "drupal/modeler_api": "^1.1",
                 "ext-json": "*",
                 "php": ">=8.3"
             },
-            "conflict": {
-                "drush/drush": "<12.5.1"
-            },
             "require-dev": {
-                "drupal/ai": "1.2.x-dev",
-                "drupal/ai_agents": "1.2.x-dev",
-                "drupal/entity_reference_revisions": "^1.12",
-                "drupal/inline_entity_form": "^3.0",
-                "drupal/modeler_api": "*",
-                "drupal/paragraphs": "^1.18",
-                "drupal/project_browser": "^2.0",
-                "drupal/token": "^1.15",
-                "drupal/webform": "^6.3"
+                "drupal/modeler_api": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.11",
-                    "datestamp": "1773134456",
+                    "version": "3.1.0",
+                    "datestamp": "1774278887",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6347,26 +6356,27 @@
         },
         {
             "name": "drupal/modeler_api",
-            "version": "1.0.7",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/modeler_api.git",
-                "reference": "1.0.7"
+                "reference": "1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/modeler_api-1.0.7.zip",
-                "reference": "1.0.7",
-                "shasum": "5ea28a231cd66c9737eb7fd9d02e94a152f97213"
+                "url": "https://ftp.drupal.org/files/projects/modeler_api-1.1.0.zip",
+                "reference": "1.1.0",
+                "shasum": "562ac7585e35a4da58ac3ed8998a2a5267d80ff0"
             },
             "require": {
-                "drupal/core": "^10.4 || ^11"
+                "drupal/core": "^11.3 || ^12.0",
+                "php": ">=8.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.7",
-                    "datestamp": "1773132747",
+                    "version": "1.1.0",
+                    "datestamp": "1774278612",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -7654,17 +7664,17 @@
         },
         {
             "name": "drupal/trash",
-            "version": "3.0.25",
+            "version": "3.0.26",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/trash.git",
-                "reference": "3.0.25"
+                "reference": "3.0.26"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/trash-3.0.25.zip",
-                "reference": "3.0.25",
-                "shasum": "ea75450a872cb339da9c46c1c4d7c89624978f02"
+                "url": "https://ftp.drupal.org/files/projects/trash-3.0.26.zip",
+                "reference": "3.0.26",
+                "shasum": "eae7737d5b1223d65ca70a4ff15a06982863b8f0"
             },
             "require": {
                 "drupal/core": "^10.3 | ^11"
@@ -7673,6 +7683,7 @@
                 "drush/drush": "<12.5.1"
             },
             "require-dev": {
+                "drupal/pathauto": "*",
                 "drupal/redirect": "*",
                 "drupal/wse": "*"
             },
@@ -7682,8 +7693,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.25",
-                    "datestamp": "1770305751",
+                    "version": "3.0.26",
+                    "datestamp": "1774733816",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
