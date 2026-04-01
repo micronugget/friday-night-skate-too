@@ -1,0 +1,79 @@
+uuid: b596187e-cd26-453d-96d4-a0061f5fbcc8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.person.field_content
+    - field.field.node.person.field_description
+    - field.field.node.person.field_featured_image
+    - field.field.node.person.field_person__email
+    - field.field.node.person.field_person__phone_number
+    - field.field.node.person.field_person__role_job_title
+    - field.field.node.person.field_tags
+    - node.type.person
+  module:
+    - media
+    - text
+    - user
+_core:
+  default_config_hash: SNd59q4laB-aH5OnNJVBAhYLnvdsGzy3IjKZUmSrHyA
+id: node.person.default
+targetEntityType: node
+bundle: person
+mode: default
+content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_content:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_featured_image:
+    type: media_thumbnail
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: eager
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_person__email:
+    type: email_mailto
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_person__phone_number:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_person__role_job_title:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_tags:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+hidden:
+  field_description: true
+  links: true

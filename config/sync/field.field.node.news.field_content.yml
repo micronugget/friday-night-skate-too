@@ -1,0 +1,26 @@
+uuid: d387094a-8363-4def-90d4-c8d3bc040896
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_content
+    - filter.format.content_format
+    - node.type.news
+  module:
+    - text
+_core:
+  default_config_hash: gW1Y8BIPfL4e2aMhndY60kjrvFkodDQL2yxDiKcl3Nw
+id: node.news.field_content
+field_name: field_content
+entity_type: node
+bundle: news
+label: Content
+description: 'The content of this page.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_format
+field_type: text_long

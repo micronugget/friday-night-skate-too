@@ -10,7 +10,10 @@ dependencies:
     - media.type.remote_video
     - media.type.svg_image
     - media.type.video
+    - node.type.blog
+    - node.type.news
     - node.type.page
+    - node.type.person
     - workflows.workflow.basic_editorial
   module:
     - canvas
@@ -39,24 +42,36 @@ permissions:
   - 'administer menu'
   - 'administer redirects'
   - 'administer url aliases'
+  - 'create blog content'
   - 'create canvas_page'
   - 'create document media'
   - 'create image media'
+  - 'create news content'
   - 'create page content'
+  - 'create person content'
   - 'create remote_video media'
   - 'create svg_image media'
   - 'create url aliases'
   - 'create video media'
+  - 'delete any blog content'
   - 'delete any document media'
   - 'delete any image media'
+  - 'delete any news content'
   - 'delete any page content'
+  - 'delete any person content'
   - 'delete any remote_video media'
   - 'delete any svg_image media'
   - 'delete any video media'
+  - 'delete blog revisions'
   - 'delete canvas_page'
+  - 'delete news revisions'
   - 'delete page revisions'
+  - 'delete person revisions'
+  - 'edit any blog content'
   - 'edit any image media'
+  - 'edit any news content'
   - 'edit any page content'
+  - 'edit any person content'
   - 'edit any remote_video media'
   - 'edit any svg_image media'
   - 'edit any video media'
