@@ -44,7 +44,14 @@ class VideoJsMediaFormTest extends BrowserTestBase {
     $permissions = [
       'access content',
     ];
-    foreach (['videojs_local_video', 'videojs_local_audio', 'videojs_remote_video', 'videojs_remote_audio', 'videojs_youtube'] as $bundle) {
+    $bundles = [
+      'videojs_local_video',
+      'videojs_local_audio',
+      'videojs_remote_video',
+      'videojs_remote_audio',
+      'videojs_youtube',
+    ];
+    foreach ($bundles as $bundle) {
       $permissions[] = "create {$bundle} videojs media";
       $permissions[] = "edit own {$bundle} videojs media";
       $permissions[] = "view {$bundle} videojs media";

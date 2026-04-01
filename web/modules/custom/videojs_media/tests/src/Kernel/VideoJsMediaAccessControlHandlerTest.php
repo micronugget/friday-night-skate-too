@@ -56,7 +56,14 @@ class VideoJsMediaAccessControlHandlerTest extends EntityKernelTestBase {
     $source = new FileStorage($module_path . '/config/install');
     $config_factory = $this->container->get('config.factory');
 
-    foreach (['videojs_local_video', 'videojs_local_audio', 'videojs_remote_video', 'videojs_remote_audio', 'videojs_youtube'] as $bundle) {
+    $bundles = [
+      'videojs_local_video',
+      'videojs_local_audio',
+      'videojs_remote_video',
+      'videojs_remote_audio',
+      'videojs_youtube',
+    ];
+    foreach ($bundles as $bundle) {
       $data = $source->read("videojs_media.type.$bundle");
       $config_factory->getEditable("videojs_media.type.$bundle")
         ->setData($data)
@@ -231,7 +238,14 @@ class VideoJsMediaAccessControlHandlerTest extends EntityKernelTestBase {
 
     $admin = $this->createUser(['administer videojs media']);
 
-    foreach (['videojs_local_video', 'videojs_local_audio', 'videojs_remote_video', 'videojs_remote_audio', 'videojs_youtube'] as $bundle) {
+    $bundles = [
+      'videojs_local_video',
+      'videojs_local_audio',
+      'videojs_remote_video',
+      'videojs_remote_audio',
+      'videojs_youtube',
+    ];
+    foreach ($bundles as $bundle) {
       $this->assertTrue(
         $access_handler->createAccess($bundle, $admin),
         "Admin can create '$bundle' entities."
