@@ -540,11 +540,12 @@ binaries.
 
 ---
 
-### #14 — [test] MetadataExtractor — GPS/timecode extraction from video files
+### #14 — [test] MetadataExtractor — GPS/timecode extraction from video files ✅ DONE
 
 **Priority:** P2
 **Labels:** `test`
 **Depends On:** #2, #5
+**PR:** https://github.com/micronugget/friday-night-skate-too/pull/52
 
 `MetadataExtractor` uses `ffprobe` (via CLI or `php-ffmpeg` library) to extract GPS
 location tags and timecode from video format metadata.
