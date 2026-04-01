@@ -601,11 +601,12 @@ The YouTube uploader requires a valid Google Cloud project with:
 
 ---
 
-### #16 — [test] VideoJS media player — all view modes and bundle types
+### #16 — [test] VideoJS media player — all view modes and bundle types ✅ DONE
 
 **Priority:** P2
 **Labels:** `test`
 **Depends On:** #3, #12
+**Status:** Closed — PR #54
 
 The `videojs_media` module ships five bundle types with teaser and default view modes
 for each. Verify all render correctly.
@@ -614,16 +615,16 @@ for each. Verify all render correctly.
 
 | Bundle | View Mode | Pass? |
 |---|---|---|
-| `local_video` | default | |
-| `local_video` | teaser | |
-| `local_audio` | default | |
-| `local_audio` | teaser | |
-| `remote_video` | default | |
-| `remote_video` | teaser | |
-| `remote_audio` | default | |
-| `remote_audio` | teaser | |
-| `youtube` | default | |
-| `youtube` | teaser | |
+| `local_video` | default | ✅ |
+| `local_video` | teaser | ✅ |
+| `local_audio` | default | ✅ |
+| `local_audio` | teaser | ✅ |
+| `remote_video` | default | ✅ |
+| `remote_video` | teaser | ✅ |
+| `remote_audio` | default | ✅ |
+| `remote_audio` | teaser | ✅ |
+| `youtube` | default | ✅ |
+| `youtube` | teaser | ✅ |
 
 **Notes:**
 - The VideoJS player JS/CSS is bundled within the `videojs_media` module's `assets/`
