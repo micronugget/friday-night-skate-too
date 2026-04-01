@@ -570,11 +570,12 @@ location tags and timecode from video format metadata.
 
 ---
 
-### #15 — [test] skating_video_uploader — YouTube OAuth flow
+### #15 — [test] skating_video_uploader — YouTube OAuth flow ✅ CLOSED
 
 **Priority:** P3
 **Labels:** `test`
 **Depends On:** #5
+**Closed:** PR #53 — issue/15-youtube-oauth-settings-test
 
 The YouTube uploader requires a valid Google Cloud project with:
 - YouTube Data API v3 enabled
