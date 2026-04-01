@@ -32,8 +32,8 @@ All changes happen in v2 only.
 
 ### #0 — [setup] Drop database and run fresh DrupalCMS 2 installation
 
-**Priority:** P1  
-**Labels:** `setup`, `ddev`  
+**Priority:** P1
+**Labels:** `setup`, `ddev`
 
 The current v2 database contains Mercury demo content that was used purely for
 familiarisation with DrupalCMS 2 and Canvas. Drop it and reinstall clean before any
@@ -79,8 +79,8 @@ development work begins.
 
 ### #1 — [setup] Add missing Composer dependencies to v2
 
-**Priority:** P1  
-**Labels:** `setup`  
+**Priority:** P1
+**Labels:** `setup`
 
 v1 used several packages that v2 does not yet have. These are required by the custom
 modules and the Radix subtheme.
@@ -113,8 +113,8 @@ ddev composer require \
 
 ### #2 — [ddev] Ensure ffmpeg/ffprobe available in DDEV container
 
-**Priority:** P1  
-**Labels:** `ddev`  
+**Priority:** P1
+**Labels:** `ddev`
 **Depends On:** #1
 
 `skating_video_uploader` → `VideoProcessor` and `MetadataExtractor` services may
@@ -138,8 +138,8 @@ Then `ddev restart`.
 
 ### #3 — [module] Port `videojs_media` custom module
 
-**Priority:** P1  
-**Labels:** `module`  
+**Priority:** P1
+**Labels:** `module`
 **Depends On:** #1
 
 The `videojs_media` module is a custom full content-entity module providing VideoJS
@@ -174,8 +174,8 @@ media player types (`local_video`, `local_audio`, `remote_video`, `remote_audio`
 
 ### #4 — [module] Port `fns_archive` custom module
 
-**Priority:** P1  
-**Labels:** `module`  
+**Priority:** P1
+**Labels:** `module`
 **Depends On:** #1, #3
 
 `fns_archive` provides the `archive_media` node type (the core content type for the
@@ -228,8 +228,8 @@ image styles, a content moderation workflow (`archive_review`), and the `moderat
 
 ### #5 — [module] Port `skating_video_uploader` custom module
 
-**Priority:** P2  
-**Labels:** `module`  
+**Priority:** P2
+**Labels:** `module`
 **Depends On:** #1, #2, #3
 
 `skating_video_uploader` provides GPS + timecode metadata extraction from video/image
@@ -270,8 +270,8 @@ depends directly on the custom `videojs_media` module.
 
 ### #6 — [theme] Add `drupal/radix` and port `fridaynightskate` Radix subtheme
 
-**Priority:** P1  
-**Labels:** `theme`  
+**Priority:** P1
+**Labels:** `theme`
 **Depends On:** #1
 
 The `fridaynightskate` theme is a Radix 6 starterkit subtheme built on Bootstrap 5 with
@@ -323,8 +323,8 @@ immediately without running the build. Do NOT commit `node_modules/`.
 
 ### #7 — [config] Set `fridaynightskate` as default theme; keep admin theme as `gin`
 
-**Priority:** P1  
-**Labels:** `config`  
+**Priority:** P1
+**Labels:** `config`
 **Depends On:** #0, #6
 
 After a fresh Starter-recipe install (#0), Mercury is the default theme. After copying
@@ -353,8 +353,8 @@ Verify at `/admin/appearance`.
 
 ### #8 — [theme] Audit Canvas page builder compatibility with Radix subtheme
 
-**Priority:** P2  
-**Labels:** `theme`, `config`  
+**Priority:** P2
+**Labels:** `theme`, `config`
 **Depends On:** #0, #6, #7
 
 **Intent:** Canvas is the page-building layer; `fridaynightskate` (Radix/Bootstrap 5) is
@@ -403,8 +403,8 @@ this audit even though the Mercury content will be dropped in #0.
 
 ### #9 — [config] Verify pathauto pattern for `archive_media` nodes
 
-**Priority:** P2  
-**Labels:** `config`  
+**Priority:** P2
+**Labels:** `config`
 **Depends On:** #4
 
 `fns_archive` ships `pathauto.pattern.archive_media_pattern.yml` in `config/optional/`.
@@ -427,8 +427,8 @@ ddev drush config:import --partial --source=web/modules/custom/fns_archive/confi
 
 ### #10 — [config] Block layout — archive view and navigation blocks
 
-**Priority:** P2  
-**Labels:** `config`  
+**Priority:** P2
+**Labels:** `config`
 **Depends On:** #4, #8
 
 Place the key site blocks in the `fridaynightskate` theme's regions via
@@ -457,8 +457,8 @@ a full page View (not a block), so no additional block placement is needed for i
 
 ### #11 — [test] Verify Views: `archive_by_date`, `moderation_dashboard`, `my_archive_content`
 
-**Priority:** P2  
-**Labels:** `test`  
+**Priority:** P2
+**Labels:** `test`
 **Depends On:** #4, #6
 
 All three Views are installed by `fns_archive`. Run functional checks:
@@ -483,10 +483,10 @@ All three Views are installed by `fns_archive`. Run functional checks:
 
 ---
 
-### #12 — [test] Masonry archive grid and modal viewer JavaScript
+### #12 — [test] Masonry archive grid and modal viewer JavaScript ✅ DONE
 
-**Priority:** P2  
-**Labels:** `test`  
+**Priority:** P2
+**Labels:** `test`
 **Depends On:** #4, #6, #11
 
 The archive grid uses custom Masonry.js + Swiper JS (compiled into `build/js/archive-masonry.js`) and a custom AJAX modal viewer (`build/js/modal-viewer.js`).
@@ -515,8 +515,8 @@ The archive grid uses custom Masonry.js + Swiper JS (compiled into `build/js/arc
 
 ### #13 — [test] MetadataExtractor — GPS EXIF extraction from images
 
-**Priority:** P2  
-**Labels:** `test`  
+**Priority:** P2
+**Labels:** `test`
 **Depends On:** #5
 
 `MetadataExtractor::extractFromImage()` uses PHP's `exif_read_data()` to pull GPS
@@ -541,8 +541,8 @@ binaries.
 
 ### #14 — [test] MetadataExtractor — GPS/timecode extraction from video files
 
-**Priority:** P2  
-**Labels:** `test`  
+**Priority:** P2
+**Labels:** `test`
 **Depends On:** #2, #5
 
 `MetadataExtractor` uses `ffprobe` (via CLI or `php-ffmpeg` library) to extract GPS
@@ -570,8 +570,8 @@ location tags and timecode from video format metadata.
 
 ### #15 — [test] skating_video_uploader — YouTube OAuth flow
 
-**Priority:** P3  
-**Labels:** `test`  
+**Priority:** P3
+**Labels:** `test`
 **Depends On:** #5
 
 The YouTube uploader requires a valid Google Cloud project with:
@@ -600,8 +600,8 @@ The YouTube uploader requires a valid Google Cloud project with:
 
 ### #16 — [test] VideoJS media player — all view modes and bundle types
 
-**Priority:** P2  
-**Labels:** `test`  
+**Priority:** P2
+**Labels:** `test`
 **Depends On:** #3, #12
 
 The `videojs_media` module ships five bundle types with teaser and default view modes
@@ -636,8 +636,8 @@ for each. Verify all render correctly.
 
 ### #17 — [config] DrupalCMS 2 recipe additions — install missing v1 content type recipes
 
-**Priority:** P2  
-**Labels:** `config`  
+**Priority:** P2
+**Labels:** `config`
 **Depends On:** #4
 
 v1 had several DrupalCMS 1 content type recipes that v2's `byte` template does not
@@ -676,8 +676,8 @@ ddev drush recipe recipes/drupal_cms_blog
 
 ### #18 — [phpcs] Run Drupal coding standards against all ported custom modules
 
-**Priority:** P2  
-**Labels:** `test`  
+**Priority:** P2
+**Labels:** `test`
 **Depends On:** #3, #4, #5
 
 After porting the three custom modules, run PHPCS to catch any issues introduced by
@@ -707,8 +707,8 @@ Address all errors. Warnings may be tracked separately.
 
 ### #19 — [test] PHPUnit test suites for ported modules
 
-**Priority:** P3  
-**Labels:** `test`  
+**Priority:** P3
+**Labels:** `test`
 **Depends On:** #3, #4, #5
 
 v1 had test files in each custom module's `tests/` directory. Port and run them.
@@ -735,8 +735,8 @@ Fix any test failures caused by Drupal 11.3 API changes or changed contrib versi
 
 ### #20 — [theme] Rebuild `fridaynightskate` frontend assets for v2
 
-**Priority:** P3  
-**Labels:** `theme`  
+**Priority:** P3
+**Labels:** `theme`
 **Depends On:** #6
 
 The compiled `build/` directory from v1 is functional, but the npm build should be run
@@ -766,8 +766,8 @@ Review `webpack.mix.js` for any paths that may need updating (e.g., references t
 
 ### #21 — [config] Starry Night theme — configure CSS custom properties and breakpoints
 
-**Priority:** P3  
-**Labels:** `theme`, `config`  
+**Priority:** P3
+**Labels:** `theme`, `config`
 **Depends On:** #6, #7, #8
 
 The Starry Night Radix subtheme uses CSS custom properties (variables) for the palette
@@ -788,8 +788,8 @@ defines custom breakpoints used by `responsive_image.styles.archive_responsive`.
 
 ### #22 — [config] Key module — store YouTube API credentials securely
 
-**Priority:** P3  
-**Labels:** `config`, `setup`  
+**Priority:** P3
+**Labels:** `config`, `setup`
 **Depends On:** #5
 
 v2 already has the `key` module installed. Rather than storing the Google OAuth client
