@@ -1,0 +1,1 @@
+videojs.addLanguage('it', {"seconds":"secondi"});

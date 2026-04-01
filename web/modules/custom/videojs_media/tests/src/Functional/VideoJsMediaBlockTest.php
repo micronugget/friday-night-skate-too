@@ -69,7 +69,7 @@ class VideoJsMediaBlockTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Block Rendered Video',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 1,
@@ -133,7 +133,7 @@ class VideoJsMediaBlockTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Inaccessible Unpublished Video',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 0,
@@ -165,7 +165,7 @@ class VideoJsMediaBlockTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Cache Tag Test',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 1,

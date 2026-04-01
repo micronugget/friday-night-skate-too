@@ -11,5 +11,5 @@ videojs_media.types:
   title: 'VideoJS Media types'
   description: 'Manage VideoJS Media entity types (bundles). Configure fields, form displays, and view modes for each media type.'
   route_name: entity.videojs_media_type.collection
-  parent: system.admin_structure
+  parent: entity.media_type.collection
   weight: 10

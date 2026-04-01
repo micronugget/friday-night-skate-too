@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: plugin.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: plugin.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import videojs from 'video.js';
+import {version as VERSION} from '../package.json';
+import './touchOverlay.js';
+import window from 'global/window';
+
+// Default options for the plugin.
+const defaults = {
+  fullscreen: {
+    enterOnRotate: true,
+    exitOnRotate: true,
+    lockOnRotate: true,
+    iOS: false
+  },
+  touchControls: {
+    seekSeconds: 10,
+    tapTimeout: 300,
+    disableOnEnd: false
+  }
+};
+
+const screen = window.screen;
+
+const angle = () => {
+  // iOS
+  if (typeof window.orientation === 'number') {
+    return window.orientation;
+  }
+  // Android
+  if (screen &amp;&amp; screen.orientation &amp;&amp; screen.orientation.angle) {
+    return window.orientation;
+  }
+  videojs.log('angle unknown');
+  return 0;
+};
+
+// Cross-compatibility for Video.js 5 and 6.
+const registerPlugin = videojs.registerPlugin || videojs.plugin;
+
+/**
+ * Add UI and event listeners
+ *
+ * @function onPlayerReady
+ * @param    {Player} player
+ *           A Video.js player object.
+ *
+ * @param    {Object} [options={}]
+ *           A plain object containing options for the plugin.
+ */
+const onPlayerReady = (player, options) => {
+  player.addClass('vjs-mobile-ui');
+
+  if (options.touchControls.disableOnEnd || typeof player.endscreen === 'function') {
+    player.addClass('vjs-mobile-ui-disable-end');
+  }
+
+  if (options.fullscreen.iOS &amp;&amp;
+      videojs.browser.IS_IOS &amp;&amp; videojs.browser.IOS_VERSION > 9 &amp;&amp;
+      !player.el_.ownerDocument.querySelector('.bc-iframe')) {
+    player.tech_.el_.setAttribute('playsinline', 'playsinline');
+    player.tech_.supportsFullScreen = function() {
+      return false;
+    };
+  }
+
+  // Insert before the control bar
+  let controlBarIdx;
+  const versionParts = videojs.VERSION.split('.');
+  const major = parseInt(versionParts[0], 10);
+  const minor = parseInt(versionParts[1], 10);
+
+  // Video.js &lt; 7.7.0 doesn't account for precedding components that don't have elements
+  if (major &lt; 7 || (major === 7 &amp;&amp; minor &lt; 7)) {
+    controlBarIdx = Array.prototype.indexOf.call(
+      player.el_.children,
+      player.getChild('ControlBar').el_
+    );
+  } else {
+    controlBarIdx = player.children_.indexOf(player.getChild('ControlBar'));
+  }
+
+  player.addChild('TouchOverlay', options.touchControls, controlBarIdx);
+
+  let locked = false;
+
+  const rotationHandler = () => {
+    const currentAngle = angle();
+
+    if ((currentAngle === 90 || currentAngle === 270 || currentAngle === -90) &amp;&amp;
+        options.enterOnRotate) {
+      if (player.paused() === false) {
+        player.requestFullscreen();
+        if (options.fullscreen.lockOnRotate &amp;&amp;
+            screen.orientation &amp;&amp; screen.orientation.lock) {
+          screen.orientation.lock('landscape').then(() => {
+            locked = true;
+          }).catch(() => {
+            videojs.log('orientation lock not allowed');
+          });
+        }
+      }
+    }
+
+    if ((currentAngle === 0 || currentAngle === 180) &amp;&amp; options.exitOnRotate) {
+      if (player.isFullscreen()) {
+        player.exitFullscreen();
+      }
+    }
+  };
+
+  if (videojs.browser.IS_IOS) {
+    window.addEventListener('orientationchange', rotationHandler);
+  } else if (screen.orientation) {
+    // addEventListener('orientationchange') is not a user interaction on Android
+    screen.orientation.onchange = rotationHandler;
+  }
+
+  player.on('ended', _ => {
+    if (locked === true) {
+      screen.orientation.unlock();
+      locked = false;
+    }
+  });
+};
+
+/**
+ * A video.js plugin.
+ *
+ * Adds a monile UI for player control, and fullscreen orientation control
+ *
+ * @function mobileUi
+ * @param    {Object} [options={}]
+ *           Plugin options.
+ * @param    {boolean} [options.forceForTesting=false]
+ *           Enables the display regardless of user agent, for testing purposes
+ * @param    {Object} [options.fullscreen={}]
+ *           Fullscreen options.
+ * @param    {boolean} [options.fullscreen.enterOnRotate=true]
+ *           Whether to go fullscreen when rotating to landscape
+ * @param    {boolean} [options.fullscreen.exitOnRotate=true]
+ *           Whether to leave fullscreen when rotating to portrait (if not locked)
+ * @param    {boolean} [options.fullscreen.lockOnRotate=true]
+ *           Whether to lock orientation when rotating to landscape
+ *           Unlocked when exiting fullscreen or on 'ended'
+ * @param    {boolean} [options.fullscreen.iOS=false]
+ *           Whether to disable iOS's native fullscreen so controls can work
+ * @param    {Object} [options.touchControls={}]
+ *           Touch UI options.
+ * @param    {int} [options.touchControls.seekSeconds=10]
+ *           Number of seconds to seek on double-tap
+ * @param    {int} [options.touchControls.tapTimeout=300]
+ *           Interval in ms to be considered a doubletap
+ * @param    {boolean} [options.touchControls.disableOnEnd=false]
+ *           Whether to disable when the video ends (e.g., if there is an endscreen)
+ *           Never shows if the endscreen plugin is present
+ */
+const mobileUi = function(options = {}) {
+  if (options.forceForTesting || videojs.browser.IS_ANDROID || videojs.browser.IS_IOS) {
+    this.ready(() => {
+      onPlayerReady(this, videojs.mergeOptions(defaults, options));
+    });
+  }
+};
+
+// Register the plugin with video.js.
+registerPlugin('mobileUi', mobileUi);
+
+// Include the version number.
+mobileUi.VERSION = VERSION;
+
+export default mobileUi;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="TouchOverlay.html">TouchOverlay</a></li></ul><h3>Global</h3><ul><li><a href="global.html#mobileUi">mobileUi</a></li><li><a href="global.html#onPlayerReady">onPlayerReady</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Feb 02 2021 09:43:56 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

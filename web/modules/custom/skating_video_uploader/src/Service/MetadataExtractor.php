@@ -250,9 +250,9 @@ class MetadataExtractor {
    *   The file entity or NULL if not found.
    */
   protected function getFileFromVideoJsMedia(VideoJsMediaInterface $videojs_media) {
-    // Check if this is a local_video or local_audio VideoJS Media entity.
+    // Check if this is a videojs_local_video or videojs_local_audio VideoJS Media entity.
     $bundle = $videojs_media->bundle();
-    if ($bundle !== 'local_video' && $bundle !== 'local_audio') {
+    if ($bundle !== 'videojs_local_video' && $bundle !== 'videojs_local_audio') {
       return NULL;
     }
 

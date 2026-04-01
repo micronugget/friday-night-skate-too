@@ -52,7 +52,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testRenderLocalVideoDefault(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Test Local Video',
       'status' => TRUE,
     ]);
@@ -70,7 +70,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testRenderYoutubeDefault(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
       'field_youtube_url' => [
@@ -91,7 +91,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testRenderRemoteVideoDefault(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'remote_video',
+      'type' => 'videojs_remote_video',
       'name' => 'Test Remote Video',
       'status' => TRUE,
       'field_remote_url' => [
@@ -112,7 +112,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testRenderTeaserViewMode(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Test Video Teaser',
       'status' => TRUE,
     ]);
@@ -133,7 +133,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testUnpublishedEntityAccess(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Unpublished Video',
       'status' => FALSE,
     ]);
@@ -151,7 +151,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testCanonicalRoute(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Canonical Route Test',
       'status' => TRUE,
     ]);
@@ -169,7 +169,7 @@ class VideoJsMediaPlayerRenderingTest extends BrowserTestBase {
    */
   public function testRenderWithSubtitle(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Video With Subtitle',
       'status' => TRUE,
       'field_subtitle' => [

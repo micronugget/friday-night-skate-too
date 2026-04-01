@@ -44,7 +44,7 @@ class VideoJsMediaFormTest extends BrowserTestBase {
     $permissions = [
       'access content',
     ];
-    foreach (['local_video', 'local_audio', 'remote_video', 'remote_audio', 'youtube'] as $bundle) {
+    foreach (['videojs_local_video', 'videojs_local_audio', 'videojs_remote_video', 'videojs_remote_audio', 'videojs_youtube'] as $bundle) {
       $permissions[] = "create {$bundle} videojs media";
       $permissions[] = "edit own {$bundle} videojs media";
       $permissions[] = "view {$bundle} videojs media";
@@ -92,7 +92,7 @@ class VideoJsMediaFormTest extends BrowserTestBase {
   public function testEditForm(): void {
     // Create entity.
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Original Name',
       'status' => TRUE,
       'uid' => $this->authorizedUser->id(),
@@ -113,7 +113,7 @@ class VideoJsMediaFormTest extends BrowserTestBase {
   public function testUpdateEntityViaForm(): void {
     // Create entity.
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Original Name',
       'status' => TRUE,
       'uid' => $this->authorizedUser->id(),
@@ -155,7 +155,7 @@ class VideoJsMediaFormTest extends BrowserTestBase {
   public function testDeleteForm(): void {
     // Create entity.
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'To Be Deleted',
       'status' => TRUE,
       'uid' => $this->authorizedUser->id(),
@@ -203,11 +203,11 @@ class VideoJsMediaFormTest extends BrowserTestBase {
    */
   public static function bundleProvider(): array {
     return [
-      'local_video' => ['local_video'],
-      'local_audio' => ['local_audio'],
-      'remote_video' => ['remote_video'],
-      'remote_audio' => ['remote_audio'],
-      'youtube' => ['youtube'],
+      'videojs_local_video' => ['videojs_local_video'],
+      'videojs_local_audio' => ['videojs_local_audio'],
+      'videojs_remote_video' => ['videojs_remote_video'],
+      'videojs_remote_audio' => ['videojs_remote_audio'],
+      'videojs_youtube' => ['videojs_youtube'],
     ];
   }
 

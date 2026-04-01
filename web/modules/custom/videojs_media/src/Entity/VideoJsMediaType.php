@@ -37,10 +37,10 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "uuid" = "uuid"
  *   },
  *   links = {
- *     "add-form" = "/admin/structure/videojs-media/types/add",
- *     "edit-form" = "/admin/structure/videojs-media/types/{videojs_media_type}",
- *     "delete-form" = "/admin/structure/videojs-media/types/{videojs_media_type}/delete",
- *     "collection" = "/admin/structure/videojs-media/types"
+ *     "add-form" = "/admin/structure/media/videojs-types/add",
+ *     "edit-form" = "/admin/structure/media/videojs-types/{videojs_media_type}",
+ *     "delete-form" = "/admin/structure/media/videojs-types/{videojs_media_type}/delete",
+ *     "collection" = "/admin/structure/media/videojs-types"
  *   },
  *   config_export = {
  *     "id",

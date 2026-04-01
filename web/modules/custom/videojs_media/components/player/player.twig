@@ -3,7 +3,7 @@
   Receives field content from videojs-media.html.twig template.
   Fields are passed as render arrays with their values.
 #}
-{% set is_audio = bundle in ['local_audio', 'remote_audio'] %}
+{% set is_audio = bundle in ['videojs_local_audio', 'videojs_remote_audio'] %}
 
 <{{ is_audio ? 'audio' : 'video' }} id="videojs-player-{{ random() }}" class="video-js" playsinline webkit-playsinline
        {% if field_poster_image %}
@@ -16,7 +16,7 @@
          {% endif %}
        {% endif %}
        {% if enable_viewport_monitoring %}data-enable-viewport-monitoring="true"{% endif %}
-       data-setup='{"techOrder": ["html5", "youtube"], {{ is_audio ? "" : "\"fluid\": true, " }}"controls": true, "youtube": {"playsinline": 1}, "html5": {"vhs": {"overrideNative": true}}}'>
+       data-setup='{"techOrder": ["html5", "videojs_youtube"], {{ is_audio ? "" : "\"fluid\": true, " }}"controls": true, "videojs_youtube": {"playsinline": 1}, "html5": {"vhs": {"overrideNative": true}}}'>
 
   {# Local media file (audio or video) #}
   {% if field_media_file %}

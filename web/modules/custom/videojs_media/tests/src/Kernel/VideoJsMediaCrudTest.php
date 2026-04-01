@@ -150,7 +150,7 @@ class VideoJsMediaCrudTest extends KernelTestBase {
    */
   public function testLoadMultipleEntities(): void {
     $entities = [];
-    foreach (['local_video', 'youtube', 'remote_audio'] as $bundle) {
+    foreach (['videojs_local_video', 'videojs_youtube', 'videojs_remote_audio'] as $bundle) {
       $entity = VideoJsMedia::create([
         'type' => $bundle,
         'name' => "Test {$bundle} Media",
@@ -174,11 +174,11 @@ class VideoJsMediaCrudTest extends KernelTestBase {
    */
   public static function bundleProvider(): array {
     return [
-      'local_video' => ['local_video'],
-      'local_audio' => ['local_audio'],
-      'remote_video' => ['remote_video'],
-      'remote_audio' => ['remote_audio'],
-      'youtube' => ['youtube'],
+      'videojs_local_video' => ['videojs_local_video'],
+      'videojs_local_audio' => ['videojs_local_audio'],
+      'videojs_remote_video' => ['videojs_remote_video'],
+      'videojs_remote_audio' => ['videojs_remote_audio'],
+      'videojs_youtube' => ['videojs_youtube'],
     ];
   }
 

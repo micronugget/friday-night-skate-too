@@ -77,7 +77,7 @@ class VideoJsMediaUpdateTest extends EntityKernelTestBase {
 
     videojs_media_update_10001();
 
-    foreach (['local_video', 'local_audio', 'remote_video', 'remote_audio', 'youtube'] as $bundle) {
+    foreach (['videojs_local_video', 'videojs_local_audio', 'videojs_remote_video', 'videojs_remote_audio', 'videojs_youtube'] as $bundle) {
       $config_name = "core.entity_view_display.videojs_media.$bundle.teaser";
       $this->assertTrue(
         $config_storage->exists($config_name),

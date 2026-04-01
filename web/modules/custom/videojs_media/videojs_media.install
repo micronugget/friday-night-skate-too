@@ -19,11 +19,11 @@ function videojs_media_update_10001() {
   // List of config files to import for the teaser view mode.
   $configs_to_import = [
     'core.entity_view_mode.videojs_media.teaser',
-    'core.entity_view_display.videojs_media.local_video.teaser',
-    'core.entity_view_display.videojs_media.local_audio.teaser',
-    'core.entity_view_display.videojs_media.remote_video.teaser',
-    'core.entity_view_display.videojs_media.remote_audio.teaser',
-    'core.entity_view_display.videojs_media.youtube.teaser',
+    'core.entity_view_display.videojs_media.videojs_local_video.teaser',
+    'core.entity_view_display.videojs_media.videojs_local_audio.teaser',
+    'core.entity_view_display.videojs_media.videojs_remote_video.teaser',
+    'core.entity_view_display.videojs_media.videojs_remote_audio.teaser',
+    'core.entity_view_display.videojs_media.videojs_youtube.teaser',
   ];
 
   foreach ($configs_to_import as $config_name) {
@@ -38,4 +38,136 @@ function videojs_media_update_10001() {
   }
 
   return t('Added Teaser view mode for VideoJS Media entities.');
+}
+
+/**
+ * Rename VideoJS Media bundle types to use videojs_ prefix.
+ */
+function videojs_media_update_10002() {
+  $config_factory = \Drupal::configFactory();
+  $config_storage = \Drupal::service('config.storage');
+  $database = \Drupal::database();
+
+  $rename_map = [
+    'local_audio'  => ['id' => 'videojs_local_audio',  'label' => 'VideoJS Local Audio',  'description' => 'Audio file hosted locally on your server.'],
+    'local_video'  => ['id' => 'videojs_local_video',  'label' => 'VideoJS Local Video',  'description' => 'Video file hosted locally on your server.'],
+    'remote_audio' => ['id' => 'videojs_remote_audio', 'label' => 'VideoJS Remote Audio', 'description' => 'Audio file hosted remotely via URL.'],
+    'remote_video' => ['id' => 'videojs_remote_video', 'label' => 'VideoJS Remote Video', 'description' => 'Video file hosted remotely via URL (HLS, DASH, MP4, etc.).'],
+    'youtube'      => ['id' => 'videojs_youtube',      'label' => 'VideoJS YouTube',      'description' => 'Video hosted on YouTube.'],
+  ];
+
+  foreach ($rename_map as $old_id => $new) {
+    $new_id = $new['id'];
+    $new_label = $new['label'];
+    $new_desc = $new['description'];
+
+    // Rename the bundle type config entity if it still has the old ID.
+    $old_config_name = 'videojs_media.type.' . $old_id;
+    $new_config_name = 'videojs_media.type.' . $new_id;
+    if ($config_storage->exists($old_config_name)) {
+      $data = $config_factory->get($old_config_name)->getRawData();
+      $data['id'] = $new_id;
+      $data['label'] = $new_label;
+      $data['description'] = $new_desc;
+      $config_factory->getEditable($new_config_name)->setData($data)->save();
+      $config_factory->getEditable($old_config_name)->delete();
+      \Drupal::logger('videojs_media')->notice('Renamed bundle type config @old to @new.', [
+        '@old' => $old_config_name,
+        '@new' => $new_config_name,
+      ]);
+    }
+    elseif ($config_storage->exists($new_config_name)) {
+      // Config already renamed (e.g. partial run); just update label/description.
+      $config_factory->getEditable($new_config_name)
+        ->set('label', $new_label)
+        ->set('description', $new_desc)
+        ->save();
+      \Drupal::logger('videojs_media')->notice('Updated label/description for @config.', ['@config' => $new_config_name]);
+    }
+
+    // Rename field instance configs: field.field.videojs_media.{old}.{field}.
+    $field_prefix = 'field.field.videojs_media.' . $old_id . '.';
+    $new_field_prefix = 'field.field.videojs_media.' . $new_id . '.';
+    foreach ($config_storage->listAll($field_prefix) as $old_field_config) {
+      $field_suffix = substr($old_field_config, strlen($field_prefix));
+      $new_field_config = $new_field_prefix . $field_suffix;
+      if (!$config_storage->exists($new_field_config)) {
+        $data = $config_factory->get($old_field_config)->getRawData();
+        $data['id'] = 'videojs_media.' . $new_id . '.' . $field_suffix;
+        $data['bundle'] = $new_id;
+        // Update dependency on old type config.
+        if (isset($data['dependencies']['config'])) {
+          $data['dependencies']['config'] = array_map(function ($dep) use ($old_id, $new_id) {
+            return str_replace('videojs_media.type.' . $old_id, 'videojs_media.type.' . $new_id, $dep);
+          }, $data['dependencies']['config']);
+        }
+        $config_factory->getEditable($new_field_config)->setData($data)->save();
+        $config_factory->getEditable($old_field_config)->delete();
+        \Drupal::logger('videojs_media')->notice('Renamed field config @old to @new.', ['@old' => $old_field_config, '@new' => $new_field_config]);
+      }
+    }
+
+    // Rename form display configs: core.entity_form_display.videojs_media.{old}.{mode}.
+    $form_prefix = 'core.entity_form_display.videojs_media.' . $old_id . '.';
+    $new_form_prefix = 'core.entity_form_display.videojs_media.' . $new_id . '.';
+    foreach ($config_storage->listAll($form_prefix) as $old_form_config) {
+      $mode = substr($old_form_config, strlen($form_prefix));
+      $new_form_config = $new_form_prefix . $mode;
+      if (!$config_storage->exists($new_form_config)) {
+        $data = $config_factory->get($old_form_config)->getRawData();
+        $data['id'] = 'videojs_media.' . $new_id . '.' . $mode;
+        $data['bundle'] = $new_id;
+        $data = _videojs_media_update_config_deps($data, $old_id, $new_id);
+        $config_factory->getEditable($new_form_config)->setData($data)->save();
+        $config_factory->getEditable($old_form_config)->delete();
+        \Drupal::logger('videojs_media')->notice('Renamed form display config @old to @new.', ['@old' => $old_form_config, '@new' => $new_form_config]);
+      }
+    }
+
+    // Rename view display configs: core.entity_view_display.videojs_media.{old}.{mode}.
+    $view_prefix = 'core.entity_view_display.videojs_media.' . $old_id . '.';
+    $new_view_prefix = 'core.entity_view_display.videojs_media.' . $new_id . '.';
+    foreach ($config_storage->listAll($view_prefix) as $old_view_config) {
+      $mode = substr($old_view_config, strlen($view_prefix));
+      $new_view_config = $new_view_prefix . $mode;
+      if (!$config_storage->exists($new_view_config)) {
+        $data = $config_factory->get($old_view_config)->getRawData();
+        $data['id'] = 'videojs_media.' . $new_id . '.' . $mode;
+        $data['bundle'] = $new_id;
+        $data = _videojs_media_update_config_deps($data, $old_id, $new_id);
+        $config_factory->getEditable($new_view_config)->setData($data)->save();
+        $config_factory->getEditable($old_view_config)->delete();
+        \Drupal::logger('videojs_media')->notice('Renamed view display config @old to @new.', ['@old' => $old_view_config, '@new' => $new_view_config]);
+      }
+    }
+
+    // Update the bundle column in the entity base and data tables (revision
+    // tables do not store the bundle/type column).
+    foreach (['videojs_media', 'videojs_media_field_data'] as $table) {
+      if ($database->schema()->tableExists($table) && $database->schema()->fieldExists($table, 'type')) {
+        $database->update($table)
+          ->fields(['type' => $new_id])
+          ->condition('type', $old_id)
+          ->execute();
+      }
+    }
+  }
+
+  return t('Renamed VideoJS Media bundle types to use videojs_ prefix.');
+}
+
+/**
+ * Helper: replace old bundle ID references in config dependency arrays.
+ */
+function _videojs_media_update_config_deps(array $data, string $old_id, string $new_id): array {
+  foreach (['config'] as $dep_type) {
+    if (isset($data['dependencies'][$dep_type])) {
+      $data['dependencies'][$dep_type] = array_map(function ($dep) use ($old_id, $new_id) {
+        $dep = str_replace('videojs_media.type.' . $old_id, 'videojs_media.type.' . $new_id, $dep);
+        $dep = str_replace('field.field.videojs_media.' . $old_id . '.', 'field.field.videojs_media.' . $new_id . '.', $dep);
+        return $dep;
+      }, $data['dependencies'][$dep_type]);
+    }
+  }
+  return $data;
 }

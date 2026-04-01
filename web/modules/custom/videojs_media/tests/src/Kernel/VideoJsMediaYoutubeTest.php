@@ -42,7 +42,7 @@ class VideoJsMediaYoutubeTest extends KernelTestBase {
    */
   public function testCreateYoutubeEntity(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
       'field_youtube_url' => [
@@ -52,7 +52,7 @@ class VideoJsMediaYoutubeTest extends KernelTestBase {
     $entity->save();
 
     $this->assertNotEmpty($entity->id());
-    $this->assertEquals('youtube', $entity->bundle());
+    $this->assertEquals('videojs_youtube', $entity->bundle());
   }
 
   /**
@@ -62,7 +62,7 @@ class VideoJsMediaYoutubeTest extends KernelTestBase {
    */
   public function testYoutubeUrlFormats(string $url): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
       'field_youtube_url' => [
@@ -80,7 +80,7 @@ class VideoJsMediaYoutubeTest extends KernelTestBase {
    */
   public function testLoadYoutubeEntity(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
       'field_youtube_url' => [
@@ -99,7 +99,7 @@ class VideoJsMediaYoutubeTest extends KernelTestBase {
    */
   public function testUpdateYoutubeUrl(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
       'field_youtube_url' => [
