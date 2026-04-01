@@ -42,8 +42,8 @@ function skating_video_uploader_help($route_name, RouteMatchInterface $route_mat
 function skating_video_uploader_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // Add consent checkbox to VideoJS Media forms for video types.
   if (strpos($form_id, 'videojs_media_') === 0 && 
-      (strpos($form_id, '_local_video_') !== FALSE || 
-       strpos($form_id, '_remote_video_') !== FALSE)) {
+      (strpos($form_id, '_videojs_local_video_') !== FALSE || 
+       strpos($form_id, '_videojs_remote_video_') !== FALSE)) {
     
     $form['youtube_upload'] = [
       '#type' => 'details',
@@ -85,7 +85,7 @@ function skating_video_uploader_form_submit($form, FormStateInterface $form_stat
 function skating_video_uploader_entity_presave(EntityInterface $entity) {
   // Check if this is a VideoJS Media entity with local video.
   if ($entity instanceof VideoJsMediaInterface && 
-      ($entity->bundle() == 'local_video' || $entity->bundle() == 'local_audio')) {
+      ($entity->bundle() == 'videojs_local_video' || $entity->bundle() == 'videojs_local_audio')) {
     // Extract metadata from the video file.
     \Drupal::service('skating_video_uploader.metadata_extractor')->extractMetadata($entity);
   }

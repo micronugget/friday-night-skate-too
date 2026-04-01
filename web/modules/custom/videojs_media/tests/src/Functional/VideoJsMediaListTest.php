@@ -65,7 +65,7 @@ class VideoJsMediaListTest extends BrowserTestBase {
   public function testListPageDisplaysEntities(): void {
     // Create test entities.
     $entities = [];
-    foreach (['local_video', 'youtube', 'remote_audio'] as $bundle) {
+    foreach (['videojs_local_video', 'videojs_youtube', 'videojs_remote_audio'] as $bundle) {
       $entity = VideoJsMedia::create([
         'type' => $bundle,
         'name' => "Test {$bundle} Media",
@@ -90,13 +90,13 @@ class VideoJsMediaListTest extends BrowserTestBase {
   public function testListPageFilterByBundle(): void {
     // Create entities of different types.
     VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Local Video Item',
       'status' => TRUE,
     ])->save();
 
     VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'YouTube Item',
       'status' => TRUE,
     ])->save();

@@ -39,7 +39,7 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
    * Tests that anonymous users receive a 403 on the canonical entity page.
    */
   public function testAnonymousUserCannotViewPublishedEntity(): void {
-    $entity = $this->createPublishedEntity('remote_video');
+    $entity = $this->createPublishedEntity('videojs_remote_video');
     $this->drupalGet("/videojs-media/{$entity->id()}");
     $this->assertSession()->statusCodeEquals(403);
   }
@@ -63,8 +63,8 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
    * Tests a bundle view permission does not grant access to another bundle.
    */
   public function testViewPermissionDoesNotCrossBundles(): void {
-    $local_video = $this->createPublishedEntity('local_video');
-    $youtube = $this->createPublishedEntity('youtube');
+    $local_video = $this->createPublishedEntity('videojs_local_video');
+    $youtube = $this->createPublishedEntity('videojs_youtube');
 
     $viewer = $this->drupalCreateUser(['view local_video videojs media']);
     $this->drupalLogin($viewer);
@@ -83,7 +83,7 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Unpublished Entity',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 0,
@@ -135,7 +135,7 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Owned by another user',
         'field_remote_url' => 'https://example.com/video.mp4',
         'uid' => $owner->id(),
@@ -160,7 +160,7 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Owner only edit',
         'field_remote_url' => 'https://example.com/video.mp4',
         'uid' => $owner->id(),
@@ -189,7 +189,7 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
     $this->drupalGet('/admin/content/videojs-media');
     $this->assertSession()->statusCodeEquals(200);
 
-    foreach (['remote_video', 'youtube'] as $bundle) {
+    foreach (['videojs_remote_video', 'videojs_youtube'] as $bundle) {
       $this->drupalGet("/videojs-media/add/$bundle");
       $this->assertSession()->statusCodeEquals(200);
     }
@@ -231,10 +231,10 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
       'status' => 1,
     ];
 
-    if (in_array($bundle, ['remote_video', 'remote_audio'], TRUE)) {
+    if (in_array($bundle, ['videojs_remote_video', 'videojs_remote_audio'], TRUE)) {
       $values['field_remote_url'] = 'https://example.com/media.mp4';
     }
-    elseif ($bundle === 'youtube') {
+    elseif ($bundle === 'videojs_youtube') {
       $values['field_youtube_url'] = 'https://www.youtube.com/watch?v=test';
     }
 
@@ -255,11 +255,11 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
    */
   public static function bundleProvider(): array {
     return [
-      'local_video' => ['local_video'],
-      'local_audio' => ['local_audio'],
-      'remote_video' => ['remote_video'],
-      'remote_audio' => ['remote_audio'],
-      'youtube' => ['youtube'],
+      'videojs_local_video' => ['videojs_local_video'],
+      'videojs_local_audio' => ['videojs_local_audio'],
+      'videojs_remote_video' => ['videojs_remote_video'],
+      'videojs_remote_audio' => ['videojs_remote_audio'],
+      'videojs_youtube' => ['videojs_youtube'],
     ];
   }
 
@@ -271,9 +271,9 @@ class VideoJsMediaPermissionsTest extends BrowserTestBase {
    */
   public static function createBundleProvider(): array {
     return [
-      'remote_video' => ['remote_video'],
-      'remote_audio' => ['remote_audio'],
-      'youtube' => ['youtube'],
+      'videojs_remote_video' => ['videojs_remote_video'],
+      'videojs_remote_audio' => ['videojs_remote_audio'],
+      'videojs_youtube' => ['videojs_youtube'],
     ];
   }
 

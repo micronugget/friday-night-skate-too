@@ -62,7 +62,7 @@ class VideoJsMediaAccessTest extends KernelTestBase {
 
     // Create entity.
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Test Video',
       'status' => TRUE,
     ]);
@@ -363,8 +363,8 @@ class VideoJsMediaAccessTest extends KernelTestBase {
    */
   public static function bundleProvider(): array {
     return [
-      'local_video' => ['local_video'],
-      'youtube' => ['youtube'],
+      'videojs_local_video' => ['videojs_local_video'],
+      'videojs_youtube' => ['videojs_youtube'],
     ];
   }
 

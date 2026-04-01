@@ -142,7 +142,7 @@ class MetadataExtractorTest extends UnitTestCase {
   public function testExtractMetadataWithMissingFile() {
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
     $videojs_media->method('id')->willReturn(1);
-    $videojs_media->method('bundle')->willReturn('local_video');
+    $videojs_media->method('bundle')->willReturn('videojs_local_video');
     $videojs_media->method('hasField')->willReturn(FALSE);
 
     $result = $this->metadataExtractor->extractMetadata($videojs_media);
@@ -157,7 +157,7 @@ class MetadataExtractorTest extends UnitTestCase {
   public function testExtractMetadataWithWrongBundle() {
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
     $videojs_media->method('id')->willReturn(1);
-    $videojs_media->method('bundle')->willReturn('youtube');
+    $videojs_media->method('bundle')->willReturn('videojs_youtube');
 
     $result = $this->metadataExtractor->extractMetadata($videojs_media);
     $this->assertNull($result);
@@ -181,7 +181,7 @@ class MetadataExtractorTest extends UnitTestCase {
     $field_item_list->target_id = 123;
 
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
-    $videojs_media->method('bundle')->willReturn('local_video');
+    $videojs_media->method('bundle')->willReturn('videojs_local_video');
     $videojs_media->method('hasField')->with('field_media_file')->willReturn(TRUE);
     $videojs_media->method('get')->with('field_media_file')->willReturn($field_item_list);
 

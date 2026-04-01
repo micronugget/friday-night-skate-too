@@ -112,7 +112,7 @@ class VideoProcessorTest extends UnitTestCase {
    */
   public function testProcessEntityWithWrongBundle() {
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
-    $videojs_media->method('bundle')->willReturn('youtube');
+    $videojs_media->method('bundle')->willReturn('videojs_youtube');
 
     $this->messenger->expects($this->once())
       ->method('addError');
@@ -128,7 +128,7 @@ class VideoProcessorTest extends UnitTestCase {
    */
   public function testProcessEntityWithMetadataExtractionFailure() {
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
-    $videojs_media->method('bundle')->willReturn('local_video');
+    $videojs_media->method('bundle')->willReturn('videojs_local_video');
     $videojs_media->method('id')->willReturn(1);
 
     $this->metadataExtractor->method('extractMetadata')
@@ -143,13 +143,13 @@ class VideoProcessorTest extends UnitTestCase {
   }
 
   /**
-   * Tests successful processing with local_video bundle.
+   * Tests successful processing with videojs_local_video bundle.
    *
    * @covers ::processEntity
    */
   public function testProcessEntityWithLocalVideo() {
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
-    $videojs_media->method('bundle')->willReturn('local_video');
+    $videojs_media->method('bundle')->willReturn('videojs_local_video');
     $videojs_media->method('id')->willReturn(1);
 
     $metadata = [
@@ -172,13 +172,13 @@ class VideoProcessorTest extends UnitTestCase {
   }
 
   /**
-   * Tests successful processing with local_audio bundle.
+   * Tests successful processing with videojs_local_audio bundle.
    *
    * @covers ::processEntity
    */
   public function testProcessEntityWithLocalAudio() {
     $videojs_media = $this->createMock(VideoJsMediaInterface::class);
-    $videojs_media->method('bundle')->willReturn('local_audio');
+    $videojs_media->method('bundle')->willReturn('videojs_local_audio');
     $videojs_media->method('id')->willReturn(2);
 
     $metadata = [

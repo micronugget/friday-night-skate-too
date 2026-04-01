@@ -30,7 +30,7 @@ function videojs_media_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<dt>' . t('Managing VideoJS Media') . '</dt>';
       $output .= '<dd>' . t('Manage all VideoJS Media items at <a href=":content">VideoJS Media content</a>.', [':content' => '/admin/content/videojs-media']) . '</dd>';
       $output .= '<dt>' . t('Managing Types') . '</dt>';
-      $output .= '<dd>' . t('Configure VideoJS Media types (bundles) at <a href=":types">VideoJS Media types</a>.', [':types' => '/admin/structure/videojs-media/types']) . '</dd>';
+      $output .= '<dd>' . t('Configure VideoJS Media types (bundles) at <a href=":types">VideoJS Media types</a>.', [':types' => '/admin/structure/media/videojs-types']) . '</dd>';
       $output .= '</dl>';
       return $output;
 
@@ -123,17 +123,17 @@ function videojs_media_videojs_media_view(array &$build, EntityInterface $entity
 
   // Add bundle-specific preprocessing if needed.
   switch ($bundle) {
-    case 'youtube':
+    case 'videojs_youtube':
       // YouTube-specific preprocessing.
       break;
 
-    case 'local_video':
-    case 'local_audio':
+    case 'videojs_local_video':
+    case 'videojs_local_audio':
       // Local media preprocessing.
       break;
 
-    case 'remote_video':
-    case 'remote_audio':
+    case 'videojs_remote_video':
+    case 'videojs_remote_audio':
       // Remote media preprocessing.
       break;
   }

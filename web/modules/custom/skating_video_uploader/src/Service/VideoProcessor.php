@@ -122,8 +122,8 @@ class VideoProcessor {
 
       // Only process local video and local audio types.
       $bundle = $entity->bundle();
-      if ($bundle !== 'local_video' && $bundle !== 'local_audio') {
-        $this->loggerFactory->error('VideoJS Media entity must be local_video or local_audio, got @bundle', ['@bundle' => $bundle]);
+      if ($bundle !== 'videojs_local_video' && $bundle !== 'videojs_local_audio') {
+        $this->loggerFactory->error('VideoJS Media entity must be videojs_local_video or videojs_local_audio, got @bundle', ['@bundle' => $bundle]);
         $this->messenger->addError(t('Only local video and audio files can be processed.'));
         return FALSE;
       }

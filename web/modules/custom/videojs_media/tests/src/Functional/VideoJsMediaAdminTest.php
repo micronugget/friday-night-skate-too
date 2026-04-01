@@ -168,7 +168,7 @@ class VideoJsMediaAdminTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Original Title',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 1,
@@ -187,7 +187,7 @@ class VideoJsMediaAdminTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Original',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 1,
@@ -206,7 +206,7 @@ class VideoJsMediaAdminTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'remote_video',
+        'type' => 'videojs_remote_video',
         'name' => 'Canonical Test',
         'field_remote_url' => 'https://example.com/video.mp4',
         'status' => 1,
@@ -224,7 +224,7 @@ class VideoJsMediaAdminTest extends BrowserTestBase {
     $entity = $this->container->get('entity_type.manager')
       ->getStorage('videojs_media')
       ->create([
-        'type' => 'youtube',
+        'type' => 'videojs_youtube',
         'name' => 'Delete Me',
         'field_youtube_url' => 'https://www.youtube.com/watch?v=test',
         'status' => 1,
@@ -245,11 +245,11 @@ class VideoJsMediaAdminTest extends BrowserTestBase {
    */
   public static function bundleProvider(): array {
     return [
-      'local_video' => ['local_video'],
-      'local_audio' => ['local_audio'],
-      'remote_video' => ['remote_video'],
-      'remote_audio' => ['remote_audio'],
-      'youtube' => ['youtube'],
+      'videojs_local_video' => ['videojs_local_video'],
+      'videojs_local_audio' => ['videojs_local_audio'],
+      'videojs_remote_video' => ['videojs_remote_video'],
+      'videojs_remote_audio' => ['videojs_remote_audio'],
+      'videojs_youtube' => ['videojs_youtube'],
     ];
   }
 

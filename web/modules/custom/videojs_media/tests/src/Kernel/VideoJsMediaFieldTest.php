@@ -45,7 +45,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testLocalVideoFields(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Test Local Video',
       'status' => TRUE,
     ]);
@@ -61,7 +61,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testLocalAudioFields(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_audio',
+      'type' => 'videojs_local_audio',
       'name' => 'Test Local Audio',
       'status' => TRUE,
     ]);
@@ -77,7 +77,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testRemoteVideoFields(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'remote_video',
+      'type' => 'videojs_remote_video',
       'name' => 'Test Remote Video',
       'status' => TRUE,
     ]);
@@ -93,7 +93,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testRemoteAudioFields(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'remote_audio',
+      'type' => 'videojs_remote_audio',
       'name' => 'Test Remote Audio',
       'status' => TRUE,
     ]);
@@ -109,7 +109,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testYoutubeFields(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
     ]);
@@ -125,7 +125,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testSetLocalVideoFieldValues(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'local_video',
+      'type' => 'videojs_local_video',
       'name' => 'Test Local Video',
       'status' => TRUE,
     ]);
@@ -147,7 +147,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testSetRemoteUrlFieldValue(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'remote_video',
+      'type' => 'videojs_remote_video',
       'name' => 'Test Remote Video',
       'status' => TRUE,
     ]);
@@ -166,7 +166,7 @@ class VideoJsMediaFieldTest extends KernelTestBase {
    */
   public function testSetYoutubeUrlFieldValue(): void {
     $entity = VideoJsMedia::create([
-      'type' => 'youtube',
+      'type' => 'videojs_youtube',
       'name' => 'Test YouTube Video',
       'status' => TRUE,
     ]);
