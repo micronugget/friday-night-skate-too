@@ -1,0 +1,7 @@
+#!/bin/bash
+## Description: Run PHPUnit tests for fridaynightskate2 custom modules
+## Usage: phpunit [args]
+## Example: "ddev phpunit web/modules/custom/fns_archive/tests"
+
+mkdir -p /var/www/html/web/sites/simpletest/browser_output
+cd /var/www/html && vendor/bin/phpunit --configuration /var/www/html/phpunit.xml "$@"
