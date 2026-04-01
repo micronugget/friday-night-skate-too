@@ -1,0 +1,26 @@
+uuid: a89d287f-5b7a-4e73-8dcb-494db4055fb7
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.person_profiles
+  module:
+    - views
+active_version: fd2c7ae5b8555157
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:person_profiles-all'
+        label: 'Person profiles: All profiles'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Person profiles: All profiles'
+id: block.views_block.person_profiles-all
+provider: views
+source: block
+source_local_id: 'views_block:person_profiles-all'

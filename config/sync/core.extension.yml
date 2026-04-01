@@ -1,10 +1,12 @@
 _core:
   default_config_hash: 4GIX5Esnc_umpXUBj4IIocRX7Mt5fPhm4AgXfE3E56E
 module:
+  add_content_by_bundle: 0
   announcements_feed: 0
   automated_cron: 0
   automatic_updates: 0
   autosave_form: 0
+  better_exposed_filters: 0
   big_pipe: 0
   block: 0
   bpmn_io: 0
@@ -91,6 +93,7 @@ module:
   tagify: 0
   tagify_user_list: 0
   taxonomy: 0
+  telephone: 0
   text: 0
   token: 0
   trash: 0
@@ -101,6 +104,7 @@ module:
   views_ui: 0
   workflows: 0
   pathauto: 1
+  selective_better_exposed_filters: 1
   views: 10
 theme:
   claro: 0
