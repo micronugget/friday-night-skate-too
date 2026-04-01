@@ -70,6 +70,77 @@ class MetadataExtractor {
   }
 
   /**
+   * Extracts metadata from a video file using ffprobe.
+   *
+   * Reads format tags via ffprobe JSON output and returns an array with:
+   * - 'gps_wkt': WKT POINT string or NULL.
+   * - 'timecode': timecode string (e.g. "10:00:00:00") or NULL.
+   * - 'metadata': associative array of raw format tags.
+   *
+   * @param string $filepath
+   *   Absolute path to the video file.
+   * @param string $ffprobe
+   *   Path to the ffprobe binary (default: 'ffprobe').
+   *
+   * @return array{gps_wkt: string|null, timecode: string|null, metadata: array<string, mixed>}
+   *   Extracted metadata.
+   */
+  public function extractFromVideo(string $filepath, string $ffprobe = 'ffprobe'): array {
+    $result = [
+      'gps_wkt' => NULL,
+      'timecode' => NULL,
+      'metadata' => [],
+    ];
+    if (!is_readable($filepath)) {
+      $this->logger->warning('MetadataExtractor: file not readable: @path', ['@path' => $filepath]);
+      return $result;
+    }
+    $cmd = escapeshellarg($ffprobe) . ' -v quiet -print_format json -show_format ' . escapeshellarg($filepath);
+    $output = shell_exec($cmd);
+    if ($output === NULL || $output === '') {
+      $this->logger->warning('MetadataExtractor: ffprobe returned no output for @path', ['@path' => $filepath]);
+      return $result;
+    }
+    $data = json_decode($output, TRUE);
+    if (!is_array($data) || empty($data['format']['tags'])) {
+      return $result;
+    }
+    $tags = $data['format']['tags'];
+    $result['metadata'] = $tags;
+    // Extract timecode.
+    if (!empty($tags['timecode'])) {
+      $result['timecode'] = $tags['timecode'];
+    }
+    // Extract GPS from ISO 6709 location tag (e.g. "+35.6812+139.7671/").
+    $location = $tags['location'] ?? $tags['com.apple.quicktime.location.ISO6709'] ?? NULL;
+    if ($location !== NULL) {
+      $result['gps_wkt'] = $this->parseIso6709($location);
+    }
+    return $result;
+  }
+
+  /**
+   * Parses an ISO 6709 location string into a WKT POINT.
+   *
+   * Handles formats like "+35.6812+139.7671/" or "+35.6812+139.7671+100/".
+   *
+   * @param string $location
+   *   ISO 6709 location string.
+   *
+   * @return string|null
+   *   WKT POINT string, or NULL if parsing fails.
+   */
+  protected function parseIso6709(string $location): ?string {
+    // Pattern: sign + lat + sign + lon (+ optional altitude) + optional slash.
+    if (!preg_match('/^([+-]\d+(?:\.\d+)?)([+-]\d+(?:\.\d+)?)(?:[+-]\d+(?:\.\d+)?)?[\/]?$/', $location, $m)) {
+      return NULL;
+    }
+    $lat = (float) $m[1];
+    $lon = (float) $m[2];
+    return sprintf('POINT(%s %s)', $lon, $lat);
+  }
+
+  /**
    * Converts an EXIF GPS coordinate array to a decimal float.
    *
    * @param array<int, string>|null $parts
