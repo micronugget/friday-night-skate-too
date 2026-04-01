@@ -1,4 +1,13 @@
 services:
+  logger.channel.fns_archive:
+    parent: logger.channel_base
+    arguments: ['fns_archive']
+
+  fns_archive.metadata_extractor:
+    class: Drupal\fns_archive\Service\MetadataExtractor
+    arguments:
+      - '@logger.channel.fns_archive'
+
   fns_archive.moderation_notifier:
     class: Drupal\fns_archive\Service\ModerationNotifier
     arguments:
