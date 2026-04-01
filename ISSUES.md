@@ -638,11 +638,11 @@ for each. Verify all render correctly.
 
 ---
 
-### #17 — [config] DrupalCMS 2 recipe additions — install missing v1 content type recipes
-
+### #17 — [config] DrupalCMS 2 recipe additions — install missing v1 content type recipes ✅ DONE
 **Priority:** P2
 **Labels:** `config`
 **Depends On:** #4
+**Closed:** PR #55 — Applied drupal_cms_blog, drupal_cms_news, drupal_cms_person recipes.
 
 v1 had several DrupalCMS 1 content type recipes that v2's `byte` template does not
 include by default. Review which are needed and install via the Recipe Installer or
