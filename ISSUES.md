@@ -513,11 +513,12 @@ The archive grid uses custom Masonry.js + Swiper JS (compiled into `build/js/arc
 
 ---
 
-### #13 — [test] MetadataExtractor — GPS EXIF extraction from images
+### #13 — [test] MetadataExtractor — GPS EXIF extraction from images ✅ DONE
 
 **Priority:** P2
 **Labels:** `test`
 **Depends On:** #5
+**PR:** https://github.com/micronugget/friday-night-skate-too/pull/51
 
 `MetadataExtractor::extractFromImage()` uses PHP's `exif_read_data()` to pull GPS
 coordinates from JPEG files. This is a pure PHP operation requiring no external
