@@ -37,6 +37,7 @@ class ArchiveByDatePageTest extends BrowserTestBase {
     'views',
     'content_moderation',
     'workflows',
+    'menu_ui',
     'fns_archive',
   ];
 
@@ -132,14 +133,15 @@ class ArchiveByDatePageTest extends BrowserTestBase {
   }
 
   /**
-   * Tests that masonry library is attached to the page.
+   * Tests that masonry and modal-viewer JS files are attached to the page.
    */
   public function testMasonryLibraryAttached(): void {
     $this->drupalGet("/archive/{$this->term->id()}");
 
-    // Check for library attachment in HTML.
+    // The built JS files should appear as <script src="..."> tags in the HTML.
     $html = $this->getSession()->getPage()->getHtml();
-    $this->assertStringContainsString('fridaynightskate/masonry-archive', $html, 'Masonry library is attached');
+    $this->assertStringContainsString('archive-masonry.js', $html, 'archive-masonry.js script is present in page HTML');
+    $this->assertStringContainsString('modal-viewer.js', $html, 'modal-viewer.js script is present in page HTML');
   }
 
   /**
@@ -321,16 +323,42 @@ class ArchiveByDatePageTest extends BrowserTestBase {
   }
 
   /**
-   * Tests that metadata overlay icons are present.
+   * Tests that masonry-sizer element is present for column width calculation.
+   */
+  public function testMasonrySizerElement(): void {
+    $this->drupalGet("/archive/{$this->term->id()}");
+    $this->assertSession()->elementExists('css', '.masonry-grid .masonry-sizer');
+  }
+
+  /**
+   * Tests that masonry items have required data attributes for modal viewer.
+   */
+  public function testMasonryItemDataAttributes(): void {
+    $this->drupalGet("/archive/{$this->term->id()}");
+
+    // Each .masonry-item should contain an anchor with data-node-id.
+    $links = $this->getSession()->getPage()->findAll('css', '.masonry-item a[data-node-id]');
+    $this->assertNotEmpty($links, 'Masonry item links have data-node-id attribute');
+
+    // Verify data-has-metadata and data-is-video attributes are present.
+    $first_link = $links[0];
+    $this->assertNotNull($first_link->getAttribute('data-has-metadata'), 'data-has-metadata attribute is present');
+    $this->assertNotNull($first_link->getAttribute('data-is-video'), 'data-is-video attribute is present');
+  }
+
+  /**
+   * Tests that metadata overlay icons are present for video/metadata items.
    */
   public function testMetadataOverlay(): void {
     $this->drupalGet("/archive/{$this->term->id()}");
 
-    // Check for metadata overlay structure (implementation-dependent).
-    $html = $this->getSession()->getPage()->getHtml();
+    // All masonry items should be rendered with the article element.
+    $items = $this->getSession()->getPage()->findAll('css', 'article.masonry-item');
+    $this->assertNotEmpty($items, 'Archive items are rendered as article.masonry-item elements');
 
-    // This test may need adjustment based on actual template implementation.
-    $this->assertNotEmpty($html, 'Page has content');
+    // Each item should have the masonry-item__content wrapper.
+    $wrappers = $this->getSession()->getPage()->findAll('css', '.masonry-item .masonry-item__content');
+    $this->assertNotEmpty($wrappers, 'Masonry items have .masonry-item__content wrapper');
   }
 
 }
