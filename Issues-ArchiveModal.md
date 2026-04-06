@@ -100,9 +100,9 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 4. Check if Masonry instance is stored on `grid.masonryInstance`
 
 **Acceptance criteria**:
-- [ ] `.masonry-item` elements are positioned with `position: absolute` and `left`/`top` values (Masonry's signature)
-- [ ] Grid is responsive: 1 col on mobile, 2–5 cols on wider screens
-- [ ] Layout recalculates on window resize
+- [x] `.masonry-item` elements are positioned with `position: absolute` and `left`/`top` values (Masonry's signature)
+- [x] Grid is responsive: 1 col on mobile, 2–5 cols on wider screens
+- [x] Layout recalculates on window resize
 
 ### Issue 2.2 — Ensure masonry CSS grid fallback ([#67](https://github.com/micronugget/friday-night-skate-too/issues/67))
 
