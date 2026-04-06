@@ -60,7 +60,7 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 - [ ] VideoJS CSS (video-js.css) is loaded on the page
 - [ ] No JS console errors related to VideoJS
 
-### Issue 1.2 — Initialise VideoJS player correctly in modal ([#65](https://github.com/micronugget/friday-night-skate-too/issues/65))
+### Issue 1.2 — Initialise VideoJS player correctly in modal ([#65](https://github.com/micronugget/friday-night-skate-too/issues/65)) ✅ DONE
 
 **Problem**: `modal-viewer.js` `renderVideo()` creates a `<video>` element and calls `videojs(uid, {...})` but may have issues with:
 - YouTube videos needing `videojs-youtube` plugin (loaded by SDC but not by modal)
@@ -68,11 +68,11 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 - Player disposal on modal close / navigation
 
 **Acceptance criteria**:
-- [ ] Local `.mp4` videos play in the modal with controls
-- [ ] Remote `.mp4` videos play in the modal
-- [ ] YouTube videos play in the modal (if `videojs-youtube` plugin is loaded)
-- [ ] Navigating between slides disposes the previous player cleanly
-- [ ] Closing the modal disposes the player
+- [x] Local `.mp4` videos play in the modal with controls
+- [x] Remote `.mp4` videos play in the modal
+- [x] YouTube videos play in the modal (if `videojs-youtube` plugin is loaded)
+- [x] Navigating between slides disposes the previous player cleanly
+- [x] Closing the modal disposes the player
 
 ### Issue 1.3 — VideoJS theming in modal matches Starry Night aesthetic ([#66](https://github.com/micronugget/friday-night-skate-too/issues/66))
 
