@@ -265,7 +265,10 @@
     }
   }
   function renderVideo(src, videoId, poster) {
-    var uid = videoId || "fns-modal-video-".concat(Date.now());
+    // Always use a unique element ID to avoid VideoJS conflicts when the same
+    // video is opened more than once in a session.
+    var uid = "fns-modal-video-".concat(Date.now());
+    var isYoutube = src.includes('youtube.com') || src.includes('youtu.be');
     var wrapper = document.createElement('div');
     wrapper.className = 'fns-modal__video-wrap';
     var video = document.createElement('video');
@@ -276,25 +279,40 @@
     if (poster) video.poster = poster;
     var source = document.createElement('source');
     source.src = src;
-    source.type = src.includes('youtube.com') || src.includes('youtu.be') ? 'video/youtube' : 'video/mp4';
+    source.type = isYoutube ? 'video/youtube' : 'video/mp4';
     video.appendChild(source);
     wrapper.appendChild(video);
     mediaWrapEl.appendChild(wrapper);
 
-    // Initialise VideoJS if available
+    // Initialise VideoJS if available.
     if (typeof videojs !== 'undefined') {
       setTimeout(function () {
-        vjsPlayer = videojs(uid, {
+        var options = {
           fluid: true,
           aspectRatio: '16:9',
           controls: true,
           preload: 'auto',
-          techOrder: ['html5', 'videojs_youtube'],
           // Disable VideoJS hotkeys so modal keyboard nav (←/→/Esc) works.
           userActions: {
             hotkeys: false
           }
-        });
+        };
+
+        // The videojs-youtube plugin registers itself as 'Youtube' (capital Y).
+        // For YouTube sources it must be first in techOrder; for plain mp4 we
+        // only need html5.
+        if (isYoutube) {
+          options.techOrder = ['youtube', 'html5'];
+          // youtube tech requires the src on the options object, not just the
+          // <source> element, to initialise correctly.
+          options.sources = [{
+            src: src,
+            type: 'video/youtube'
+          }];
+        } else {
+          options.techOrder = ['html5'];
+        }
+        vjsPlayer = videojs(uid, options);
       }, 50);
     }
   }
