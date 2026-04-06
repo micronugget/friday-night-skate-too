@@ -202,6 +202,7 @@
     overlayEl.removeAttribute('aria-hidden');
     overlayEl.classList.add('is-open');
     modalEl.classList.add('is-open');
+    document.documentElement.classList.add('fns-modal-open');
     document.body.classList.add('fns-modal-open');
 
     // Dim the grid
@@ -219,6 +220,7 @@
     overlayEl.classList.remove('is-open');
     overlayEl.setAttribute('aria-hidden', 'true');
     modalEl.classList.remove('is-open');
+    document.documentElement.classList.remove('fns-modal-open');
     document.body.classList.remove('fns-modal-open');
 
     document.querySelectorAll('.masonry-item').forEach((el) => {
