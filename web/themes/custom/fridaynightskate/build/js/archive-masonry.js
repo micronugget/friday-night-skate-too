@@ -2924,6 +2924,11 @@ __webpack_require__.r(__webpack_exports__);
           return 5; // xl: 5 columns
         };
 
+        // Signal that Masonry is active — disables CSS grid fallback so
+        // .masonry-sizer gets its correct percentage width before Masonry
+        // reads it during initialisation.
+        grid.classList.add('js-masonry-active');
+
         // Initialize ImagesLoaded first
         imagesloaded__WEBPACK_IMPORTED_MODULE_1___default()(grid, function () {
           // Initialize Masonry
@@ -2936,9 +2941,6 @@ __webpack_require__.r(__webpack_exports__);
             transitionDuration: '0.3s',
             initLayout: true
           });
-
-          // Signal that Masonry is active — disables CSS grid fallback.
-          grid.classList.add('js-masonry-active');
           // Store instance for later access
           grid.masonryInstance = masonry;
 

@@ -24,6 +24,11 @@ import imagesLoaded from 'imagesloaded';
           return 5;                       // xl: 5 columns
         };
 
+        // Signal that Masonry is active — disables CSS grid fallback so
+        // .masonry-sizer gets its correct percentage width before Masonry
+        // reads it during initialisation.
+        grid.classList.add('js-masonry-active');
+
         // Initialize ImagesLoaded first
         imagesLoaded(grid, function () {
           // Initialize Masonry
@@ -35,9 +40,6 @@ import imagesLoaded from 'imagesloaded';
             transitionDuration: '0.3s',
             initLayout: true
           });
-
-          // Signal that Masonry is active — disables CSS grid fallback.
-          grid.classList.add('js-masonry-active');
           // Store instance for later access
           grid.masonryInstance = masonry;
 
