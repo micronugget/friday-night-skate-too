@@ -84,3 +84,4 @@ modal-viewer:
     - core/drupal
     - core/once
     - core/drupalSettings
+    - videojs_media/videojs-player
