@@ -2762,6 +2762,10 @@
                 {
                     "name": "wotnak",
                     "homepage": "https://www.drupal.org/user/3558113"
+                },
+                {
+                    "name": "ravi.maniyar.123",
+                    "homepage": "https://www.drupal.org/user/3867193"
                 }
             ],
             "description": "Canvas",
@@ -3899,6 +3903,47 @@
                 "source": "https://git.drupalcode.org/project/drupal_cms_authentication/-/tree/2.1.0"
             },
             "time": "2026-03-20T22:14:05+00:00"
+        },
+        {
+            "name": "drupal/drupal_cms_content_type_base",
+            "version": "2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/drupal_cms_content_type_base.git",
+                "reference": "8163aca13723e89e5d62010869371f59688bee17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_content_type_base/repository/archive.zip?sha=8163aca13723e89e5d62010869371f59688bee17",
+                "reference": "8163aca13723e89e5d62010869371f59688bee17",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/autosave_form": "^1.10",
+                "drupal/bpmn_io": "^3",
+                "drupal/canvas": "^1.2",
+                "drupal/core": "^11.3",
+                "drupal/drupal_cms_helper": "^2",
+                "drupal/eca": "^3.0.8",
+                "drupal/linkit": "^7",
+                "drupal/modeler_api": "^1",
+                "drupal/pathauto": "^1.13",
+                "drupal/scheduler": "^2.2",
+                "drupal/scheduler_content_moderation_integration": "^3.0.4",
+                "drupal/tagify": "^1.2",
+                "drupal/token": "^1",
+                "drupal/trash": "^3.0.13"
+            },
+            "type": "drupal-recipe",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "Provides basic tools for creating content.",
+            "support": {
+                "source": "https://git.drupalcode.org/project/drupal_cms_content_type_base/-/tree/2.0.4"
+            },
+            "time": "2026-03-12T17:25:13+00:00"
         },
         {
             "name": "drupal/drupal_cms_forms",
@@ -5950,7 +5995,7 @@
             "extra": {
                 "drupal": {
                     "version": "7.0.13",
-                    "datestamp": "1772036178",
+                    "datestamp": "1773055628",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6441,17 +6486,17 @@
         },
         {
             "name": "drupal/modeler_api",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/modeler_api.git",
-                "reference": "1.1.0"
+                "reference": "1.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/modeler_api-1.1.0.zip",
-                "reference": "1.1.0",
-                "shasum": "562ac7585e35a4da58ac3ed8998a2a5267d80ff0"
+                "url": "https://ftp.drupal.org/files/projects/modeler_api-1.1.1.zip",
+                "reference": "1.1.1",
+                "shasum": "bcd04330c0b8f8fcdf3fbc67f34301ad0b23a396"
             },
             "require": {
                 "drupal/core": "^11.3 || ^12.0",
@@ -6460,8 +6505,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.1.0",
-                    "datestamp": "1774278612",
+                    "version": "1.1.1",
+                    "datestamp": "1775052389",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -9259,16 +9304,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "v6.7.2",
+            "version": "6.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "6fea66c7204683af437864e7c4e7abf383d14bc0"
+                "reference": "89ac92bcfe5d0a8a4433c7b89d394553ae7250cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/6fea66c7204683af437864e7c4e7abf383d14bc0",
-                "reference": "6fea66c7204683af437864e7c4e7abf383d14bc0",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/89ac92bcfe5d0a8a4433c7b89d394553ae7250cc",
+                "reference": "89ac92bcfe5d0a8a4433c7b89d394553ae7250cc",
                 "shasum": ""
             },
             "require": {
@@ -9328,9 +9373,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/v6.7.2"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/6.8.0"
             },
-            "time": "2026-02-15T15:06:22+00:00"
+            "time": "2026-04-02T12:43:11+00:00"
         },
         {
             "name": "laravel/prompts",
