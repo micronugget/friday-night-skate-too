@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.videojs_media.field_skate_date
+    - taxonomy.vocabulary.skate_dates
+    - videojs_media.type.videojs_youtube
+id: videojs_media.videojs_youtube.field_skate_date
+field_name: field_skate_date
+entity_type: videojs_media
+bundle: videojs_youtube
+label: 'Skate date'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      skate_dates: skate_dates
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

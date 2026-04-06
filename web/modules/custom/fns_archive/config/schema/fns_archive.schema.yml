@@ -1,0 +1,91 @@
+# Schema definitions for field formatter settings used in fns_archive views.
+# These fill gaps in Drupal core's views field formatter schema coverage.
+
+field.formatter.settings.string:
+  type: mapping
+  label: 'String formatter settings'
+  mapping:
+    link_to_entity:
+      type: boolean
+      label: 'Link to entity'
+
+field.formatter.settings.string_long:
+  type: mapping
+  label: 'String long formatter settings'
+  mapping:
+    link_to_entity:
+      type: boolean
+      label: 'Link to entity'
+
+field.formatter.settings.timestamp:
+  type: mapping
+  label: 'Timestamp formatter settings'
+  mapping:
+    date_format:
+      type: string
+      label: 'Date format'
+    custom_date_format:
+      type: string
+      label: 'Custom date format'
+    timezone:
+      type: string
+      label: 'Timezone'
+
+field.formatter.settings.entity_reference_label:
+  type: mapping
+  label: 'Entity reference label formatter settings'
+  mapping:
+    link:
+      type: boolean
+      label: 'Link label to the referenced entity'
+
+field.formatter.settings.content_moderation_state:
+  type: mapping
+  label: 'Content moderation state formatter settings'
+  mapping:
+    link:
+      type: boolean
+      label: 'Link to entity'
+
+field.formatter.settings.changed:
+  type: mapping
+  label: 'Changed date formatter settings'
+  mapping:
+    date_format:
+      type: string
+      label: 'Date format'
+    custom_date_format:
+      type: string
+      label: 'Custom date format'
+    timezone:
+      type: string
+      label: 'Timezone'
+    tooltip:
+      type: mapping
+      label: 'Tooltip'
+      mapping:
+        date_format:
+          type: string
+          label: 'Tooltip date format'
+        custom_date_format:
+          type: string
+          label: 'Tooltip custom date format'
+    time_diff:
+      type: mapping
+      label: 'Time difference'
+      mapping:
+        enabled:
+          type: boolean
+          label: 'Enabled'
+        future_format:
+          type: string
+          label: 'Future format'
+        past_format:
+          type: string
+          label: 'Past format'
+        granularity:
+          type: integer
+          label: 'Granularity'
+        refresh:
+          type: integer
+          label: 'Refresh interval'

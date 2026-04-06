@@ -31,6 +31,7 @@ content:
 hidden:
   created: true
   field_remote_url: true
+  field_skate_date: true
   field_subtitle: true
   name: true
   uid: true

@@ -3,7 +3,7 @@ status: true
 dependencies:
   enforced:
     module:
-      - fns_archive
+      - videojs_media
 name: 'Skate Dates'
 vid: skate_dates
 description: 'Taxonomy for organizing Friday Night Skate sessions by date and location. Format: YYYY-MM-DD - Location/Description'
