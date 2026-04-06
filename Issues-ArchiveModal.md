@@ -74,14 +74,14 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 - [x] Navigating between slides disposes the previous player cleanly
 - [x] Closing the modal disposes the player
 
-### Issue 1.3 — VideoJS theming in modal matches Starry Night aesthetic ([#66](https://github.com/micronugget/friday-night-skate-too/issues/66))
+### Issue 1.3 — VideoJS theming in modal matches Starry Night aesthetic ([#66](https://github.com/micronugget/friday-night-skate-too/issues/66)) ✅ DONE
 
 **Problem**: The SDC player component (`player.js`) registers players, sets up hotkeys, and applies one-at-a-time playback. The modal creates its own VideoJS instance outside this flow.
 
 **Acceptance criteria**:
-- [ ] Modal VideoJS player uses `vjs-big-play-centered` skin
-- [ ] Player respects the Starry Night colour scheme (gold accents, dark background)
-- [ ] Hotkeys work inside the modal (space = play/pause, ←/→ = seek, not conflict with modal nav)
+- [x] Modal VideoJS player uses `vjs-big-play-centered` skin
+- [x] Player respects the Starry Night colour scheme (gold accents, dark background)
+- [x] Hotkeys work inside the modal (space = play/pause, ←/→ = seek, not conflict with modal nav)
 
 ---
 

@@ -70,6 +70,25 @@
   }
   function handleKeydown(e) {
     if (!modalEl || !modalEl.classList.contains('is-open')) return;
+
+    // Space toggles play/pause on the active VideoJS player (if any).
+    if (e.key === ' ' && vjsPlayer) {
+      e.preventDefault();
+      vjsPlayer.paused() ? vjsPlayer.play() : vjsPlayer.pause();
+      return;
+    }
+
+    // ←/→ seek 5 s when a VideoJS player is active; otherwise navigate slides.
+    if (e.key === 'ArrowLeft' && vjsPlayer) {
+      e.preventDefault();
+      vjsPlayer.currentTime(Math.max(0, vjsPlayer.currentTime() - 5));
+      return;
+    }
+    if (e.key === 'ArrowRight' && vjsPlayer) {
+      e.preventDefault();
+      vjsPlayer.currentTime(Math.min(vjsPlayer.duration(), vjsPlayer.currentTime() + 5));
+      return;
+    }
     switch (e.key) {
       case 'ArrowLeft':
         e.preventDefault();

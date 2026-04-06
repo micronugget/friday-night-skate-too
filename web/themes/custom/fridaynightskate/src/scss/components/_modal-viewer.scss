@@ -142,11 +142,99 @@
     0 0 0 1px rgba(255, 215, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-  // VideoJS fluid wrapper
+  // ── VideoJS — Starry Night skin ──────────────────────────────────────────
   .video-js {
     width: 100% !important;
     max-height: 72vh;
     border-radius: 12px;
+
+    // Dark deep-space background
+    background-color: #04060e;
+
+    // Control bar
+    .vjs-control-bar {
+      background: linear-gradient(0deg, rgba(4, 6, 14, 0.95) 0%, rgba(13, 27, 42, 0.85) 100%);
+      border-top: 1px solid rgba(255, 215, 0, 0.12);
+      border-radius: 0 0 12px 12px;
+    }
+
+    // All interactive controls — gold accent
+    .vjs-button > .vjs-icon-placeholder::before,
+    .vjs-control:focus .vjs-icon-placeholder::before {
+      color: rgba(255, 215, 0, 0.85);
+    }
+
+    .vjs-button:hover > .vjs-icon-placeholder::before {
+      color: var(--starry-golden, #ffd700);
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    }
+
+    // Progress / seek bar
+    .vjs-progress-control {
+      .vjs-play-progress,
+      .vjs-play-progress::before {
+        background: var(--starry-golden, #ffd700);
+        color: var(--starry-golden, #ffd700);
+      }
+
+      .vjs-load-progress {
+        background: rgba(255, 215, 0, 0.2);
+      }
+
+      .vjs-slider {
+        background: rgba(255, 255, 255, 0.12);
+      }
+    }
+
+    // Volume bar
+    .vjs-volume-level,
+    .vjs-volume-level::before {
+      background: var(--starry-golden, #ffd700);
+      color: var(--starry-golden, #ffd700);
+    }
+
+    // Big play button — centred, gold ring
+    .vjs-big-play-button {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 72px;
+      height: 72px;
+      line-height: 72px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 215, 0, 0.7);
+      background: rgba(4, 6, 14, 0.65);
+      color: var(--starry-golden, #ffd700);
+      transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+
+      .vjs-icon-placeholder::before {
+        color: var(--starry-golden, #ffd700);
+        font-size: 2rem;
+        line-height: 72px;
+      }
+
+      &:hover,
+      &:focus {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: var(--starry-golden, #ffd700);
+        box-shadow: 0 0 28px rgba(255, 215, 0, 0.4);
+        outline: none;
+      }
+    }
+
+    // Time display
+    .vjs-current-time,
+    .vjs-duration,
+    .vjs-time-divider {
+      color: rgba(255, 215, 0, 0.7);
+      font-size: 0.8rem;
+    }
+
+    // Focus ring on controls
+    .vjs-control:focus-visible {
+      outline: 2px solid var(--starry-golden, #ffd700);
+      outline-offset: 2px;
+    }
   }
 }
 
