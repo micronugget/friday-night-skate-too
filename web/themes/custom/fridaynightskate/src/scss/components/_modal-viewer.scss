@@ -35,7 +35,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(1rem, 4vw, 3rem);
+  // Vertical padding only — horizontal space is handled per-child to clear nav arrows.
+  padding: clamp(1rem, 4vw, 3rem) 0;
+  overflow: hidden;
   pointer-events: none;
   opacity: 0;
   transform: scale(0.96);
@@ -123,13 +125,22 @@
 .fns-modal__media {
   position: relative;
   width: 100%;
-  max-width: min(90vw, 1200px);
+  // Reserve space for the fixed nav arrows (56px button + gap) on each side.
+  // clamp matches the nav button's own left/right positioning.
+  padding-inline: calc(56px + clamp(0.5rem, 2vw, 1.5rem) + 1rem);
+  max-width: min(100vw, 1400px);
   max-height: 72vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex: 1 1 auto;
   min-height: 0;
+  box-sizing: border-box;
+
+  @media (max-width: 575.98px) {
+    // Smaller nav buttons on mobile (44px)
+    padding-inline: calc(44px + clamp(0.5rem, 2vw, 1.5rem) + 0.75rem);
+  }
 }
 
 .fns-modal__video-wrap {
@@ -327,13 +338,19 @@
 
 .fns-modal__info {
   width: 100%;
-  max-width: min(90vw, 1200px);
-  padding: 1rem 0 0;
+  // Match media area horizontal padding so info bar aligns with video edge.
+  padding: 1rem calc(56px + clamp(0.5rem, 2vw, 1.5rem) + 1rem) 0;
+  max-width: min(100vw, 1400px);
   flex-shrink: 0;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.5rem 1.5rem;
+  box-sizing: border-box;
+
+  @media (max-width: 575.98px) {
+    padding-inline: calc(44px + clamp(0.5rem, 2vw, 1.5rem) + 0.75rem);
+  }
 }
 
 .fns-modal__title {
