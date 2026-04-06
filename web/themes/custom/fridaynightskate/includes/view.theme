@@ -12,69 +12,80 @@
  */
 function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
   $view = $variables['view'];
-  
-  // Only apply to archive views with masonry
-  if (strpos($view->id(), 'archive') === FALSE) {
+
+  // Only apply to the archive_by_date view.
+  if ($view->id() !== 'archive_by_date') {
     return;
   }
-  
+
+  // Video bundles for videojs_media entity type.
+  $video_bundles = [
+    'videojs_local_video',
+    'videojs_remote_video',
+    'videojs_youtube',
+  ];
+
+  /** @var \Drupal\file_url_generator\FileUrlGeneratorInterface $file_url_generator */
+  $file_url_generator = \Drupal::service('file_url_generator');
+
   foreach ($variables['rows'] as $id => $row) {
     $entity = $view->result[$id]->_entity ?? NULL;
-    
+
     if (!$entity) {
       continue;
     }
-    
-    // Add data attributes for modal viewer
+
     $attributes = &$variables['rows'][$id]['attributes'];
-    
-    // Media type
-    if ($entity->hasField('field_media_video_file') && !$entity->get('field_media_video_file')->isEmpty()) {
-      $attributes->setAttribute('data-media-type', 'video');
-      
-      // Video URL
-      $video_file = $entity->get('field_media_video_file')->entity;
-      if ($video_file) {
-        $video_url = \Drupal::service('file_url_generator')->generateAbsoluteString($video_file->getFileUri());
-        $attributes->setAttribute('data-video-url', $video_url);
-        $attributes->setAttribute('data-video-id', 'video-' . $entity->id());
+    $bundle = $entity->bundle();
+    $is_video = in_array($bundle, $video_bundles, TRUE);
+
+    // data-media-type.
+    $attributes->setAttribute('data-media-type', $is_video ? 'video' : 'image');
+    $attributes->setAttribute('data-video-id', 'video-' . $entity->id());
+
+    // data-video-url: local file or remote URL.
+    if ($is_video) {
+      if ($bundle === 'videojs_local_video' && $entity->hasField('field_media_file') && !$entity->get('field_media_file')->isEmpty()) {
+        $file = $entity->get('field_media_file')->entity;
+        if ($file) {
+          $attributes->setAttribute('data-video-url', $file_url_generator->generateAbsoluteString($file->getFileUri()));
+        }
       }
-    } else {
-      $attributes->setAttribute('data-media-type', 'image');
+      elseif (in_array($bundle, ['videojs_remote_video', 'videojs_youtube'], TRUE) && $entity->hasField('field_remote_url') && !$entity->get('field_remote_url')->isEmpty()) {
+        $attributes->setAttribute('data-video-url', $entity->get('field_remote_url')->value);
+      }
     }
-    
-    // Date
-    if ($entity->hasField('field_event_date') && !$entity->get('field_event_date')->isEmpty()) {
-      $date = $entity->get('field_event_date')->value;
-      $formatted_date = \Drupal::service('date.formatter')->format(strtotime($date), 'custom', 'F j, Y');
-      $attributes->setAttribute('data-date', $formatted_date);
+
+    // data-fullsize: poster image for video, or image file for image bundles.
+    if ($entity->hasField('field_poster_image') && !$entity->get('field_poster_image')->isEmpty()) {
+      $image_file = $entity->get('field_poster_image')->entity;
+      if ($image_file) {
+        $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($image_file->getFileUri()));
+      }
     }
-    
-    // Location/GPS
-    if ($entity->hasField('field_gps_location') && !$entity->get('field_gps_location')->isEmpty()) {
-      $gps = $entity->get('field_gps_location')->value;
-      $attributes->setAttribute('data-gps', $gps);
+    elseif (!$is_video && $entity->hasField('field_media_file') && !$entity->get('field_media_file')->isEmpty()) {
+      $file = $entity->get('field_media_file')->entity;
+      if ($file) {
+        $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($file->getFileUri()));
+      }
     }
-    
-    if ($entity->hasField('field_location_name') && !$entity->get('field_location_name')->isEmpty()) {
-      $location = $entity->get('field_location_name')->value;
-      $attributes->setAttribute('data-location', $location);
+
+    // data-date: from field_skate_date taxonomy term label.
+    if ($entity->hasField('field_skate_date') && !$entity->get('field_skate_date')->isEmpty()) {
+      $term = $entity->get('field_skate_date')->entity;
+      if ($term) {
+        $attributes->setAttribute('data-date', $term->label());
+      }
     }
-    
-    // Uploader
-    if ($entity->hasField('uid')) {
+
+    // data-title: entity label.
+    $attributes->setAttribute('data-title', $entity->label());
+
+    // data-uploader: entity owner display name.
+    if (method_exists($entity, 'getOwner')) {
       $owner = $entity->getOwner();
       if ($owner) {
         $attributes->setAttribute('data-uploader', $owner->getDisplayName());
-      }
-    }
-    
-    // Full size image URL
-    if ($entity->hasField('field_media_image') && !$entity->get('field_media_image')->isEmpty()) {
-      $image = $entity->get('field_media_image')->entity;
-      if ($image) {
-        $image_url = \Drupal::service('file_url_generator')->generateAbsoluteString($image->getFileUri());
-        $attributes->setAttribute('data-fullsize', $image_url);
       }
     }
   }
