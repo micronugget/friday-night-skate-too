@@ -1,2 +1,189 @@
-!function(e,t){"use strict";function r(){var e=Math.random();return e<.1?"star-large":e<.4?"star-small":""}e.behaviors.starryNight={attach:function(e,n){t("starry-night-init","body",e).forEach(function(e){!function(){if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches&&!(window.innerWidth<768||document.querySelector(".starry-container"))){var e=document.createElement("div");e.className="starry-container",e.setAttribute("aria-hidden","true");for(var t=50,n=0;n<t;n++){var a=document.createElement("div"),o=r();a.className="star ".concat(o),e.appendChild(a)}document.body.insertBefore(e,document.body.firstChild)}}(),function(){if("IntersectionObserver"in window&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){var e=new IntersectionObserver(function(e){e.forEach(function(e){e.isIntersecting&&e.target.classList.add("is-visible")})},{root:null,rootMargin:"0px 0px -100px 0px",threshold:.1});document.querySelectorAll(".scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale").forEach(function(t){e.observe(t)})}}(),document.querySelectorAll("[data-stagger-children]").forEach(function(e){var t=e.children,r=parseFloat(e.dataset.staggerDelay)||.1;Array.from(t).forEach(function(e,t){e.style.animationDelay="".concat(t*r,"s")})})})}},e.behaviors.starryHoverEffects={attach:function(e,r){t("starry-hover",".hover-float",e).forEach(function(e){e.addEventListener("mouseenter",function(){this.style.animationPlayState="running"}),e.addEventListener("mouseleave",function(){this.style.animationPlayState="paused"})})}},document.addEventListener("visibilitychange",function(){var e=document.querySelector(".starry-container");e&&(document.hidden?e.style.animationPlayState="paused":e.style.animationPlayState="running")}),e.behaviors.smoothScroll={attach:function(e,r){window.matchMedia("(prefers-reduced-motion: reduce)").matches||t("smooth-scroll",'a[href^="#"]',e).forEach(function(e){e.addEventListener("click",function(e){var t=this.getAttribute("href");if("#"!==t&&"#main-content"!==t){var r=document.querySelector(t);r&&(e.preventDefault(),r.scrollIntoView({behavior:"smooth",block:"start"}),history.pushState&&history.pushState(null,null,t))}})})}}}(Drupal,once);
+/******/ (function() { // webpackBootstrap
+/*!********************************!*\
+  !*** ./src/js/starry-night.js ***!
+  \********************************/
+/**
+ * @file
+ * Starry Night - Particle effects and dynamic animations
+ * Creates celestial atmosphere with CSS-based stars
+ */
+
+(function (Drupal, once) {
+  'use strict';
+
+  /**
+   * Initialize Starry Night particle effects
+   */
+  Drupal.behaviors.starryNight = {
+    attach: function attach(context, settings) {
+      // Only run once on page load
+      once('starry-night-init', 'body', context).forEach(function (element) {
+        initStarryParticles();
+        initScrollReveal();
+        initAnimationStagger();
+      });
+    }
+  };
+
+  /**
+   * Create starry particle container with CSS-based stars
+   */
+  function initStarryParticles() {
+    // Check if user prefers reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    // Check if mobile (skip particles for performance)
+    if (window.innerWidth < 768) {
+      return;
+    }
+
+    // Check if container already exists
+    if (document.querySelector('.starry-container')) {
+      return;
+    }
+    var container = document.createElement('div');
+    container.className = 'starry-container';
+    container.setAttribute('aria-hidden', 'true');
+
+    // Generate stars with varied sizes
+    var starCount = 50;
+    for (var i = 0; i < starCount; i++) {
+      var star = document.createElement('div');
+      var sizeClass = getStarSize();
+      star.className = "star ".concat(sizeClass);
+      container.appendChild(star);
+    }
+
+    // Insert at the beginning of body
+    document.body.insertBefore(container, document.body.firstChild);
+  }
+
+  /**
+   * Get random star size class
+   */
+  function getStarSize() {
+    var rand = Math.random();
+    if (rand < 0.1) {
+      return 'star-large';
+    } else if (rand < 0.4) {
+      return 'star-small';
+    }
+    return '';
+  }
+
+  /**
+   * Initialize Intersection Observer for scroll reveal animations
+   */
+  function initScrollReveal() {
+    // Check if IntersectionObserver is supported
+    if (!('IntersectionObserver' in window)) {
+      return;
+    }
+
+    // Check if user prefers reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+    var observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -100px 0px',
+      threshold: 0.1
+    };
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          // Optionally unobserve after animation
+          // observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe elements with scroll-reveal classes
+    var revealElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right, .scroll-reveal-scale');
+    revealElements.forEach(function (element) {
+      observer.observe(element);
+    });
+  }
+
+  /**
+   * Add staggered animation delays to child elements
+   */
+  function initAnimationStagger() {
+    var staggerContainers = document.querySelectorAll('[data-stagger-children]');
+    staggerContainers.forEach(function (container) {
+      var children = container.children;
+      var delay = parseFloat(container.dataset.staggerDelay) || 0.1;
+      Array.from(children).forEach(function (child, index) {
+        child.style.animationDelay = "".concat(index * delay, "s");
+      });
+    });
+  }
+
+  /**
+   * Add floating animation to elements on hover (optional enhancement)
+   */
+  Drupal.behaviors.starryHoverEffects = {
+    attach: function attach(context, settings) {
+      once('starry-hover', '.hover-float', context).forEach(function (element) {
+        element.addEventListener('mouseenter', function () {
+          this.style.animationPlayState = 'running';
+        });
+        element.addEventListener('mouseleave', function () {
+          this.style.animationPlayState = 'paused';
+        });
+      });
+    }
+  };
+
+  /**
+   * Performance optimization: Pause animations when page is not visible
+   */
+  document.addEventListener('visibilitychange', function () {
+    var starryContainer = document.querySelector('.starry-container');
+    if (!starryContainer) return;
+    if (document.hidden) {
+      starryContainer.style.animationPlayState = 'paused';
+    } else {
+      starryContainer.style.animationPlayState = 'running';
+    }
+  });
+
+  /**
+   * Add smooth scroll behavior for better UX
+   */
+  Drupal.behaviors.smoothScroll = {
+    attach: function attach(context, settings) {
+      // Check if user prefers reduced motion
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+      }
+      once('smooth-scroll', 'a[href^="#"]', context).forEach(function (element) {
+        element.addEventListener('click', function (e) {
+          var href = this.getAttribute('href');
+          if (href === '#' || href === '#main-content') {
+            return; // Let default behavior handle these
+          }
+          var target = document.querySelector(href);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+
+            // Update URL without jumping
+            if (history.pushState) {
+              history.pushState(null, null, href);
+            }
+          }
+        });
+      });
+    }
+  };
+})(Drupal, once);
+/******/ })()
+;
 //# sourceMappingURL=starry-night.js.map
