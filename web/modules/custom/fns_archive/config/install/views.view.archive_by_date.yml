@@ -2,26 +2,23 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.thumbnail
-    - field.storage.node.field_skate_date
-    - field.storage.node.field_timestamp
-    - node.type.archive_media
+    - core.entity_view_mode.videojs_media.teaser
+    - field.storage.videojs_media.field_skate_date
     - taxonomy.vocabulary.skate_dates
   module:
-    - content_moderation
-    - node
     - taxonomy
     - user
+    - videojs_media
   enforced:
     module:
       - fns_archive
 id: archive_by_date
 label: 'Archive by Skate Date'
 module: views
-description: 'Displays archive media filtered by Skate Date taxonomy term with Masonry grid layout'
+description: 'Displays VideoJS media filtered by Skate Date taxonomy term with Masonry grid layout'
 tag: archive
-base_table: node_field_data
-base_field: nid
+base_table: videojs_media_field_data
+base_field: id
 display:
   default:
     id: default
@@ -29,18 +26,14 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      # Title will be overridden by contextual filter
       title: 'Archive'
-      # Access control
       access:
         type: perm
         options:
           perm: 'access content'
-      # Cache settings
       cache:
         type: tag
         options: {  }
-      # Query settings
       query:
         type: views_query
         options:
@@ -48,7 +41,6 @@ display:
           disable_sql_rewrite: false
           distinct: false
           replica: false
-      # Empty text when no results
       empty:
         area_text_custom:
           id: area_text_custom
@@ -57,7 +49,6 @@ display:
           plugin_id: text_custom
           empty: true
           content: 'No archive media available for this date. <a href="/archive">View all archive dates</a>.'
-      # Exposed form (none for this view)
       exposed_form:
         type: basic
         options:
@@ -68,7 +59,6 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
-      # Pager configuration - 50 items with full pager
       pager:
         type: full
         options:
@@ -90,7 +80,6 @@ display:
             offset: false
             offset_label: Offset
           quantity: 9
-      # Display style - unformatted list for Masonry.js compatibility
       style:
         type: default
         options:
@@ -98,100 +87,46 @@ display:
           row_class: 'masonry-item'
           default_row_class: false
           uses_fields: false
-      # Row style - rendered entity using thumbnail view mode
       row:
-        type: 'entity:node'
+        type: entity:videojs_media
         options:
-          view_mode: thumbnail
-      # Fields (not used since we're using rendered entity row style)
+          relationship: none
+          view_mode: teaser
       fields: {  }
-      # Filters
       filters:
-        # Filter by content type: Archive Media
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
-          value:
-            archive_media: archive_media
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
-        # Filter by published status
         status:
           id: status
-          table: node_field_data
+          table: videojs_media_field_data
           field: status
-          entity_type: node
-          entity_field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: videojs_media
           plugin_id: boolean
+          operator: '='
           value: '1'
           group: 1
-          expose:
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-        # Filter by moderation state: Published only
-        moderation_state:
-          id: moderation_state
-          table: node_field_data
-          field: moderation_state
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          plugin_id: moderation_state_filter
-          operator: in
-          value:
-            published: published
-          group: 1
           exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-      # Sort criteria - newest first by timestamp
       sorts:
-        field_timestamp_value:
-          id: field_timestamp_value
-          table: node__field_timestamp
-          field: field_timestamp_value
+        created:
+          id: created
+          table: videojs_media_field_data
+          field: created
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: datetime
+          entity_type: videojs_media
+          plugin_id: date
           order: DESC
           expose:
             label: ''
-            field_identifier: field_timestamp_value
+            field_identifier: ''
           exposed: false
-          granularity: second
-      # Header (optional - can add breadcrumb or description)
-      header: {  }
-      # Footer (optional - can add statistics or links)
-      footer: {  }
-      # Relationships
       relationships: {  }
-      # Arguments/Contextual filters
       arguments:
-        # Contextual filter for Skate Date taxonomy term
         field_skate_date_target_id:
           id: field_skate_date_target_id
-          table: node__field_skate_date
+          table: videojs_media__field_skate_date
           field: field_skate_date_target_id
           relationship: none
           group_type: group
@@ -223,12 +158,23 @@ display:
           validate_options:
             bundles:
               skate_dates: skate_dates
-            access: true
+            access: false
             operation: view
             multiple: 0
+            transform: false
           break_phrase: false
           not: false
-      # Display extenders
+          limit: false
+          error_message: true
+          glossary: false
+          character_limit: 0
+          transform_dash: false
+          case: none
+          path_case: none
+          wildcard: all
+          wildcard_substitution: All
+      header: {  }
+      footer: {  }
       display_extenders: {  }
     cache_metadata:
       max-age: -1
@@ -238,24 +184,23 @@ display:
         - url
         - 'user.permissions'
       tags: {  }
-  # Page display
   page_1:
     id: page_1
     display_title: Page
     display_plugin: page
     position: 1
     display_options:
-      # Path with contextual filter placeholder
-      path: 'archive/%'
-      # Menu settings (optional - can add to main menu)
+      display_extenders: {  }
+      path: archive/%taxonomy_term
       menu:
         type: none
-        title: Archive
+        title: ''
         description: ''
+        expanded: false
+        parent: ''
         weight: 0
+        context: '0'
         menu_name: main
-      # Display extenders
-      display_extenders: {  }
     cache_metadata:
       max-age: -1
       contexts:
