@@ -1,0 +1,20 @@
+uuid: 2e82e96e-c3f7-45f8-b83d-bc25d33b8a70
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+    - videojs_media
+id: videojs_media.field_skate_date
+field_name: field_skate_date
+entity_type: videojs_media
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

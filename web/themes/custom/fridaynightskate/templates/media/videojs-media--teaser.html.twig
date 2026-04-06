@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Teaser view mode for VideoJS media entities — poster-image thumbnail only.
+ *
+ * Used by the archive_by_date view masonry grid. Renders a single poster image
+ * wrapped in a button-like container. All playback data lives on the parent
+ * .masonry-item wrapper (set by fridaynightskate_preprocess_views_view_unformatted).
+ * Clicking the thumbnail opens the cinematic modal viewer.
+ *
+ * Available variables:
+ * - content: Rendered fields (field_poster_image is the only visible field).
+ * - label: Entity name.
+ * - bundle: Bundle machine name.
+ * - view_mode: Current view mode.
+ * - attributes: HTML attributes for the wrapper element.
+ */
+#}
+{%
+  set classes = [
+    'videojs-media-thumb',
+    'videojs-media-thumb--' ~ bundle|clean_class,
+  ]
+%}
+<div{{ attributes.addClass(classes) }} aria-hidden="true">
+  {% if content.field_poster_image %}
+    {{ content.field_poster_image }}
+  {% else %}
+    <div class="videojs-media-thumb__placeholder">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </div>
+  {% endif %}
+  <div class="videojs-media-thumb__overlay">
+    <span class="videojs-media-thumb__play-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </span>
+    <span class="videojs-media-thumb__title">{{ label }}</span>
+  </div>
+</div>

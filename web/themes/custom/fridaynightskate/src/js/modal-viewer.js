@@ -1,370 +1,328 @@
 /**
  * @file
- * Modal viewer with Swiper.js navigation for archive media.
+ * Cinematic modal viewer — Starry Night Edition.
+ *
+ * Clicking a .masonry-item thumbnail opens a full-screen cinematic lightbox.
+ * The active item expands to fill the viewport; the grid dims behind it.
+ * Navigation arrows and keyboard (←/→/Esc) cycle through all items.
+ * VideoJS is initialised inside the modal for video items.
  */
-
-import Swiper from 'swiper';
-import { Navigation, Keyboard, A11y } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/a11y';
 
 (function (Drupal, once) {
   'use strict';
 
+  // ─── Constants ────────────────────────────────────────────────────────────
+
+  const MODAL_ID = 'fns-cinematic-modal';
+  const ANIM_MS  = 320; // transition duration in ms
+
+  // ─── State ────────────────────────────────────────────────────────────────
+
+  let items            = [];   // NodeList snapshot of .masonry-item elements
+  let currentIndex     = 0;
+  let vjsPlayer        = null; // active VideoJS instance
+  let focusOrigin      = null; // element focused before modal opened
+  let modalEl          = null;
+  let overlayEl        = null;
+  let mediaWrapEl      = null;
+  let titleEl          = null;
+  let metaEl           = null;
+  let prevBtn          = null;
+  let nextBtn          = null;
+  let closeBtn         = null;
+  let counterEl        = null;
+
+  // ─── Drupal behaviour ─────────────────────────────────────────────────────
+
   Drupal.behaviors.modalViewer = {
-    attach: function (context, settings) {
-      // Initialize modal trigger on masonry items
-      const items = once('modal-viewer-trigger', '.masonry-item', context);
-      
-      items.forEach((item, index) => {
-        item.addEventListener('click', (e) => {
-          e.preventDefault();
-          openModal(index);
-        });
-        
-        // Make items keyboard accessible
+    attach(context) {
+      const triggers = once('modal-viewer-trigger', '.masonry-item', context);
+      if (!triggers.length) return;
+
+      // Snapshot all items for navigation (whole document, not just context).
+      items = Array.from(document.querySelectorAll('.masonry-item'));
+
+      triggers.forEach((item) => {
+        // Make the whole card keyboard-accessible.
         item.setAttribute('tabindex', '0');
         item.setAttribute('role', 'button');
-        item.setAttribute('aria-label', `View media item ${index + 1}`);
-        
-        // Handle Enter/Space key
+        item.setAttribute('aria-label', `${Drupal.t('Open')} ${item.dataset.title || Drupal.t('media item')}`);
+
+        item.addEventListener('click', handleItemClick);
         item.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
-            openModal(index);
+            handleItemClick.call(item, e);
           }
         });
       });
 
-      // Store reference to current VideoJS player
-      let currentVideoPlayer = null;
-      let swiper = null;
-      let focusedElementBeforeModal = null;
+      ensureModal();
+    },
+  };
 
-      /**
-       * Open modal at specific index
-       */
-      function openModal(startIndex) {
-        focusedElementBeforeModal = document.activeElement;
-        
-        const modal = document.getElementById('mediaModal');
-        if (!modal) {
-          createModal();
-          openModal(startIndex);
-          return;
-        }
+  // ─── Event handlers ───────────────────────────────────────────────────────
 
-        const bsModal = new bootstrap.Modal(modal);
-        
-        // Build slides from masonry items
-        buildSlides();
-        
-        // Initialize or update Swiper
-        if (!swiper) {
-          initializeSwiper();
-        }
-        
-        // Go to the clicked item
-        if (swiper) {
-          swiper.slideTo(startIndex, 0);
-        }
-        
-        bsModal.show();
-        
-        // Trap focus in modal
-        trapFocus(modal);
-      }
+  function handleItemClick(e) {
+    e.preventDefault();
+    const idx = items.indexOf(this);
+    openModal(idx >= 0 ? idx : 0);
+  }
 
-      /**
-       * Create modal HTML structure
-       */
-      function createModal() {
-        const modalHTML = `
-          <div class="modal fade" id="mediaModal" tabindex="-1" aria-labelledby="mediaModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen-sm-down modal-xl modal-dialog-centered">
-              <div class="modal-content bg-dark">
-                <div class="modal-header border-0">
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-0 position-relative">
-                  <div class="swiper modal-swiper">
-                    <div class="swiper-wrapper" id="swiperWrapper" role="list" aria-label="Media gallery">
-                    </div>
-                    
-                    <!-- Navigation arrows -->
-                    <div class="swiper-button-prev" aria-label="Previous media item"></div>
-                    <div class="swiper-button-next" aria-label="Next media item"></div>
-                  </div>
-                  
-                  <!-- Metadata toggle button -->
-                  <button class="btn btn-light metadata-toggle position-absolute" 
-                          type="button" 
-                          aria-label="Toggle metadata panel"
-                          aria-expanded="false"
-                          aria-controls="metadataPanel">
-                    <svg width="24" height="24" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
-                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                      <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                    </svg>
-                  </button>
-                  
-                  <!-- Metadata panel -->
-                  <div id="metadataPanel" class="metadata-panel position-absolute bg-dark text-white p-3" aria-hidden="true">
-                    <div class="metadata-content">
-                      <!-- Content populated dynamically -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        // Setup metadata toggle
-        const toggleBtn = document.querySelector('.metadata-toggle');
-        const panel = document.getElementById('metadataPanel');
-        
-        toggleBtn.addEventListener('click', () => {
-          const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
-          toggleBtn.setAttribute('aria-expanded', !isExpanded);
-          panel.setAttribute('aria-hidden', isExpanded);
-          panel.classList.toggle('show');
-        });
-        
-        // Handle modal cleanup
-        const modal = document.getElementById('mediaModal');
-        modal.addEventListener('hidden.bs.modal', () => {
-          cleanupVideoPlayer();
-          if (swiper) {
-            swiper.destroy(true, true);
-            swiper = null;
-          }
-          // Restore focus
-          if (focusedElementBeforeModal) {
-            focusedElementBeforeModal.focus();
-          }
-        });
-      }
+  function handleKeydown(e) {
+    if (!modalEl || !modalEl.classList.contains('is-open')) return;
+    switch (e.key) {
+      case 'ArrowLeft':  e.preventDefault(); navigate(-1); break;
+      case 'ArrowRight': e.preventDefault(); navigate(1);  break;
+      case 'Escape':     e.preventDefault(); closeModal();  break;
+    }
+  }
 
-      /**
-       * Build slides from masonry items
-       */
-      function buildSlides() {
-        const wrapper = document.getElementById('swiperWrapper');
-        if (!wrapper) return;
-        
-        wrapper.innerHTML = '';
-        
-        const items = document.querySelectorAll('.masonry-item');
-        items.forEach((item, index) => {
-          const slide = document.createElement('div');
-          slide.className = 'swiper-slide';
-          slide.setAttribute('role', 'listitem');
-          slide.setAttribute('aria-label', `Media item ${index + 1} of ${items.length}`);
-          
-          // Extract data from item
-          const img = item.querySelector('img');
-          const isVideo = item.dataset.mediaType === 'video' || item.classList.contains('video-item');
-          
-          if (isVideo) {
-            // Create video player container using safe DOM methods (no innerHTML).
-            const videoId = item.dataset.videoId || `video-${index}`;
-            const videoUrl = item.dataset.videoUrl || '';
-            const videoContainer = document.createElement('div');
-            videoContainer.className = 'video-container d-flex align-items-center justify-content-center h-100';
-            const videoEl = document.createElement('video');
-            videoEl.id = videoId;
-            videoEl.className = 'video-js vjs-default-skin';
-            videoEl.controls = true;
-            videoEl.preload = 'none';
-            videoEl.dataset.setup = '{"fluid": true, "aspectRatio": "16:9"}';
-            const sourceEl = document.createElement('source');
-            sourceEl.src = videoUrl;
-            sourceEl.type = 'video/mp4';
-            videoEl.appendChild(sourceEl);
-            videoContainer.appendChild(videoEl);
-            slide.appendChild(videoContainer);
-          } else {
-            // Create image using safe DOM methods (no innerHTML).
-            const imgSrc = item.dataset.fullsize || img?.dataset.fullsize || img?.src || '';
-            const imgAlt = img?.alt || 'Archive media';
-            const imgContainer = document.createElement('div');
-            imgContainer.className = 'image-container d-flex align-items-center justify-content-center h-100';
-            const imgEl = document.createElement('img');
-            imgEl.src = imgSrc;
-            imgEl.alt = imgAlt;
-            imgEl.className = 'img-fluid';
-            imgEl.loading = 'lazy';
-            imgContainer.appendChild(imgEl);
-            slide.appendChild(imgContainer);
-          }
-          
-          // Store metadata from item data attributes
-          slide.dataset.metadata = JSON.stringify({
-            date: item.dataset.date || '',
-            location: item.dataset.location || '',
-            gps: item.dataset.gps || '',
-            uploader: item.dataset.uploader || '',
-            title: img?.alt || item.dataset.title || ''
-          });
-          
-          wrapper.appendChild(slide);
-        });
-      }
+  // ─── Modal DOM ────────────────────────────────────────────────────────────
 
-      /**
-       * Initialize Swiper
-       */
-      function initializeSwiper() {
-        swiper = new Swiper('.modal-swiper', {
-          modules: [Navigation, Keyboard, A11y],
-          
-          // Navigation
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
-          
-          // Keyboard control
-          keyboard: {
-            enabled: true,
-            onlyInViewport: false,
-          },
-          
-          // Lazy loading (built-in to Swiper v11+)
-          preloadImages: false,
-          lazy: true,
-          
-          // Accessibility
-          a11y: {
-            enabled: true,
-            prevSlideMessage: 'Previous media item',
-            nextSlideMessage: 'Next media item',
-            firstSlideMessage: 'This is the first media item',
-            lastSlideMessage: 'This is the last media item',
-          },
-          
-          // Loop
-          loop: true,
-          
-          // Speed
-          speed: 400,
-          
-          // Allow touch move on mobile
-          simulateTouch: true,
-          touchRatio: 1,
-          touchAngle: 45,
-          
-          // Events
-          on: {
-            slideChange: function () {
-              cleanupVideoPlayer();
-              updateMetadata(this.realIndex);
-              
-              // Initialize VideoJS for video slides
-              const activeSlide = this.slides[this.activeIndex];
-              const video = activeSlide?.querySelector('video');
-              
-              if (video && typeof videojs !== 'undefined') {
-                setTimeout(() => {
-                  currentVideoPlayer = videojs(video.id);
-                }, 100);
-              }
-            },
-            init: function () {
-              updateMetadata(this.realIndex);
-            }
-          }
-        });
-      }
+  function ensureModal() {
+    if (document.getElementById(MODAL_ID)) {
+      cacheModalRefs();
+      return;
+    }
 
-      /**
-       * Update metadata panel
-       */
-      function updateMetadata(index) {
-        const slides = document.querySelectorAll('.swiper-slide');
-        const slide = slides[index];
-        
-        if (!slide) return;
-        
-        const metadata = JSON.parse(slide.dataset.metadata || '{}');
-        const content = document.querySelector('.metadata-content');
-        
-        if (!content) return;
-        
-        // Build metadata using safe DOM methods — metadata values come from
-        // data attributes and must not be interpolated into innerHTML.
-        const metaContainer = document.createElement('div');
-        metaContainer.className = 'metadata-items';
+    // Backdrop overlay
+    overlayEl = document.createElement('div');
+    overlayEl.className = 'fns-modal-overlay';
+    overlayEl.setAttribute('aria-hidden', 'true');
+    overlayEl.addEventListener('click', closeModal);
 
-        const addMetaItem = (label, value) => {
-          const metaItem = document.createElement('div');
-          metaItem.className = 'metadata-item';
-          const strong = document.createElement('strong');
-          strong.textContent = label;
-          metaItem.appendChild(strong);
-          metaItem.appendChild(document.createTextNode(' ' + value));
-          metaContainer.appendChild(metaItem);
-        };
+    // Modal shell
+    modalEl = document.createElement('div');
+    modalEl.id = MODAL_ID;
+    modalEl.className = 'fns-modal';
+    modalEl.setAttribute('role', 'dialog');
+    modalEl.setAttribute('aria-modal', 'true');
+    modalEl.setAttribute('aria-labelledby', 'fns-modal-title');
+    modalEl.setAttribute('tabindex', '-1');
 
-        if (metadata.title) addMetaItem('Title:', metadata.title);
-        if (metadata.date) addMetaItem('Date:', metadata.date);
-        if (metadata.location) addMetaItem('Location:', metadata.location);
-        if (metadata.gps) addMetaItem('GPS:', metadata.gps);
-        if (metadata.uploader) addMetaItem('Uploaded by:', metadata.uploader);
+    // Close button
+    closeBtn = document.createElement('button');
+    closeBtn.className = 'fns-modal__close';
+    closeBtn.setAttribute('aria-label', Drupal.t('Close'));
+    closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    closeBtn.addEventListener('click', closeModal);
 
-        content.innerHTML = '';
-        content.appendChild(metaContainer);
-      }
+    // Counter
+    counterEl = document.createElement('div');
+    counterEl.className = 'fns-modal__counter';
+    counterEl.setAttribute('aria-live', 'polite');
 
-      /**
-       * Cleanup VideoJS player
-       */
-      function cleanupVideoPlayer() {
-        if (currentVideoPlayer) {
-          try {
-            currentVideoPlayer.dispose();
-          } catch (e) {
-            console.warn('Error disposing video player:', e);
-          }
-          currentVideoPlayer = null;
-        }
-      }
+    // Media wrapper
+    mediaWrapEl = document.createElement('div');
+    mediaWrapEl.className = 'fns-modal__media';
 
-      /**
-       * Trap focus within modal for accessibility
-       */
-      function trapFocus(modal) {
-        const focusableElements = modal.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const firstFocusable = focusableElements[0];
-        const lastFocusable = focusableElements[focusableElements.length - 1];
-        
-        modal.addEventListener('keydown', (e) => {
-          if (e.key === 'Tab') {
-            if (e.shiftKey) {
-              if (document.activeElement === firstFocusable) {
-                lastFocusable.focus();
-                e.preventDefault();
-              }
-            } else {
-              if (document.activeElement === lastFocusable) {
-                firstFocusable.focus();
-                e.preventDefault();
-              }
-            }
-          }
-        });
-        
-        // Focus first element
-        if (firstFocusable) {
-          firstFocusable.focus();
-        }
+    // Prev / Next
+    prevBtn = document.createElement('button');
+    prevBtn.className = 'fns-modal__nav fns-modal__nav--prev';
+    prevBtn.setAttribute('aria-label', Drupal.t('Previous'));
+    prevBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`;
+    prevBtn.addEventListener('click', () => navigate(-1));
+
+    nextBtn = document.createElement('button');
+    nextBtn.className = 'fns-modal__nav fns-modal__nav--next';
+    nextBtn.setAttribute('aria-label', Drupal.t('Next'));
+    nextBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>`;
+    nextBtn.addEventListener('click', () => navigate(1));
+
+    // Info bar (title + metadata)
+    const infoBar = document.createElement('div');
+    infoBar.className = 'fns-modal__info';
+
+    titleEl = document.createElement('h2');
+    titleEl.id = 'fns-modal-title';
+    titleEl.className = 'fns-modal__title';
+
+    metaEl = document.createElement('div');
+    metaEl.className = 'fns-modal__meta';
+
+    infoBar.appendChild(titleEl);
+    infoBar.appendChild(metaEl);
+
+    // Assemble
+    modalEl.appendChild(closeBtn);
+    modalEl.appendChild(counterEl);
+    modalEl.appendChild(prevBtn);
+    modalEl.appendChild(mediaWrapEl);
+    modalEl.appendChild(nextBtn);
+    modalEl.appendChild(infoBar);
+
+    document.body.appendChild(overlayEl);
+    document.body.appendChild(modalEl);
+
+    document.addEventListener('keydown', handleKeydown);
+  }
+
+  function cacheModalRefs() {
+    modalEl     = document.getElementById(MODAL_ID);
+    overlayEl   = document.querySelector('.fns-modal-overlay');
+    mediaWrapEl = modalEl.querySelector('.fns-modal__media');
+    titleEl     = modalEl.querySelector('.fns-modal__title');
+    metaEl      = modalEl.querySelector('.fns-modal__meta');
+    prevBtn     = modalEl.querySelector('.fns-modal__nav--prev');
+    nextBtn     = modalEl.querySelector('.fns-modal__nav--next');
+    closeBtn    = modalEl.querySelector('.fns-modal__close');
+    counterEl   = modalEl.querySelector('.fns-modal__counter');
+  }
+
+  // ─── Open / Close ─────────────────────────────────────────────────────────
+
+  function openModal(index) {
+    currentIndex = index;
+    focusOrigin  = document.activeElement;
+
+    renderSlide(currentIndex);
+
+    overlayEl.removeAttribute('aria-hidden');
+    overlayEl.classList.add('is-open');
+    modalEl.classList.add('is-open');
+    document.body.classList.add('fns-modal-open');
+
+    // Dim the grid
+    document.querySelectorAll('.masonry-item').forEach((el, i) => {
+      el.classList.toggle('is-modal-bg', i !== currentIndex);
+    });
+
+    // Focus the modal after transition
+    setTimeout(() => modalEl.focus(), ANIM_MS);
+  }
+
+  function closeModal() {
+    destroyVjs();
+
+    overlayEl.classList.remove('is-open');
+    overlayEl.setAttribute('aria-hidden', 'true');
+    modalEl.classList.remove('is-open');
+    document.body.classList.remove('fns-modal-open');
+
+    document.querySelectorAll('.masonry-item').forEach((el) => {
+      el.classList.remove('is-modal-bg');
+    });
+
+    if (focusOrigin) focusOrigin.focus();
+  }
+
+  function navigate(delta) {
+    if (!items.length) return;
+    destroyVjs();
+    currentIndex = (currentIndex + delta + items.length) % items.length;
+    renderSlide(currentIndex);
+
+    // Update dim state
+    document.querySelectorAll('.masonry-item').forEach((el, i) => {
+      el.classList.toggle('is-modal-bg', i !== currentIndex);
+    });
+  }
+
+  // ─── Slide rendering ──────────────────────────────────────────────────────
+
+  function renderSlide(index) {
+    const item = items[index];
+    if (!item) return;
+
+    const { mediaType, videoUrl, videoId, fullsize, date, title, uploader } = item.dataset;
+
+    // Counter
+    counterEl.textContent = `${index + 1} / ${items.length}`;
+
+    // Title
+    titleEl.textContent = title || '';
+
+    // Metadata
+    metaEl.innerHTML = '';
+    if (date)     appendMeta(metaEl, Drupal.t('Date'), date);
+    if (uploader) appendMeta(metaEl, Drupal.t('By'), uploader);
+
+    // Nav visibility
+    prevBtn.style.display = items.length > 1 ? '' : 'none';
+    nextBtn.style.display = items.length > 1 ? '' : 'none';
+
+    // Media content
+    mediaWrapEl.innerHTML = '';
+
+    if (mediaType === 'video' && videoUrl) {
+      renderVideo(videoUrl, videoId, fullsize);
+    } else if (fullsize) {
+      renderImage(fullsize, title || '');
+    } else {
+      // Fallback: clone the poster img from the thumbnail
+      const thumbImg = item.querySelector('img');
+      if (thumbImg) {
+        renderImage(thumbImg.src, thumbImg.alt || title || '');
       }
     }
-  };
+  }
+
+  function renderVideo(src, videoId, poster) {
+    const uid = videoId || `fns-modal-video-${Date.now()}`;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'fns-modal__video-wrap';
+
+    const video = document.createElement('video');
+    video.id = uid;
+    video.className = 'video-js vjs-default-skin vjs-big-play-centered';
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+    if (poster) video.poster = poster;
+
+    const source = document.createElement('source');
+    source.src  = src;
+    source.type = src.includes('youtube.com') || src.includes('youtu.be') ? 'video/youtube' : 'video/mp4';
+    video.appendChild(source);
+    wrapper.appendChild(video);
+    mediaWrapEl.appendChild(wrapper);
+
+    // Initialise VideoJS if available
+    if (typeof videojs !== 'undefined') {
+      setTimeout(() => {
+        vjsPlayer = videojs(uid, {
+          fluid: true,
+          aspectRatio: '16:9',
+          controls: true,
+          preload: 'auto',
+          techOrder: ['html5', 'videojs_youtube'],
+        });
+      }, 50);
+    }
+  }
+
+  function renderImage(src, alt) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'fns-modal__image-wrap';
+
+    const img = document.createElement('img');
+    img.src     = src;
+    img.alt     = alt;
+    img.className = 'fns-modal__image';
+    img.loading = 'eager';
+
+    wrapper.appendChild(img);
+    mediaWrapEl.appendChild(wrapper);
+  }
+
+  function appendMeta(container, label, value) {
+    const span = document.createElement('span');
+    span.className = 'fns-modal__meta-item';
+    const strong = document.createElement('strong');
+    strong.textContent = label + ': ';
+    span.appendChild(strong);
+    span.appendChild(document.createTextNode(value));
+    container.appendChild(span);
+  }
+
+  // ─── VideoJS cleanup ──────────────────────────────────────────────────────
+
+  function destroyVjs() {
+    if (vjsPlayer) {
+      try { vjsPlayer.dispose(); } catch (_) { /* ignore */ }
+      vjsPlayer = null;
+    }
+  }
+
 })(Drupal, once);
