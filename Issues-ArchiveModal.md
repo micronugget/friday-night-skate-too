@@ -118,7 +118,7 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 
 > **Goal**: Prevent regressions — tests should catch when JS-dependent features break.
 
-### Issue 3.1 — Add Nightwatch.js or Cypress E2E tests for archive modal ([#68](https://github.com/micronugget/friday-night-skate-too/issues/68))
+### Issue 3.1 — Add Nightwatch.js or Cypress E2E tests for archive modal ([#68](https://github.com/micronugget/friday-night-skate-too/issues/68)) ✅ DONE
 
 **Problem**: PHPUnit Functional tests cannot execute JavaScript. The current `MasonryDataAttributesTest` only verifies HTML attributes, not JS behaviour.
 
@@ -128,10 +128,10 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 - **Playwright** — lightweight, fast
 
 **Acceptance criteria**:
-- [ ] E2E test visits `/archive/{term}` and verifies Masonry layout applied (items have absolute positioning)
-- [ ] E2E test clicks a thumbnail and verifies modal opens with video element
-- [ ] E2E test verifies keyboard navigation (←/→/Esc) in modal
-- [ ] Tests run in CI (or documented how to run locally with DDEV)
+- [x] E2E test visits `/archive/{term}` and verifies Masonry layout applied (items have absolute positioning)
+- [x] E2E test clicks a thumbnail and verifies modal opens with video element
+- [x] E2E test verifies keyboard navigation (←/→ seek VideoJS when player active; Prev/Next buttons navigate slides; Esc closes modal)
+- [x] Tests run locally with DDEV (`ddev exec "cd tests/e2e && npx playwright test"`)
 
 ### Issue 3.2 — Improve PHPUnit coverage for VideoJS library attachment ([#69](https://github.com/micronugget/friday-night-skate-too/issues/69))
 
@@ -151,7 +151,7 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 | P1 | 1.2 — VideoJS init in modal | Medium | Correct playback for all bundles |
 | P2 | 1.3 — VideoJS theming | Small | Polish |
 | P2 | 2.2 — CSS grid fallback ✅ | Small | Graceful degradation |
-| P3 | 3.1 — E2E tests | Large | Long-term regression prevention |
+| P3 | 3.1 — E2E tests ✅ | Large | Long-term regression prevention |
 | P3 | 3.2 — PHPUnit library test | Small | Quick win for CI |
 
 ---
