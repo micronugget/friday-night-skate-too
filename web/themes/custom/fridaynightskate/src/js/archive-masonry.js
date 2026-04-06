@@ -36,6 +36,8 @@ import imagesLoaded from 'imagesloaded';
             initLayout: true
           });
 
+          // Signal that Masonry is active — disables CSS grid fallback.
+          grid.classList.add('js-masonry-active');
           // Store instance for later access
           grid.masonryInstance = masonry;
 

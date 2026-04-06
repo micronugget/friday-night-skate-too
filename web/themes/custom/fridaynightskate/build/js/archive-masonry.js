@@ -2937,6 +2937,8 @@ __webpack_require__.r(__webpack_exports__);
             initLayout: true
           });
 
+          // Signal that Masonry is active — disables CSS grid fallback.
+          grid.classList.add('js-masonry-active');
           // Store instance for later access
           grid.masonryInstance = masonry;
 
