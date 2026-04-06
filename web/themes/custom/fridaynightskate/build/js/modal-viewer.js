@@ -161,7 +161,9 @@
     modalEl.appendChild(infoBar);
     document.body.appendChild(overlayEl);
     document.body.appendChild(modalEl);
-    document.addEventListener('keydown', handleKeydown);
+
+    // Use capture phase so our handler fires before VideoJS consumes the event.
+    document.addEventListener('keydown', handleKeydown, true);
   }
   function cacheModalRefs() {
     modalEl = document.getElementById(MODAL_ID);
@@ -287,7 +289,11 @@
           aspectRatio: '16:9',
           controls: true,
           preload: 'auto',
-          techOrder: ['html5', 'videojs_youtube']
+          techOrder: ['html5', 'videojs_youtube'],
+          // Disable VideoJS hotkeys so modal keyboard nav (←/→/Esc) works.
+          userActions: {
+            hotkeys: false
+          }
         });
       }, 50);
     }

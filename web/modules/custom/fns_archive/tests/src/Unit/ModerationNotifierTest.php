@@ -14,6 +14,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\content_moderation\ModerationInformationInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\user\EntityOwnerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Url;
 use Drupal\user\UserInterface;
@@ -261,7 +262,7 @@ class ModerationNotifierTest extends UnitTestCase {
    *   The mock entity.
    */
   protected function createMockEntity(string $label, string $authorEmail) {
-    $entity = $this->createMock(ContentEntityInterface::class);
+    $entity = $this->createMockForIntersectionOfInterfaces([ContentEntityInterface::class, EntityOwnerInterface::class]);
     $owner = $this->createMock(UserInterface::class);
 
     $owner->method('getEmail')->willReturn($authorEmail);
