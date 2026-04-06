@@ -17,3 +17,4 @@ dependencies:
   - drupal:responsive_image
   - drupal:content_moderation
   - drupal:workflows
+  - videojs_media:videojs_media

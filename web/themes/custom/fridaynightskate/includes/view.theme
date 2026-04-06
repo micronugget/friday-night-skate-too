@@ -36,6 +36,8 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
     }
 
     $attributes = &$variables['rows'][$id]['attributes'];
+    // Add masonry-item class so Masonry.js itemSelector matches the row wrapper.
+    $attributes->addClass('masonry-item');
     $bundle = $entity->bundle();
     $is_video = in_array($bundle, $video_bundles, TRUE);
 
@@ -51,8 +53,11 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
           $attributes->setAttribute('data-video-url', $file_url_generator->generateAbsoluteString($file->getFileUri()));
         }
       }
-      elseif (in_array($bundle, ['videojs_remote_video', 'videojs_youtube'], TRUE) && $entity->hasField('field_remote_url') && !$entity->get('field_remote_url')->isEmpty()) {
+      elseif ($bundle === 'videojs_remote_video' && $entity->hasField('field_remote_url') && !$entity->get('field_remote_url')->isEmpty()) {
         $attributes->setAttribute('data-video-url', $entity->get('field_remote_url')->value);
+      }
+      elseif ($bundle === 'videojs_youtube' && $entity->hasField('field_youtube_url') && !$entity->get('field_youtube_url')->isEmpty()) {
+        $attributes->setAttribute('data-video-url', $entity->get('field_youtube_url')->value);
       }
     }
 

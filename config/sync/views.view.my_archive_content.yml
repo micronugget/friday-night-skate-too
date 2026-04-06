@@ -127,12 +127,12 @@ display:
           id: uid
           table: node_field_data
           field: uid
-          entity_type: node
-          entity_field: uid
-          plugin_id: user_current
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
+          entity_field: uid
+          plugin_id: user_current
           operator: '='
           value: '***CURRENT_USER***'
       style:
@@ -165,6 +165,7 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      display_extenders: {  }
       path: user/my-archive-content
       menu:
         type: normal
@@ -172,4 +173,3 @@ display:
         description: 'Manage your archive media submissions'
         weight: 0
         menu_name: account
-      display_extenders: {  }
