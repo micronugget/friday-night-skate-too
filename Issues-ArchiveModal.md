@@ -104,13 +104,13 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 - [x] Grid is responsive: 1 col on mobile, 2–5 cols on wider screens
 - [x] Layout recalculates on window resize
 
-### Issue 2.2 — Ensure masonry CSS grid fallback ([#67](https://github.com/micronugget/friday-night-skate-too/issues/67))
+### Issue 2.2 — Ensure masonry CSS grid fallback ([#67](https://github.com/micronugget/friday-night-skate-too/issues/67)) ✅ DONE
 
 **Problem**: If JS fails, items should still display in a reasonable CSS grid layout.
 
 **Acceptance criteria**:
-- [ ] Without JS, items display in a CSS grid/flexbox fallback (not overlapping or invisible)
-- [ ] With JS, Masonry overrides the CSS layout
+- [x] Without JS, items display in a CSS grid/flexbox fallback (not overlapping or invisible)
+- [x] With JS, Masonry overrides the CSS layout
 
 ---
 
@@ -150,7 +150,7 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 | P0 | 2.1 — Fix Masonry JS | Small–Medium | Core visual feature |
 | P1 | 1.2 — VideoJS init in modal | Medium | Correct playback for all bundles |
 | P2 | 1.3 — VideoJS theming | Small | Polish |
-| P2 | 2.2 — CSS grid fallback | Small | Graceful degradation |
+| P2 | 2.2 — CSS grid fallback ✅ | Small | Graceful degradation |
 | P3 | 3.1 — E2E tests | Large | Long-term regression prevention |
 | P3 | 3.2 — PHPUnit library test | Small | Quick win for CI |
 

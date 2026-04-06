@@ -4,6 +4,48 @@
  * Atmospheric hover effects and celestial aesthetics
  */
 
+// CSS grid fallback — used when JS is unavailable or has not yet run.
+// Provides a reasonable responsive layout without Masonry.
+.masonry-grid:not(.js-masonry-active) {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin: 0;
+
+  @media (min-width: 576px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 992px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  // In fallback mode, items fill their grid cell naturally.
+  .masonry-item {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  // Hide the Masonry sizer element in fallback mode.
+  .masonry-sizer {
+    display: none;
+  }
+}
+
+// When JS has initialised Masonry, restore float-based layout.
+.masonry-grid.js-masonry-active {
+  display: block;
+}
+
 .masonry-grid {
   margin: 0 -12px; // Increased gutter for breathing room
   position: relative;
