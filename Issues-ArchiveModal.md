@@ -1,7 +1,7 @@
-# Issues — Archive Modal & Masonry Fixes
+# Issues — Archive Modal & Masonry Fixes ✅ COMPLETE
 
 > Planning document created 2026-04-06.
-> Tracks the remaining issues preventing the archive page (`/archive/{term}`) from working correctly.
+> All sub-issues resolved — epic #62 closed 2026-04-06.
 
 ---
 
@@ -10,11 +10,11 @@
 | Feature | Status | Detail |
 |---------|--------|--------|
 | Masonry grid HTML | ✅ Working | `.masonry-grid`, `.masonry-sizer`, `.masonry-item` all render correctly |
-| Masonry JS layout | ❌ Broken | `archive-masonry.js` is loaded but Masonry layout effect not visible — items stack vertically instead of tiling |
+| Masonry JS layout | ✅ Fixed | Masonry initialises correctly; items tile in responsive grid (#64) |
 | Modal open/close | ✅ Working | Clicking a thumbnail opens the cinematic lightbox; Esc/close button dismiss it |
-| VideoJS in modal | ❌ Broken | `modal-viewer.js` checks `typeof videojs !== 'undefined'` — always false because VideoJS JS/CSS are never loaded on the archive page |
+| VideoJS in modal | ✅ Fixed | `videojs_media/videojs-player` library loaded on archive pages; VideoJS available in modal (#63) |
 | Teaser thumbnails | ✅ Working | Poster images with play-icon overlay render via `videojs-media--teaser.html.twig` |
-| Keyboard nav in modal | ⚠️ Untestable | Fixed in PR #61 but can't verify without working video playback |
+| Keyboard nav in modal | ✅ Working | Verified with working VideoJS playback (#61, #65) |
 | Data attributes | ✅ Working | `data-media-type`, `data-video-url`, `data-video-id`, `data-fullsize`, `data-date`, `data-title`, `data-uploader` all present |
 
 ### Why Tests Passed Despite Broken Features
@@ -44,7 +44,7 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 
 > **Goal**: When a user clicks a video thumbnail in the archive masonry grid, the modal opens and the video plays using the VideoJS Media player with full controls.
 
-### Issue 1.1 — Load VideoJS library on archive pages ([#63](https://github.com/micronugget/friday-night-skate-too/issues/63))
+### Issue 1.1 — Load VideoJS library on archive pages ([#63](https://github.com/micronugget/friday-night-skate-too/issues/63)) ✅ DONE
 
 **Problem**: The `modal-viewer` theme library has no dependency on VideoJS JS/CSS.
 
@@ -56,9 +56,9 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 **Recommended**: Option A — simplest, most Drupal-idiomatic.
 
 **Acceptance criteria**:
-- [ ] `typeof videojs` is defined when `modal-viewer.js` runs on `/archive/{term}`
-- [ ] VideoJS CSS (video-js.css) is loaded on the page
-- [ ] No JS console errors related to VideoJS
+- [x] `typeof videojs` is defined when `modal-viewer.js` runs on `/archive/{term}`
+- [x] VideoJS CSS (video-js.css) is loaded on the page
+- [x] No JS console errors related to VideoJS
 
 ### Issue 1.2 — Initialise VideoJS player correctly in modal ([#65](https://github.com/micronugget/friday-night-skate-too/issues/65)) ✅ DONE
 
@@ -89,7 +89,7 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 
 > **Goal**: Archive thumbnails tile in a responsive masonry grid (not a single vertical column).
 
-### Issue 2.1 — Debug and fix Masonry JS initialisation ([#64](https://github.com/micronugget/friday-night-skate-too/issues/64))
+### Issue 2.1 — Debug and fix Masonry JS initialisation ([#64](https://github.com/micronugget/friday-night-skate-too/issues/64)) ✅ DONE
 
 **Problem**: Masonry JS is loaded but layout effect is not visible.
 
@@ -146,10 +146,10 @@ However, `modal-viewer.js` needs VideoJS available when the user clicks a thumbn
 
 | Priority | Issue | Effort | Impact |
 |----------|-------|--------|--------|
-| P0 | 1.1 — Load VideoJS library | Small | Unblocks all video playback |
-| P0 | 2.1 — Fix Masonry JS | Small–Medium | Core visual feature |
-| P1 | 1.2 — VideoJS init in modal | Medium | Correct playback for all bundles |
-| P2 | 1.3 — VideoJS theming | Small | Polish |
+| P0 | 1.1 — Load VideoJS library ✅ | Small | Unblocks all video playback |
+| P0 | 2.1 — Fix Masonry JS ✅ | Small–Medium | Core visual feature |
+| P1 | 1.2 — VideoJS init in modal ✅ | Medium | Correct playback for all bundles |
+| P2 | 1.3 — VideoJS theming ✅ | Small | Polish |
 | P2 | 2.2 — CSS grid fallback ✅ | Small | Graceful degradation |
 | P3 | 3.1 — E2E tests ✅ | Large | Long-term regression prevention |
 | P3 | 3.2 — PHPUnit library test ✅ | Small | Quick win for CI |
