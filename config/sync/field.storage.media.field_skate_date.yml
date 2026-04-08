@@ -1,0 +1,20 @@
+uuid: 7080b080-2b8b-489a-8241-9f4b875b82ce
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+    - taxonomy
+id: media.field_skate_date
+field_name: field_skate_date
+entity_type: media
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

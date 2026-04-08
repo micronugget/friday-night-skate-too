@@ -295,6 +295,219 @@ test.describe('Archive Modal Viewer', () => {
     expect(counterAfter).not.toBe(counterBefore);
   });
 
+  test('videojs-hotkeys plugin is initialized on the modal player', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    // Find a video item to open.
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    await videoItem.click();
+
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    // Wait for VideoJS to initialise and registerPlayer to run.
+    await page.waitForTimeout(1_500);
+
+    // Verify the hotkeys plugin is available on the player instance.
+    // VideoJS wraps the <video> in a div.video-js — the player ref lives there.
+    const hotkeysActive = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      if (!vjsEl || !vjsEl.player) return { found: false };
+      const player = vjsEl.player;
+      const hasHotkeys = typeof player.hotkeys === 'function';
+      const hasControls = player.controls();
+      return { found: true, hasHotkeys, hasControls };
+    });
+
+    expect(hotkeysActive.found).toBe(true);
+    expect(hotkeysActive.hasHotkeys).toBe(true);
+    expect(hotkeysActive.hasControls).toBe(true);
+  });
+
+  test('videojs-mobile-ui plugin is initialized on the modal player', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    await videoItem.click();
+
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+    await page.waitForTimeout(1_500);
+
+    // Verify the mobileUi plugin is registered on the player.
+    const mobileUiActive = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      if (!vjsEl || !vjsEl.player) return { found: false };
+      const player = vjsEl.player;
+      return { found: true, hasMobileUi: typeof player.mobileUi === 'function' };
+    });
+
+    expect(mobileUiActive.found).toBe(true);
+    expect(mobileUiActive.hasMobileUi).toBe(true);
+  });
+
+  test('Space key toggles play/pause via videojs-hotkeys in the modal', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    await videoItem.click();
+
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    // Wait for VideoJS + hotkeys to initialise.
+    await page.waitForTimeout(1_500);
+
+    // Verify player starts paused.
+    const pausedBefore = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      return vjsEl && vjsEl.player ? vjsEl.player.paused() : null;
+    });
+    expect(pausedBefore).toBe(true);
+
+    // Press Space — should start playback via videojs-hotkeys.
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(500);
+
+    const pausedAfter = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      return vjsEl && vjsEl.player ? vjsEl.player.paused() : null;
+    });
+    expect(pausedAfter).toBe(false);
+
+    // Press Space again — should pause.
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(500);
+
+    const pausedFinal = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      return vjsEl && vjsEl.player ? vjsEl.player.paused() : null;
+    });
+    expect(pausedFinal).toBe(true);
+  });
+
+  test('Number key 5 seeks to 50% of video via videojs-hotkeys in the modal', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    await videoItem.click();
+
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+    await page.waitForTimeout(1_500);
+
+    // Get duration and current time before pressing 5.
+    const before = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      if (!vjsEl || !vjsEl.player) return null;
+      const p = vjsEl.player;
+      return { duration: p.duration(), currentTime: p.currentTime() };
+    });
+
+    // Skip if duration is not available (e.g. remote video not loaded).
+    if (!before || !before.duration || before.duration <= 0 || !isFinite(before.duration)) {
+      test.skip();
+      return;
+    }
+
+    // Press 5 — should seek to 50%.
+    await page.keyboard.press('Digit5');
+    await page.waitForTimeout(500);
+
+    const after = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      if (!vjsEl || !vjsEl.player) return null;
+      return { currentTime: vjsEl.player.currentTime() };
+    });
+
+    const expectedTime = before.duration * 0.5;
+    // Allow 2-second tolerance for seek precision.
+    expect(after.currentTime).toBeGreaterThan(expectedTime - 2);
+    expect(after.currentTime).toBeLessThan(expectedTime + 2);
+  });
+
+  test('closing the modal stops video playback', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    await videoItem.click();
+
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    // Wait for VideoJS to fully initialise (50ms init timeout + hotkeys setup).
+    await page.waitForTimeout(2_000);
+
+    // Start playback via the VideoJS API directly (avoids focus/hotkey issues).
+    await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      if (vjsEl && vjsEl.player) vjsEl.player.play();
+    });
+    await page.waitForTimeout(500);
+
+    // Confirm video is playing.
+    const playingBeforeClose = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      return vjsEl && vjsEl.player ? !vjsEl.player.paused() : false;
+    });
+    expect(playingBeforeClose).toBe(true);
+
+    // Close the modal via the close button.
+    await modal.locator('.fns-modal__close').click();
+    await expect(modal).not.toHaveClass(/is-open/, { timeout: 5_000 });
+
+    // After close, the player must be paused or disposed — audio must not continue.
+    // VideoJS dispose() removes the .player reference from the element.
+    const audioStopped = await page.evaluate(() => {
+      const vjsEl = document.querySelector('#fns-cinematic-modal .video-js');
+      if (!vjsEl) return true;           // element removed — definitely stopped
+      if (!vjsEl.player) return true;    // player reference gone — disposed
+      if (vjsEl.player.isDisposed()) return true;
+      return vjsEl.player.paused();      // still exists but must be paused
+    });
+    expect(audioStopped).toBe(true);
+  });
+
   test('close button dismisses the modal', async ({ page, request }) => {
     const url = await getArchiveUrl(request);
     await page.goto(url);

@@ -1,0 +1,26 @@
+uuid: 7bab1a96-8fed-4757-920e-98cdb9584206
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.archive_images
+  module:
+    - views
+active_version: 5eb8372eb9dd73f1
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:archive_images-block_1'
+        label: 'Archive Images'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Archive Images'
+id: block.views_block.archive_images-block_1
+provider: views
+source: block
+source_local_id: 'views_block:archive_images-block_1'

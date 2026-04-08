@@ -6,6 +6,28 @@
  */
 
 /**
+ * Implements hook_preprocess_views_view().
+ *
+ * Embed the archive_images view into the archive_by_date page display,
+ * passing the current taxonomy term argument so images appear in the grid.
+ */
+function fridaynightskate_preprocess_views_view(&$variables) {
+  $view = $variables['view'];
+
+  if ($view->id() !== 'archive_by_date' || $view->current_display !== 'page_1') {
+    return;
+  }
+
+  // Get the taxonomy term argument from the current view.
+  $args = $view->args;
+  $tid = $args[0] ?? NULL;
+
+  if ($tid) {
+    $variables['archive_images'] = views_embed_view('archive_images', 'default', $tid);
+  }
+}
+
+/**
  * Implements hook_preprocess_views_view_unformatted().
  *
  * Add data attributes to masonry items for modal viewer integration.
@@ -41,9 +63,12 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
     $bundle = $entity->bundle();
     $is_video = in_array($bundle, $video_bundles, TRUE);
 
+    // data-video-id.
+    $id_prefix = $entity->getEntityTypeId() === 'videojs_media' ? 'video-' : 'media-';
+    $attributes->setAttribute('data-video-id', $id_prefix . $entity->id());
+
     // data-media-type.
     $attributes->setAttribute('data-media-type', $is_video ? 'video' : 'image');
-    $attributes->setAttribute('data-video-id', 'video-' . $entity->id());
 
     // data-video-url: local file or remote URL.
     if ($is_video) {
@@ -66,6 +91,12 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
       $image_file = $entity->get('field_poster_image')->entity;
       if ($image_file) {
         $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($image_file->getFileUri()));
+      }
+    }
+    elseif (!$is_video && $entity->hasField('field_media_image') && !$entity->get('field_media_image')->isEmpty()) {
+      $file = $entity->get('field_media_image')->entity;
+      if ($file) {
+        $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($file->getFileUri()));
       }
     }
     elseif (!$is_video && $entity->hasField('field_media_file') && !$entity->get('field_media_file')->isEmpty()) {

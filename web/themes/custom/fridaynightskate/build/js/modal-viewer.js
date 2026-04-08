@@ -71,22 +71,15 @@
   function handleKeydown(e) {
     if (!modalEl || !modalEl.classList.contains('is-open')) return;
 
-    // Space toggles play/pause on the active VideoJS player (if any).
-    if (e.key === ' ' && vjsPlayer) {
-      e.preventDefault();
-      vjsPlayer.paused() ? vjsPlayer.play() : vjsPlayer.pause();
-      return;
-    }
-
-    // ←/→ seek 5 s when a VideoJS player is active; otherwise navigate slides.
-    if (e.key === 'ArrowLeft' && vjsPlayer) {
-      e.preventDefault();
-      vjsPlayer.currentTime(Math.max(0, vjsPlayer.currentTime() - 5));
-      return;
-    }
-    if (e.key === 'ArrowRight' && vjsPlayer) {
-      e.preventDefault();
-      vjsPlayer.currentTime(Math.min(vjsPlayer.duration(), vjsPlayer.currentTime() + 5));
+    // When a VideoJS player is active, let videojs-hotkeys handle playback
+    // keys (space, arrows, numbers, etc.). We only intercept Escape and
+    // slide-navigation arrows when there is NO active player.
+    if (vjsPlayer) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeModal();
+      }
+      // All other keys are left to videojs-hotkeys / videojs-mobile-ui.
       return;
     }
     switch (e.key) {
@@ -180,9 +173,10 @@
     modalEl.appendChild(infoBar);
     document.body.appendChild(overlayEl);
     document.body.appendChild(modalEl);
+    document.addEventListener('keydown', handleKeydown);
 
-    // Use capture phase so our handler fires before VideoJS consumes the event.
-    document.addEventListener('keydown', handleKeydown, true);
+    // Touch swipe support: swipe left → next, swipe right → prev.
+    attachSwipeListeners(modalEl);
   }
   function cacheModalRefs() {
     modalEl = document.getElementById(MODAL_ID);
@@ -312,11 +306,7 @@
           fluid: true,
           aspectRatio: '16:9',
           controls: true,
-          preload: 'auto',
-          // Disable VideoJS hotkeys so modal keyboard nav (←/→/Esc) works.
-          userActions: {
-            hotkeys: false
-          }
+          preload: 'auto'
         };
 
         // The videojs-youtube plugin registers itself as 'Youtube' (capital Y).
@@ -334,6 +324,34 @@
           options.techOrder = ['html5'];
         }
         vjsPlayer = videojs(uid, options);
+
+        // Register with the videojs_media behavior so mobile-ui and
+        // one-at-a-time playback are initialised on this player instance.
+        vjsPlayer.ready(function () {
+          if (Drupal.behaviors.videojsMediablockPlayer) {
+            Drupal.behaviors.videojsMediablockPlayer.registerPlayer(vjsPlayer);
+          }
+          // Re-initialise hotkeys with alwaysCaptureHotkeys so they work
+          // inside the modal regardless of which element holds focus.
+          // This overrides the default hotkeys setup from registerPlayer.
+          try {
+            vjsPlayer.hotkeys({
+              volumeStep: 0.1,
+              seekStep: 5,
+              enableModifiersForNumbers: false,
+              enableVolumeScroll: false,
+              enableHoverScroll: false,
+              alwaysCaptureHotkeys: true,
+              captureDocumentHotkeys: true,
+              documentHotkeysFocusElementFilter: function documentHotkeysFocusElementFilter() {
+                // Accept hotkeys when any element inside the modal has focus.
+                return modalEl && modalEl.classList.contains('is-open');
+              }
+            });
+          } catch (e) {
+            // Fallback: hotkeys plugin not available.
+          }
+        });
       }, 50);
     }
   }
@@ -358,10 +376,40 @@
     container.appendChild(span);
   }
 
+  // ─── Touch swipe ──────────────────────────────────────────────────────────
+
+  function attachSwipeListeners(el) {
+    var touchStartX = 0;
+    var touchStartY = 0;
+    el.addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    }, {
+      passive: true
+    });
+    el.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      var dy = e.changedTouches[0].clientY - touchStartY;
+
+      // Only treat as a horizontal swipe if horizontal movement dominates.
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+      if (dx < 0) {
+        navigate(1); // swipe left → next
+      } else {
+        navigate(-1); // swipe right → prev
+      }
+    }, {
+      passive: true
+    });
+  }
+
   // ─── VideoJS cleanup ──────────────────────────────────────────────────────
 
   function destroyVjs() {
     if (vjsPlayer) {
+      try {
+        vjsPlayer.pause();
+      } catch (_) {/* ignore */}
       try {
         vjsPlayer.dispose();
       } catch (_) {/* ignore */}

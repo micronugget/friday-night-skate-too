@@ -1,28 +1,25 @@
-uuid: 6197af08-2e23-4655-9730-23cc36da48e0
+uuid: a1b2c3d4-e5f6-7890-abcd-ef1234567890
 langcode: en
 status: true
 dependencies:
   config:
     - core.entity_view_mode.media.teaser
-    - core.entity_view_mode.videojs_media.teaser
     - field.storage.media.field_skate_date
-    - field.storage.videojs_media.field_skate_date
     - taxonomy.vocabulary.skate_dates
   module:
     - media
     - taxonomy
     - user
-    - videojs_media
   enforced:
     module:
       - fns_archive
-id: archive_by_date
-label: 'Archive by Skate Date'
+id: archive_images
+label: 'Archive Images by Skate Date'
 module: views
-description: 'Displays VideoJS media filtered by Skate Date taxonomy term with Masonry grid layout'
+description: 'Displays image media filtered by Skate Date taxonomy term'
 tag: archive
-base_table: videojs_media_field_data
-base_field: id
+base_table: media_field_data
+base_field: mid
 display:
   default:
     id: default
@@ -30,29 +27,13 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Archive
+      title: 'Archive Images'
       fields: {  }
       pager:
-        type: full
+        type: some
         options:
           offset: 0
           items_per_page: 50
-          total_pages: 0
-          id: 0
-          tags:
-            next: 'Next ›'
-            previous: '‹ Previous'
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '25, 50, 100, 200'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
       exposed_form:
         type: basic
         options:
@@ -70,23 +51,16 @@ display:
       cache:
         type: tag
         options: {  }
-      empty:
-        area_text_custom:
-          id: area_text_custom
-          table: views
-          field: area_text_custom
-          plugin_id: text_custom
-          empty: true
-          content: 'No archive media available for this date. <a href="/archive">View all archive dates</a>.'
+      empty: {  }
       sorts:
         created:
           id: created
-          table: videojs_media_field_data
+          table: media_field_data
           field: created
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: videojs_media
+          entity_type: media
           plugin_id: date
           order: DESC
           expose:
@@ -96,19 +70,19 @@ display:
       arguments:
         field_skate_date_target_id:
           id: field_skate_date_target_id
-          table: videojs_media__field_skate_date
+          table: media__field_skate_date
           field: field_skate_date_target_id
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: taxonomy_index_tid
-          default_action: not found
+          default_action: 'not found'
           exception:
             value: all
             title_enable: false
             title: All
-          title_enable: true
-          title: 'Archive: {{ arguments.field_skate_date_target_id }}'
+          title_enable: false
+          title: ''
           default_argument_type: fixed
           default_argument_options:
             argument: ''
@@ -139,22 +113,36 @@ display:
           transform_dash: false
           break_phrase: false
           not: false
-          error_message: true
+          error_message: false
           character_limit: 0
           wildcard: all
           wildcard_substitution: All
       filters:
         status:
           id: status
-          table: videojs_media_field_data
+          table: media_field_data
           field: status
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: videojs_media
+          entity_type: media
           plugin_id: boolean
           operator: '='
           value: '1'
+          group: 1
+          exposed: false
+        bundle:
+          id: bundle
+          table: media_field_data
+          field: bundle
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: media
+          plugin_id: bundle
+          operator: in
+          value:
+            image: image
           group: 1
           exposed: false
       style:
@@ -165,7 +153,7 @@ display:
           default_row_class: false
           uses_fields: false
       row:
-        type: 'entity:videojs_media'
+        type: 'entity:media'
         options:
           relationship: none
           view_mode: teaser
@@ -188,23 +176,17 @@ display:
         - url
         - user.permissions
       tags: {  }
-  page_1:
-    id: page_1
-    display_title: Page
-    display_plugin: page
+  block_1:
+    id: block_1
+    display_title: Block
+    display_plugin: block
     position: 1
     display_options:
       display_extenders: {  }
-      path: archive/%taxonomy_term
-      menu:
-        type: none
-        title: ''
-        description: ''
-        weight: 0
-        expanded: false
-        menu_name: main
-        parent: ''
-        context: '0'
+      block_description: 'Archive Images'
+      block_category: 'Lists (Views)'
+      allow:
+        items_per_page: false
     cache_metadata:
       max-age: -1
       contexts:

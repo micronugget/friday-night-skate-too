@@ -6,6 +6,8 @@
       <sourceFolder url="file://$MODULE_DIR$/web/modules/contrib/canvas/coding_standards" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/vendor" />
       <excludeFolder url="file://$MODULE_DIR$/web/core" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/web/sites/default/files" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -41,13 +41,18 @@
     </div>
   {% endif %}
 
-  {% if rows %}
+  {% if rows or archive_images %}
     <div class="masonry-grid" role="list" aria-label="{{ 'Archive media items'|t }}">
       {# Column sizer for Masonry #}
       <div class="masonry-sizer"></div>
-      
-      {# Grid items #}
+
+      {# VideoJS media grid items #}
       {{ rows }}
+
+      {# Image media grid items #}
+      {% if archive_images %}
+        {{ archive_images }}
+      {% endif %}
     </div>
   {% elseif empty %}
     <div class="view-empty">

@@ -6,6 +6,7 @@ name: 'Lists (Views)'
 configEntityTypeId: component
 weight: 0
 items:
+  - block.views_block.archive_images-block_1
   - block.views_block.blog-all
   - block.views_block.blog-latest
   - block.views_block.blog-related
