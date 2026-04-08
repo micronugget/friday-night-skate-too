@@ -39,5 +39,11 @@
       </svg>
     </span>
     <span class="videojs-media-thumb__title">{{ label }}</span>
+    {% if media.field_skate_date is not empty and not media.field_skate_date.isEmpty() %}
+      <span class="videojs-media-thumb__meta">{{ 'Date'|t }}: {{ media.field_skate_date.entity.label() }}</span>
+    {% endif %}
+    {% if media.getOwner is defined %}
+      <span class="videojs-media-thumb__meta">{{ 'By'|t }}: {{ media.getOwner().getDisplayName() }}</span>
+    {% endif %}
   </div>
 </div>

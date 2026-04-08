@@ -18,6 +18,8 @@
 #}
 {% set has_metadata = node.field_metadata is not empty and not node.field_metadata.isEmpty() %}
 {% set is_video = node.field_archive_media.entity.bundle() == 'video' %}
+{% set skate_date = node.field_skate_date.entity.label() ?? '' %}
+{% set uploader = node.getOwner().getDisplayName() ?? '' %}
 
 {%
   set classes = [
@@ -33,20 +35,36 @@
   {{ title_suffix }}
 
   <div class="masonry-item__content">
-    <a href="{{ url }}" 
+    <a href="{{ url }}"
        aria-label="{{ 'View media from'|t }} {{ label }}"
        data-node-id="{{ node.id() }}"
        data-has-metadata="{{ has_metadata ? 'true' : 'false' }}"
        data-is-video="{{ is_video ? 'true' : 'false' }}">
-      
+
       {# Render the media field (image/video thumbnail) #}
       {% if content.field_archive_media %}
         {{ content.field_archive_media }}
       {% endif %}
 
+      {# Hover info overlay — mirrors the videojs-media-thumb__overlay pattern #}
+      <div class="archive-image-thumb__overlay">
+        <span class="archive-image-thumb__icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+          </svg>
+        </span>
+        <span class="archive-image-thumb__title">{{ label }}</span>
+        {% if skate_date %}
+          <span class="archive-image-thumb__meta">{{ skate_date }}</span>
+        {% endif %}
+        {% if uploader %}
+          <span class="archive-image-thumb__meta">{{ 'By'|t }}: {{ uploader }}</span>
+        {% endif %}
+      </div>
+
       {# Metadata icon overlay if metadata exists #}
       {% if has_metadata or is_video %}
-        <span class="masonry-item__metadata-icon" 
+        <span class="masonry-item__metadata-icon"
               aria-hidden="true"
               data-has-video="{{ is_video ? 'true' : 'false' }}">
         </span>

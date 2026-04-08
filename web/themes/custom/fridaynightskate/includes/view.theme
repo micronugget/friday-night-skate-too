@@ -35,8 +35,8 @@ function fridaynightskate_preprocess_views_view(&$variables) {
 function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
   $view = $variables['view'];
 
-  // Only apply to the archive_by_date view.
-  if ($view->id() !== 'archive_by_date') {
+  // Only apply to the archive_by_date and archive_images views.
+  if (!in_array($view->id(), ['archive_by_date', 'archive_images'], TRUE)) {
     return;
   }
 

@@ -1,0 +1,44 @@
+{#
+/**
+ * @file
+ * Teaser view mode for Image media entities — thumbnail with hover overlay.
+ *
+ * Used by the archive_images view masonry grid. Renders the image with a
+ * hover overlay identical to the videojs-media-thumb__overlay pattern.
+ * All data attributes live on the parent .masonry-item wrapper (set by
+ * fridaynightskate_preprocess_views_view_unformatted).
+ *
+ * Available variables:
+ * - content: Rendered fields.
+ * - label: Entity name.
+ * - bundle: Bundle machine name.
+ * - view_mode: Current view mode.
+ * - attributes: HTML attributes for the wrapper element.
+ * - media: The media entity.
+ */
+#}
+{%
+  set classes = [
+    'videojs-media-thumb',
+    'videojs-media-thumb--image',
+  ]
+%}
+<div{{ attributes.addClass(classes) }} aria-hidden="true">
+  {% if content.field_media_image %}
+    {{ content.field_media_image }}
+  {% else %}
+    <div class="videojs-media-thumb__placeholder">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+      </svg>
+    </div>
+  {% endif %}
+  <div class="videojs-media-thumb__overlay">
+    <span class="videojs-media-thumb__play-icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+      </svg>
+    </span>
+    <span class="videojs-media-thumb__title">{{ media.label() }}</span>
+  </div>
+</div>

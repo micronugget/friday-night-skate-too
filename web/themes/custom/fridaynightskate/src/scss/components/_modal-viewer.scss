@@ -422,7 +422,8 @@ body.fns-modal-open {
     transform: scale(1.03);
     outline: none;
 
-    .videojs-media-thumb__overlay {
+    .videojs-media-thumb__overlay,
+    .archive-image-thumb__overlay {
       opacity: 1;
     }
   }
@@ -518,7 +519,7 @@ body.fns-modal-open {
   &__title {
     font-family: var(--fns-font-display, 'Cormorant Garamond', Georgia, serif);
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--starry-golden, #ffd700);
     text-align: center;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
     max-width: 90%;
@@ -526,4 +527,76 @@ body.fns-modal-open {
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  &__meta {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  }
+}
+
+// ─── Archive image thumbnail hover overlay ────────────────────────────────────
+
+.archive-image-thumb__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: linear-gradient(
+    180deg,
+    transparent 20%,
+    rgba(4, 6, 14, 0.8) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.archive-image-thumb__icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 215, 0, 0.15);
+  border: 2px solid rgba(255, 215, 0, 0.6);
+  border-radius: 50%;
+  color: var(--starry-golden, #ffd700);
+  box-shadow: 0 0 24px rgba(255, 215, 0, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .masonry-item:hover & {
+    transform: scale(1.12);
+    background: rgba(255, 215, 0, 0.25);
+  }
+}
+
+.archive-image-thumb__title {
+  font-family: var(--fns-font-display, 'Cormorant Garamond', Georgia, serif);
+  font-size: 0.85rem;
+  color: var(--starry-golden, #ffd700);
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.archive-image-thumb__meta {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
