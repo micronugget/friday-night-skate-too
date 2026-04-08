@@ -1,0 +1,26 @@
+uuid: 2fb3a5cd-3293-4a74-85ba-db633e0db887
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.skate_dates_list
+  module:
+    - views
+active_version: 5361b30c09eca78f
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:skate_dates_list-block_1'
+        label: 'Skate Dates'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Skate Dates'
+id: block.views_block.skate_dates_list-block_1
+provider: views
+source: block
+source_local_id: 'views_block:skate_dates_list-block_1'
