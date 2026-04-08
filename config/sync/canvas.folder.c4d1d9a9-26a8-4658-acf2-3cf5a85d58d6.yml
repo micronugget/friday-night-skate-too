@@ -1,0 +1,9 @@
+uuid: c4d1d9a9-26a8-4658-acf2-3cf5a85d58d6
+langcode: en
+status: true
+dependencies: {  }
+name: 'Friday Night Skate'
+configEntityTypeId: component
+weight: 0
+items:
+  - block.views_block.skate_dates_list-block_1

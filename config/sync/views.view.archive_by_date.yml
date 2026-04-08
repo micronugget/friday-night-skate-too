@@ -102,7 +102,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: taxonomy_index_tid
-          default_action: not found
+          default_action: 'not found'
           exception:
             value: all
             title_enable: false
