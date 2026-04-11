@@ -6,10 +6,16 @@ videojs-player:
       node_modules/videojs-mobile-ui/dist/videojs-mobile-ui.css: {}
   js:
     node_modules/video.js/dist/video.js: {}
-    node_modules/@videojs/http-streaming/dist/videojs-http-streaming.js: {}
     node_modules/videojs-youtube/dist/Youtube.js: {}
     node_modules/videojs-hotkeys/videojs.hotkeys.min.js: {}
     node_modules/videojs-mobile-ui/dist/videojs-mobile-ui.js: {}
   dependencies:
     - core/drupal
     - core/once
+
+videojs-player-hls:
+  version: VERSION
+  js:
+    node_modules/@videojs/http-streaming/dist/videojs-http-streaming.js: {}
+  dependencies:
+    - videojs_media/videojs-player
