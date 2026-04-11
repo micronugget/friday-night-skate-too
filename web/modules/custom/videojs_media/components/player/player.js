@@ -49,6 +49,21 @@
           self.pauseOtherPlayers(this);
         });
 
+        // Suspend VHS segment loading when paused to reduce CPU usage.
+        // Guard with VHS existence check so MP4/YouTube sources are unaffected.
+        player.on('pause', function vhsSuspendHandler() {
+          const vhs = player.tech(true)?.vhs;
+          if (vhs && vhs.masterPlaylistController_) {
+            vhs.masterPlaylistController_.mainSegmentLoader_.pause();
+          }
+        });
+        player.on('play', function vhsResumeHandler() {
+          const vhs = player.tech(true)?.vhs;
+          if (vhs && vhs.masterPlaylistController_) {
+            vhs.masterPlaylistController_.mainSegmentLoader_.load();
+          }
+        });
+
         // Initialize viewport visibility monitoring (only if enabled)
         const playerElement = player.el();
         if (playerElement.hasAttribute('data-enable-viewport-monitoring')) {
