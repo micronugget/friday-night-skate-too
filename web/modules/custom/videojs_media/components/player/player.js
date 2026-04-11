@@ -379,14 +379,20 @@
             },
           );
 
-          // Observe the element for changes
-          // phpcs:disable Generic.PHP.UpperCaseConstant
+          // Observe only class attribute changes — the only signal Video.js
+          // adds during initialization. Avoids cascading callbacks from
+          // Video.js's own DOM mutations (childList / subtree).
           observer.observe(element, {
             attributes: true,
-            childList: true,
-            subtree: true,
+            attributeFilter: ['class'],
           });
-          // phpcs:enable Generic.PHP.UpperCaseConstant
+          // Safety guard: disconnect after 5 s if the player never initialises.
+          setTimeout(function mutationObserverTimeout() {
+            if (element.hasAttribute('data-videojs-mediablock-waiting')) {
+              observer.disconnect();
+              element.removeAttribute('data-videojs-mediablock-waiting');
+            }
+          }, 5000);
         }
       });
     },
