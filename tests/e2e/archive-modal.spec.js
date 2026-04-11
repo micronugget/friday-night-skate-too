@@ -527,3 +527,285 @@ test.describe('Archive Modal Viewer', () => {
     await expect(modal).not.toHaveClass(/is-open/, { timeout: 5_000 });
   });
 });
+
+// ---------------------------------------------------------------------------
+// Test suite: Image Thumbnail Overlay
+// ---------------------------------------------------------------------------
+test.describe('Archive Image Thumbnail Overlay', () => {
+  test('image masonry items have data-media-type="image"', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const mediaType = await imageItem.getAttribute('data-media-type');
+    expect(mediaType).toBe('image');
+  });
+
+  test('image masonry items have data-title set to the entity label', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const title = await imageItem.getAttribute('data-title');
+    expect(title).toBeTruthy();
+    expect(title.length).toBeGreaterThan(0);
+  });
+
+  test('image masonry items have data-date set from the skate_date term', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const date = await imageItem.getAttribute('data-date');
+    expect(date).toBeTruthy();
+  });
+
+  test('image masonry items have data-uploader set', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const uploader = await imageItem.getAttribute('data-uploader');
+    expect(uploader).toBeTruthy();
+  });
+
+  test('image thumbnail renders .videojs-media-thumb wrapper', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const thumb = imageItem.locator('.videojs-media-thumb');
+    await expect(thumb).toBeAttached();
+  });
+
+  test('image thumbnail overlay title matches data-title attribute', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+
+    const dataTitle = await imageItem.getAttribute('data-title');
+    const titleSpan = imageItem.locator('.videojs-media-thumb__title');
+    await expect(titleSpan).toBeAttached();
+    const spanText = await titleSpan.textContent();
+    expect(spanText.trim()).toBe(dataTitle);
+  });
+
+  test('image thumbnail overlay is hidden by default and visible on hover', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+
+    const overlay = imageItem.locator('.videojs-media-thumb__overlay');
+    await expect(overlay).toBeAttached();
+
+    // Before hover: opacity should be 0.
+    const opacityBefore = await overlay.evaluate((el) =>
+      parseFloat(window.getComputedStyle(el).opacity)
+    );
+    expect(opacityBefore).toBe(0);
+
+    // After hover: opacity should be 1.
+    await imageItem.hover();
+    const opacityAfter = await overlay.evaluate((el) =>
+      parseFloat(window.getComputedStyle(el).opacity)
+    );
+    expect(opacityAfter).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test suite: Modal Info Bar (title / date / uploader)
+// ---------------------------------------------------------------------------
+test.describe('Archive Modal Info Bar', () => {
+  test('modal info bar shows title for video items', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    const dataTitle = await videoItem.getAttribute('data-title');
+
+    await videoItem.click();
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    const titleEl = modal.locator('.fns-modal__title');
+    await expect(titleEl).toBeVisible();
+    await expect(titleEl).toHaveText(dataTitle);
+  });
+
+  test('modal info bar shows title for image items', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const dataTitle = await imageItem.getAttribute('data-title');
+
+    await imageItem.click();
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    const titleEl = modal.locator('.fns-modal__title');
+    await expect(titleEl).toBeVisible();
+    await expect(titleEl).toHaveText(dataTitle);
+  });
+
+  test('modal info bar shows date and uploader for image items', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const imageItem = page.locator('.masonry-item[data-media-type="image"]').first();
+    const hasImageItem = (await imageItem.count()) > 0;
+    if (!hasImageItem) {
+      test.skip();
+      return;
+    }
+    await expect(imageItem).toBeVisible({ timeout: 10_000 });
+    const dataDate = await imageItem.getAttribute('data-date');
+    const dataUploader = await imageItem.getAttribute('data-uploader');
+
+    await imageItem.click();
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    const metaEl = modal.locator('.fns-modal__meta');
+    await expect(metaEl).toBeVisible();
+
+    if (dataDate) {
+      await expect(metaEl).toContainText(dataDate);
+    }
+    if (dataUploader) {
+      await expect(metaEl).toContainText(dataUploader);
+    }
+  });
+
+  test('modal info bar shows date and uploader for video items', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const videoItem = page.locator('.masonry-item[data-media-type="video"]').first();
+    const hasVideoItem = (await videoItem.count()) > 0;
+    if (!hasVideoItem) {
+      test.skip();
+      return;
+    }
+    await expect(videoItem).toBeVisible({ timeout: 10_000 });
+    const dataDate = await videoItem.getAttribute('data-date');
+    const dataUploader = await videoItem.getAttribute('data-uploader');
+
+    await videoItem.click();
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    const metaEl = modal.locator('.fns-modal__meta');
+    await expect(metaEl).toBeVisible();
+
+    if (dataDate) {
+      await expect(metaEl).toContainText(dataDate);
+    }
+    if (dataUploader) {
+      await expect(metaEl).toContainText(dataUploader);
+    }
+  });
+
+  test('modal counter shows correct position out of total items', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const firstItem = page.locator('.masonry-item').first();
+    await expect(firstItem).toBeVisible({ timeout: 10_000 });
+    const totalItems = await page.locator('.masonry-item').count();
+
+    await firstItem.click();
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    const counter = modal.locator('.fns-modal__counter');
+    await expect(counter).toBeVisible();
+    await expect(counter).toHaveText(`1 / ${totalItems}`);
+  });
+
+  test('modal title updates when navigating to next item', async ({ page, request }) => {
+    const url = await getArchiveUrl(request);
+    await page.goto(url);
+
+    const items = page.locator('.masonry-item');
+    await expect(items.first()).toBeVisible({ timeout: 10_000 });
+    const totalItems = await items.count();
+
+    if (totalItems < 2) {
+      test.skip();
+      return;
+    }
+
+    // Collect titles in DOM order.
+    const titles = await items.evaluateAll((els) =>
+      els.map((el) => el.dataset.title || '')
+    );
+
+    await items.first().click();
+    const modal = page.locator('#fns-cinematic-modal');
+    await expect(modal).toHaveClass(/is-open/, { timeout: 5_000 });
+
+    // Navigate to next item.
+    await modal.locator('.fns-modal__nav--next').click();
+
+    const titleEl = modal.locator('.fns-modal__title');
+    await expect(titleEl).toHaveText(titles[1]);
+  });
+});

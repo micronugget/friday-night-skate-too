@@ -9,6 +9,7 @@ dependencies:
     - file
     - honeypot
     - klaro
+    - matomo
     - media
     - navigation
     - node
@@ -27,6 +28,7 @@ permissions:
   - 'access navigation'
   - 'bypass honeypot protection'
   - 'delete own files'
+  - 'opt-in or out of matomo tracking'
   - 'skip CAPTCHA'
   - 'use klaro'
   - 'view media'
