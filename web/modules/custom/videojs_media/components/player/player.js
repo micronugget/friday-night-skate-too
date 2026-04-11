@@ -426,76 +426,202 @@
   };
 
   /**
-   * Helper to initialize VideoJS players with SDC components.
+   * Lazy-initialize VideoJS players with SDC components.
+   *
+   * Page players: deferred via IntersectionObserver until the facade enters
+   * the viewport. Modal players: deferred until the Bootstrap modal fires
+   * `show.bs.modal`, then disposed when `hide.bs.modal` fires.
    *
    * @type {Drupal~behavior}
    */
   Drupal.behaviors.videojsMediablockPlayerInit = {
-    attach(context) {
-      // Only initialize if videojs is available
+
+    /**
+     * Initializes a single VideoJS player from a facade wrapper element.
+     *
+     * Hides the facade overlay, shows the video element, calls window.videojs(),
+     * and optionally starts playback.
+     *
+     * @param {HTMLElement} facadeEl - The `.videojs-lazy-facade` wrapper element.
+     * @param {boolean} autoplay - Whether to start playback after init.
+     */
+    initPlayerFromFacade(facadeEl, autoplay) {
+      if (facadeEl.hasAttribute('data-videojs-facade-initialized')) {
+        // Already initialized — just play if requested.
+        const videoEl = facadeEl.querySelector('.videojs-lazy-target');
+        if (autoplay && videoEl && videoEl.player && !videoEl.player.isDisposed()) {
+          videoEl.player.play();
+        }
+        return;
+      }
+      facadeEl.setAttribute('data-videojs-facade-initialized', 'true');
+
       if (typeof window.videojs === 'undefined') {
         return;
       }
 
-      once('videojs-elements', 'video.video-js, audio.video-js', context).forEach(
-        function initializeVideoElement(videoElement) {
+      const videoEl = facadeEl.querySelector('.videojs-lazy-target');
+      if (!videoEl) {
+        return;
+      }
+
+      // Hide facade overlays (poster img + play button) — keep the video element.
+      const poster = facadeEl.querySelector('.videojs-lazy-facade__poster');
+      const playBtn = facadeEl.querySelector('.videojs-lazy-facade__play-btn');
+      if (poster) {
+        poster.style.display = 'none';
+      }
+      if (playBtn) {
+        playBtn.style.display = 'none';
+      }
+
+      try {
+        const isAudio = videoEl.hasAttribute('data-videojs-audio');
+        // phpcs:disable Generic.PHP.UpperCaseConstant
+        window.videojs(videoEl, {
+          techOrder: ['html5', 'videojs_youtube'],
+          controls: true,
+          fluid: !isAudio,
+          autoplay: autoplay ? 'any' : false,
+          videojs_youtube: {
+            playsinline: 1,
+          },
+          html5: {
+            vhs: {
+              overrideNative: !window.videojs.browser.IS_SAFARI,
+              enableLowInitialPlaylist: true,
+              smoothQualityChange: true,
+              useBandwidthFromLocalStorage: true,
+            },
+          },
+        // phpcs:enable Generic.PHP.UpperCaseConstant
+        }, function videojsReadyCallback() {
+          this.el().setAttribute('data-videojs-initialized', 'true');
+
+          // Configure adaptive bitrate settings if HLS/DASH source is detected.
+          const sources = this.currentSources();
+          const hasAdaptiveStream = sources.some(source =>
+            source.type === 'application/vnd.apple.mpegurl' ||
+            source.type === 'application/dash+xml',
+          );
+
+          if (hasAdaptiveStream && this.qualityLevels) {
+            this.qualityLevels().on('addqualitylevel', (event) => {
+              console.log('Quality level added:', event.qualityLevel);
+            });
+          }
+
+          // Notify other behaviors that a player is ready.
           try {
-            // Determine if this is an audio-only element
-            const isAudio = videoElement.hasAttribute('data-videojs-audio');
-            // Initialize VideoJS on the element
-            window.videojs(videoElement, {
-              // phpcs:disable Generic.PHP.UpperCaseConstant
-              techOrder: ['html5', 'videojs_youtube'],
-              controls: true,
-              fluid: !isAudio,
-              videojs_youtube: {
-                playsinline: 1,
-              },
-              html5: {
-                vhs: {
-                  overrideNative: !window.videojs.browser.IS_SAFARI,
-                  enableLowInitialPlaylist: true,
-                  smoothQualityChange: true,
-                  useBandwidthFromLocalStorage: true,
-                },
-              },
-              // phpcs:enable Generic.PHP.UpperCaseConstant
-            }, function videojsReadyCallback() {
-              // Player is ready
-              this.el().setAttribute('data-videojs-initialized', 'true');
+            document.dispatchEvent(new CustomEvent('videojs-player-ready', {
+              detail: this,
+            }));
+          } catch (err) {
+            console.error('Error dispatching videojs-player-ready event:', err);
+          }
+        });
+      } catch (e) {
+        console.error('Error initializing VideoJS player:', e);
+      }
+    },
 
-              // Configure adaptive bitrate settings if HLS/DASH source is detected
-              const sources = this.currentSources();
-              const hasAdaptiveStream = sources.some(source =>
-                source.type === 'application/vnd.apple.mpegurl' ||
-                source.type === 'application/dash+xml',
-              );
+    /**
+     * Disposes the VideoJS player inside a facade wrapper, if one exists.
+     *
+     * Restores the facade overlays so the element can be re-initialized later.
+     *
+     * @param {HTMLElement} facadeEl - The `.videojs-lazy-facade` wrapper element.
+     */
+    disposePlayerInFacade(facadeEl) {
+      const videoEl = facadeEl.querySelector('.videojs-lazy-target');
+      if (videoEl && videoEl.player && !videoEl.player.isDisposed()) {
+        videoEl.player.dispose();
+      }
+      facadeEl.removeAttribute('data-videojs-facade-initialized');
 
-              if (hasAdaptiveStream) {
-                // Enable quality menu if available
-                if (this.qualityLevels) {
-                  this.qualityLevels().on('addqualitylevel', (event) => {
-                    console.log('Quality level added:', event.qualityLevel);
-                  });
-                }
-              }
+      // Restore facade overlays.
+      const poster = facadeEl.querySelector('.videojs-lazy-facade__poster');
+      const playBtn = facadeEl.querySelector('.videojs-lazy-facade__play-btn');
+      if (poster) {
+        poster.style.display = '';
+      }
+      if (playBtn) {
+        playBtn.style.display = '';
+      }
+    },
 
-              // Trigger a native event (no jQuery dependency)
-              try {
-                const event = new CustomEvent('videojs-player-ready', {
-                  detail: this,
-                });
-                document.dispatchEvent(event);
-              } catch (err) {
-                console.error(
-                  'Error dispatching videojs-player-ready event:',
-                  err,
-                );
+    attach(context) {
+      const self = this;
+
+      // ── Facade play-button click / keyboard activation ──────────────────────
+      once('videojs-facade-click', '.videojs-lazy-facade', context).forEach(
+        function attachFacadeInteraction(facadeEl) {
+          const playBtn = facadeEl.querySelector('.videojs-lazy-facade__play-btn');
+          if (playBtn) {
+            playBtn.addEventListener('click', function onPlayBtnClick() {
+              self.initPlayerFromFacade(facadeEl, true);
+            });
+            playBtn.addEventListener('keydown', function onPlayBtnKeydown(e) {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                self.initPlayerFromFacade(facadeEl, true);
               }
             });
-          } catch (e) {
-            console.error('Error initializing VideoJS player:', e);
           }
+        },
+      );
+
+      // ── Page players: IntersectionObserver lazy init ─────────────────────────
+      // Only for facades NOT inside a Bootstrap modal.
+      once('videojs-lazy-page', '.videojs-lazy-facade', context).forEach(
+        function observePagePlayer(facadeEl) {
+          // Skip modal players — handled separately below.
+          if (facadeEl.closest('.modal')) {
+            return;
+          }
+
+          if (!('IntersectionObserver' in window)) {
+            // Fallback: initialize immediately.
+            self.initPlayerFromFacade(facadeEl, false);
+            return;
+          }
+
+          const observer = new IntersectionObserver(
+            function intersectionCallback(entries, obs) {
+              entries.forEach(function handleEntry(entry) {
+                if (entry.isIntersecting) {
+                  self.initPlayerFromFacade(facadeEl, false);
+                  obs.unobserve(facadeEl);
+                }
+              });
+            },
+            // phpcs:disable Generic.PHP.UpperCaseConstant
+            { rootMargin: '200px', threshold: 0 },
+            // phpcs:enable Generic.PHP.UpperCaseConstant
+          );
+
+          observer.observe(facadeEl);
+        },
+      );
+
+      // ── Modal players: init on show, dispose on hide ─────────────────────────
+      once('videojs-modal-players', '.modal', context).forEach(
+        function attachModalPlayerLifecycle(modalEl) {
+          modalEl.addEventListener('show.bs.modal', function onModalShow() {
+            modalEl.querySelectorAll('.videojs-lazy-facade').forEach(
+              function initModalPlayer(facadeEl) {
+                self.initPlayerFromFacade(facadeEl, false);
+              },
+            );
+          });
+
+          modalEl.addEventListener('hide.bs.modal', function onModalHide() {
+            modalEl.querySelectorAll('.videojs-lazy-facade').forEach(
+              function disposeModalPlayer(facadeEl) {
+                self.disposePlayerInFacade(facadeEl);
+              },
+            );
+          });
         },
       );
     },
