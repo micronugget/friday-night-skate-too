@@ -117,25 +117,35 @@ function videojs_media_theme_suggestions_videojs_media(array $variables) {
  * Implements hook_ENTITY_TYPE_view().
  */
 function videojs_media_videojs_media_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
-  // Add any preprocessing specific to viewing the entity.
-  // This is where you could add custom logic based on bundle type.
+  // Conditionally attach the HLS/DASH library only for adaptive stream sources.
   $bundle = $entity->bundle();
+  $hls_extensions = ['m3u8', 'mpd'];
+  $needs_hls = FALSE;
 
-  // Add bundle-specific preprocessing if needed.
-  switch ($bundle) {
-    case 'videojs_youtube':
-      // YouTube-specific preprocessing.
-      break;
+  if (in_array($bundle, ['videojs_local_video', 'videojs_local_audio'], TRUE)) {
+    if ($entity->hasField('field_media_file') && !$entity->get('field_media_file')->isEmpty()) {
+      $file = $entity->get('field_media_file')->entity;
+      if ($file) {
+        $uri = $file->getFileUri();
+        $ext = strtolower(pathinfo($uri, PATHINFO_EXTENSION));
+        $needs_hls = in_array($ext, $hls_extensions, TRUE);
+      }
+    }
+  }
+  elseif (in_array($bundle, ['videojs_remote_video', 'videojs_remote_audio'], TRUE)) {
+    if ($entity->hasField('field_remote_url') && !$entity->get('field_remote_url')->isEmpty()) {
+      $url = $entity->get('field_remote_url')->value;
+      if ($url) {
+        $path = parse_url($url, PHP_URL_PATH) ?? '';
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $needs_hls = in_array($ext, $hls_extensions, TRUE);
+      }
+    }
+  }
+  // YouTube never needs HLS.
 
-    case 'videojs_local_video':
-    case 'videojs_local_audio':
-      // Local media preprocessing.
-      break;
-
-    case 'videojs_remote_video':
-    case 'videojs_remote_audio':
-      // Remote media preprocessing.
-      break;
+  if ($needs_hls) {
+    $build['#attached']['library'][] = 'videojs_media/videojs-player-hls';
   }
 }
 
