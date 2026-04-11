@@ -425,9 +425,17 @@
       once('videojs-elements', 'video.video-js, audio.video-js', context).forEach(
         function initializeVideoElement(videoElement) {
           try {
+            // Determine if this is an audio-only element
+            const isAudio = videoElement.hasAttribute('data-videojs-audio');
             // Initialize VideoJS on the element
             window.videojs(videoElement, {
               // phpcs:disable Generic.PHP.UpperCaseConstant
+              techOrder: ['html5', 'videojs_youtube'],
+              controls: true,
+              fluid: !isAudio,
+              videojs_youtube: {
+                playsinline: 1,
+              },
               html5: {
                 vhs: {
                   overrideNative: !window.videojs.browser.IS_SAFARI,

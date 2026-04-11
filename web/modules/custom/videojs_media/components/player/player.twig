@@ -16,7 +16,7 @@
          {% endif %}
        {% endif %}
        {% if enable_viewport_monitoring %}data-enable-viewport-monitoring="true"{% endif %}
-       data-setup='{"techOrder": ["html5", "videojs_youtube"], {{ is_audio ? "" : "\"fluid\": true, " }}"controls": true, "videojs_youtube": {"playsinline": 1}, "html5": {"vhs": {"overrideNative": true}}}'>
+       {% if is_audio %}data-videojs-audio="true"{% endif %}>
 
   {# Local media file (audio or video) #}
   {% if field_media_file %}
