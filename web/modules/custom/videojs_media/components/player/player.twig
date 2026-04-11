@@ -5,7 +5,7 @@
 #}
 {% set is_audio = bundle in ['videojs_local_audio', 'videojs_remote_audio'] %}
 
-<{{ is_audio ? 'audio' : 'video' }} id="videojs-player-{{ random() }}" class="video-js" playsinline webkit-playsinline
+<{{ is_audio ? 'audio' : 'video' }} id="videojs-player-{{ random() }}" class="video-js" preload="none" playsinline webkit-playsinline
        {% if field_poster_image %}
          {% if field_poster_image[0]['#item'] %}
            {% set poster_uri = field_poster_image[0]['#item'].entity.uri.value %}
