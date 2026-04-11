@@ -49,11 +49,31 @@ function videojs_media_update_10002() {
   $database = \Drupal::database();
 
   $rename_map = [
-    'local_audio'  => ['id' => 'videojs_local_audio',  'label' => 'VideoJS Local Audio',  'description' => 'Audio file hosted locally on your server.'],
-    'local_video'  => ['id' => 'videojs_local_video',  'label' => 'VideoJS Local Video',  'description' => 'Video file hosted locally on your server.'],
-    'remote_audio' => ['id' => 'videojs_remote_audio', 'label' => 'VideoJS Remote Audio', 'description' => 'Audio file hosted remotely via URL.'],
-    'remote_video' => ['id' => 'videojs_remote_video', 'label' => 'VideoJS Remote Video', 'description' => 'Video file hosted remotely via URL (HLS, DASH, MP4, etc.).'],
-    'youtube'      => ['id' => 'videojs_youtube',      'label' => 'VideoJS YouTube',      'description' => 'Video hosted on YouTube.'],
+    'local_audio' => [
+      'id' => 'videojs_local_audio',
+      'label' => 'VideoJS Local Audio',
+      'description' => 'Audio file hosted locally on your server.',
+    ],
+    'local_video' => [
+      'id' => 'videojs_local_video',
+      'label' => 'VideoJS Local Video',
+      'description' => 'Video file hosted locally on your server.',
+    ],
+    'remote_audio' => [
+      'id' => 'videojs_remote_audio',
+      'label' => 'VideoJS Remote Audio',
+      'description' => 'Audio file hosted remotely via URL.',
+    ],
+    'remote_video' => [
+      'id' => 'videojs_remote_video',
+      'label' => 'VideoJS Remote Video',
+      'description' => 'Video file hosted remotely via URL (HLS, DASH, MP4, etc.).',
+    ],
+    'youtube' => [
+      'id' => 'videojs_youtube',
+      'label' => 'VideoJS YouTube',
+      'description' => 'Video hosted on YouTube.',
+    ],
   ];
 
   foreach ($rename_map as $old_id => $new) {
@@ -77,12 +97,16 @@ function videojs_media_update_10002() {
       ]);
     }
     elseif ($config_storage->exists($new_config_name)) {
-      // Config already renamed (e.g. partial run); just update label/description.
+      // Config already renamed (e.g. partial run); just update
+      // label/description.
       $config_factory->getEditable($new_config_name)
         ->set('label', $new_label)
         ->set('description', $new_desc)
         ->save();
-      \Drupal::logger('videojs_media')->notice('Updated label/description for @config.', ['@config' => $new_config_name]);
+      \Drupal::logger('videojs_media')->notice(
+        'Updated label/description for @config.',
+        ['@config' => $new_config_name],
+      );
     }
 
     // Rename field instance configs: field.field.videojs_media.{old}.{field}.
@@ -97,17 +121,28 @@ function videojs_media_update_10002() {
         $data['bundle'] = $new_id;
         // Update dependency on old type config.
         if (isset($data['dependencies']['config'])) {
-          $data['dependencies']['config'] = array_map(function ($dep) use ($old_id, $new_id) {
-            return str_replace('videojs_media.type.' . $old_id, 'videojs_media.type.' . $new_id, $dep);
-          }, $data['dependencies']['config']);
+          $data['dependencies']['config'] = array_map(
+            function ($dep) use ($old_id, $new_id) {
+              return str_replace(
+                'videojs_media.type.' . $old_id,
+                'videojs_media.type.' . $new_id,
+                $dep,
+              );
+            },
+            $data['dependencies']['config'],
+          );
         }
         $config_factory->getEditable($new_field_config)->setData($data)->save();
         $config_factory->getEditable($old_field_config)->delete();
-        \Drupal::logger('videojs_media')->notice('Renamed field config @old to @new.', ['@old' => $old_field_config, '@new' => $new_field_config]);
+        \Drupal::logger('videojs_media')->notice(
+          'Renamed field config @old to @new.',
+          ['@old' => $old_field_config, '@new' => $new_field_config],
+        );
       }
     }
 
-    // Rename form display configs: core.entity_form_display.videojs_media.{old}.{mode}.
+    // Rename form display configs:
+    // core.entity_form_display.videojs_media.{old}.{mode}.
     $form_prefix = 'core.entity_form_display.videojs_media.' . $old_id . '.';
     $new_form_prefix = 'core.entity_form_display.videojs_media.' . $new_id . '.';
     foreach ($config_storage->listAll($form_prefix) as $old_form_config) {
@@ -120,11 +155,15 @@ function videojs_media_update_10002() {
         $data = _videojs_media_update_config_deps($data, $old_id, $new_id);
         $config_factory->getEditable($new_form_config)->setData($data)->save();
         $config_factory->getEditable($old_form_config)->delete();
-        \Drupal::logger('videojs_media')->notice('Renamed form display config @old to @new.', ['@old' => $old_form_config, '@new' => $new_form_config]);
+        \Drupal::logger('videojs_media')->notice(
+          'Renamed form display config @old to @new.',
+          ['@old' => $old_form_config, '@new' => $new_form_config],
+        );
       }
     }
 
-    // Rename view display configs: core.entity_view_display.videojs_media.{old}.{mode}.
+    // Rename view display configs:
+    // core.entity_view_display.videojs_media.{old}.{mode}.
     $view_prefix = 'core.entity_view_display.videojs_media.' . $old_id . '.';
     $new_view_prefix = 'core.entity_view_display.videojs_media.' . $new_id . '.';
     foreach ($config_storage->listAll($view_prefix) as $old_view_config) {
@@ -137,7 +176,10 @@ function videojs_media_update_10002() {
         $data = _videojs_media_update_config_deps($data, $old_id, $new_id);
         $config_factory->getEditable($new_view_config)->setData($data)->save();
         $config_factory->getEditable($old_view_config)->delete();
-        \Drupal::logger('videojs_media')->notice('Renamed view display config @old to @new.', ['@old' => $old_view_config, '@new' => $new_view_config]);
+        \Drupal::logger('videojs_media')->notice(
+          'Renamed view display config @old to @new.',
+          ['@old' => $old_view_config, '@new' => $new_view_config],
+        );
       }
     }
 

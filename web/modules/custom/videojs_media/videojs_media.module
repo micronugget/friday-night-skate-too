@@ -143,7 +143,6 @@ function videojs_media_videojs_media_view(array &$build, EntityInterface $entity
     }
   }
   // YouTube never needs HLS.
-
   if ($needs_hls) {
     $build['#attached']['library'][] = 'videojs_media/videojs-player-hls';
   }
