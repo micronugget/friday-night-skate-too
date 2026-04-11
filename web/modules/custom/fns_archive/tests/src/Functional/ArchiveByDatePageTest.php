@@ -18,6 +18,13 @@ use Drupal\taxonomy\Entity\Vocabulary;
 class ArchiveByDatePageTest extends BrowserTestBase {
 
   /**
+   * Use the Standard profile to ensure default entity view modes exist.
+   *
+   * @var string
+   */
+  protected $profile = 'testing';
+
+  /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';

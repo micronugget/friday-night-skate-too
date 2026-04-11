@@ -42,6 +42,7 @@
         "drupal/file_upload_secure_validator": "^2",
         "drupal/geofield": "^10",
         "drupal/linkit": "^7",
+        "drupal/matomo": "^2.0@alpha",
         "drupal/modeler_api": "^1",
         "drupal/pathauto": "^1.13",
         "drupal/radix": "^6",
