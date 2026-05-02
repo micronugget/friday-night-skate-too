@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * @file
  * VideoJS Media module.
@@ -89,7 +91,6 @@ function template_preprocess_videojs_media(array &$variables) {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['content'][$key] = $variables['elements'][$key];
   }
-
   // Add bundle-specific classes.
   $variables['attributes']['class'][] = 'videojs-media';
   $variables['attributes']['class'][] = 'videojs-media--' . $videojs_media->bundle();
@@ -143,6 +144,7 @@ function videojs_media_videojs_media_view(array &$build, EntityInterface $entity
     }
   }
   // YouTube never needs HLS.
+
   if ($needs_hls) {
     $build['#attached']['library'][] = 'videojs_media/videojs-player-hls';
   }

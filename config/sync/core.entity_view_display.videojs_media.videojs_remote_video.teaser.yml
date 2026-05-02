@@ -7,8 +7,10 @@ dependencies:
     - field.field.videojs_media.videojs_remote_video.field_poster_image
     - field.field.videojs_media.videojs_remote_video.field_remote_url
     - field.field.videojs_media.videojs_remote_video.field_subtitle
+    - responsive_image.styles.16_9_wide
     - videojs_media.type.videojs_remote_video
   module:
+    - responsive_image
     - svg_image
 _core:
   default_config_hash: UAbiWjG7-vqorkEGPREBfThg6gNQKAWf7E-c7t7P4pY
@@ -18,11 +20,11 @@ bundle: videojs_remote_video
 mode: teaser
 content:
   field_poster_image:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: 16_9_wide
       image_link: ''
-      image_style: ''
       image_loading:
         attribute: lazy
     third_party_settings: {  }

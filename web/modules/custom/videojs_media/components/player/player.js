@@ -578,11 +578,17 @@
       );
 
       // ── Page players: IntersectionObserver lazy init ─────────────────────────
-      // Only for facades NOT inside a Bootstrap modal.
+      // Only for facades NOT inside a Bootstrap modal and NOT click-only.
       once('videojs-lazy-page', '.videojs-lazy-facade', context).forEach(
         function observePagePlayer(facadeEl) {
           // Skip modal players — handled separately below.
           if (facadeEl.closest('.modal')) {
+            return;
+          }
+
+          // Skip teaser/masonry facades — modal-viewer.js owns the click;
+          // no IntersectionObserver player should be created here.
+          if (facadeEl.hasAttribute('data-lazy-player-click-only')) {
             return;
           }
 

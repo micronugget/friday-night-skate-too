@@ -6,17 +6,7 @@
 {% set is_audio = bundle in ['videojs_local_audio', 'videojs_remote_audio'] %}
 {% set player_id = 'videojs-player-' ~ random() %}
 
-{# Resolve poster URL for facade and video element #}
-{% set poster_url = null %}
-{% if field_poster_image %}
-  {% if field_poster_image[0]['#item'] %}
-    {% set poster_uri = field_poster_image[0]['#item'].entity.uri.value %}
-    {% if poster_uri %}{% set poster_url = file_url(poster_uri) %}{% endif %}
-  {% elseif field_poster_image['#items'] %}
-    {% set poster_uri = field_poster_image['#items'].entity.uri.value %}
-    {% if poster_uri %}{% set poster_url = file_url(poster_uri) %}{% endif %}
-  {% endif %}
-{% endif %}
+{# No raw poster URL needed — the <picture> element serves as the facade poster #}
 
 {# Facade wrapper — JS replaces this with the initialised player #}
 <div class="videojs-lazy-facade"
@@ -24,12 +14,12 @@
      {% if is_audio %}data-lazy-player-audio="true"{% endif %}
      {% if enable_viewport_monitoring %}data-enable-viewport-monitoring="true"{% endif %}>
 
-  {# Static poster / thumbnail shown before player initialises #}
-  {% if poster_url and not is_audio %}
-    <img class="videojs-lazy-facade__poster"
-         src="{{ poster_url }}"
-         alt=""
-         aria-hidden="true">
+  {# Responsive poster — the <picture> element IS the visible facade thumbnail.
+     The browser resolves the correct srcset source natively; no JS trick needed. #}
+  {% if field_poster_image and not is_audio %}
+    <div class="videojs-lazy-facade__poster" aria-hidden="true">
+      {{ field_poster_image }}
+    </div>
   {% endif %}
 
   {# Accessible play button overlay #}
@@ -45,7 +35,6 @@
 
   {# Hidden video/audio element — initialised lazily by player.js #}
   <{{ is_audio ? 'audio' : 'video' }} id="{{ player_id }}" class="video-js videojs-lazy-target" preload="none" playsinline webkit-playsinline
-         {% if poster_url %}poster="{{ poster_url }}"{% endif %}
          {% if enable_viewport_monitoring %}data-enable-viewport-monitoring="true"{% endif %}
          {% if is_audio %}data-videojs-audio="true"{% endif %}>
     {# Local media file (audio or video) #}

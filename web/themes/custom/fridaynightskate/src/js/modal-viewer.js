@@ -264,7 +264,9 @@
     mediaWrapEl.innerHTML = '';
 
     if (mediaType === 'video' && videoUrl) {
-      renderVideo(videoUrl, videoId, fullsize);
+      // Prefer the responsive <picture> markup if the view provided it.
+      const posterPicture = item.dataset.posterPicture || '';
+      renderVideo(videoUrl, videoId, fullsize, posterPicture);
     } else if (fullsize) {
       renderImage(fullsize, title || '');
     } else {
@@ -276,7 +278,7 @@
     }
   }
 
-  function renderVideo(src, videoId, poster) {
+  function renderVideo(src, videoId, poster, posterPictureHtml) {
     // Always use a unique element ID to avoid VideoJS conflicts when the same
     // video is opened more than once in a session.
     const uid = `fns-modal-video-${Date.now()}`;
@@ -291,13 +293,34 @@
     video.className = 'video-js vjs-default-skin vjs-big-play-centered';
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
-    if (poster) video.poster = poster;
+
+    // Poster strategy:
+    //   1. If a responsive <picture> was provided by the view, do NOT set
+    //      `video.poster` (which only takes a single URL and triggers a full-
+    //      res download). Instead, inject the <picture> as an overlay so the
+    //      browser resolves the srcset natively.
+    //   2. Otherwise, fall back to the single-URL `poster` attribute.
+    if (!posterPictureHtml && poster) {
+      video.poster = poster;
+    }
 
     const source = document.createElement('source');
     source.src  = src;
     source.type = isYoutube ? 'video/youtube' : 'video/mp4';
     video.appendChild(source);
     wrapper.appendChild(video);
+
+    if (posterPictureHtml) {
+      const posterOverlay = document.createElement('div');
+      posterOverlay.className = 'fns-modal__video-poster';
+      posterOverlay.setAttribute('aria-hidden', 'true');
+      posterOverlay.innerHTML = posterPictureHtml;
+      // The overlay sits over the video until VideoJS shows its own UI.
+      // VideoJS will paint its own internal poster on top once the player
+      // initialises; until then this <picture> is what the user sees.
+      wrapper.appendChild(posterOverlay);
+    }
+
     mediaWrapEl.appendChild(wrapper);
 
     // Initialise VideoJS if available.
