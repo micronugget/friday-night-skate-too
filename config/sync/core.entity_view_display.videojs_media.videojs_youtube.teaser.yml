@@ -7,8 +7,10 @@ dependencies:
     - field.field.videojs_media.videojs_youtube.field_poster_image
     - field.field.videojs_media.videojs_youtube.field_subtitle
     - field.field.videojs_media.videojs_youtube.field_youtube_url
+    - responsive_image.styles.16_9_wide
     - videojs_media.type.videojs_youtube
   module:
+    - responsive_image
     - svg_image
 _core:
   default_config_hash: FoRFQML3ytol62WBGLgaZrt-O8NPYx3QZyzSIlVudEk
@@ -18,11 +20,11 @@ bundle: videojs_youtube
 mode: teaser
 content:
   field_poster_image:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
+      responsive_image_style: 16_9_wide
       image_link: ''
-      image_style: ''
       image_loading:
         attribute: lazy
     third_party_settings: {  }
@@ -30,6 +32,7 @@ content:
     region: content
 hidden:
   created: true
+  field_skate_date: true
   field_subtitle: true
   field_youtube_url: true
   name: true

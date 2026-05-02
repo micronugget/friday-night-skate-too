@@ -49,3 +49,7 @@ props:
       type: boolean
       title: Enable auto-pause when scrolled out of view
       default: false
+    click_only:
+      type: boolean
+      title: Skip IntersectionObserver init; player initialises only on click (e.g. teaser/masonry view modes)
+      default: false

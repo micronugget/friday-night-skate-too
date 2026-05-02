@@ -86,11 +86,40 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
       }
     }
 
-    // data-fullsize: poster image for video, or image file for image bundles.
+    // data-fullsize / data-poster-picture: poster image for video, or image
+    // file for image bundles. For videos we render the poster through the
+    // responsive_image formatter so the modal can inject a real <picture>
+    // element with srcset — letting the browser pick a viewport-appropriate
+    // source instead of a single full-resolution image.
     if ($entity->hasField('field_poster_image') && !$entity->get('field_poster_image')->isEmpty()) {
-      $image_file = $entity->get('field_poster_image')->entity;
+      $image_item = $entity->get('field_poster_image')->first();
+      $image_file = $image_item ? $image_item->entity : NULL;
       if ($image_file) {
-        $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($image_file->getFileUri()));
+        // Fallback single-URL for legacy/non-srcset consumers.
+        $attributes->setAttribute(
+          'data-fullsize',
+          $file_url_generator->generateAbsoluteString($image_file->getFileUri())
+        );
+
+        // Render a responsive <picture> via the responsive_image formatter.
+        // The style id is configurable here; `16_9_wide` matches the video
+        // aspect ratio used in the modal player.
+        $responsive_style_id = '16_9_wide';
+        $responsive_style = \Drupal::entityTypeManager()
+          ->getStorage('responsive_image_style')
+          ->load($responsive_style_id);
+        if ($responsive_style) {
+          $build = [
+            '#theme' => 'responsive_image_formatter',
+            '#item' => $image_item,
+            '#item_attributes' => ['alt' => $entity->label()],
+            '#responsive_image_style_id' => $responsive_style_id,
+          ];
+          $picture_html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+          if ($picture_html !== '') {
+            $attributes->setAttribute('data-poster-picture', $picture_html);
+          }
+        }
       }
     }
     elseif (!$is_video && $entity->hasField('field_media_image') && !$entity->get('field_media_image')->isEmpty()) {
