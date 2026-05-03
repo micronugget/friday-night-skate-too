@@ -268,9 +268,18 @@
     // Media content
     mediaWrapEl.innerHTML = '';
     if (mediaType === 'video' && videoUrl) {
-      // Prefer the responsive <picture> markup if the view provided it.
-      var posterPicture = item.dataset.posterPicture || '';
-      renderVideo(videoUrl, videoId, fullsize, posterPicture);
+      // Prefer the responsive <picture> from the <template> sibling element.
+      // The view renders a <template id="poster-picture-{videoId}"> next to
+      // each masonry item; cloneNode(true) gives native one-pass parsing with
+      // no attribute escaping overhead.
+      var posterFragment = null;
+      if (videoId) {
+        var tmpl = document.getElementById('poster-picture-' + videoId);
+        if (tmpl) {
+          posterFragment = tmpl.content.cloneNode(true);
+        }
+      }
+      renderVideo(videoUrl, videoId, fullsize, posterFragment);
     } else if (fullsize) {
       renderImage(fullsize, title || '');
     } else {
@@ -281,7 +290,7 @@
       }
     }
   }
-  function renderVideo(src, videoId, poster, posterPictureHtml) {
+  function renderVideo(src, videoId, poster, posterFragment) {
     // Always use a unique element ID to avoid VideoJS conflicts when the same
     // video is opened more than once in a session.
     var uid = "fns-modal-video-".concat(Date.now());
@@ -295,12 +304,12 @@
     video.setAttribute('webkit-playsinline', '');
 
     // Poster strategy:
-    //   1. If a responsive <picture> was provided by the view, do NOT set
-    //      `video.poster` (which only takes a single URL and triggers a full-
-    //      res download). Instead, inject the <picture> as an overlay so the
-    //      browser resolves the srcset natively.
+    //   1. If a responsive <picture> fragment was cloned from the <template>
+    //      sibling, do NOT set `video.poster` (which only takes a single URL
+    //      and triggers a full-res download). Instead, inject the <picture> as
+    //      an overlay so the browser resolves the srcset natively.
     //   2. Otherwise, fall back to the single-URL `poster` attribute.
-    if (!posterPictureHtml && poster) {
+    if (!posterFragment && poster) {
       video.poster = poster;
     }
     var source = document.createElement('source');
@@ -308,11 +317,11 @@
     source.type = isYoutube ? 'video/youtube' : 'video/mp4';
     video.appendChild(source);
     wrapper.appendChild(video);
-    if (posterPictureHtml) {
+    if (posterFragment) {
       var posterOverlay = document.createElement('div');
       posterOverlay.className = 'fns-modal__video-poster';
       posterOverlay.setAttribute('aria-hidden', 'true');
-      posterOverlay.innerHTML = posterPictureHtml;
+      posterOverlay.appendChild(posterFragment);
       // The overlay sits over the video until VideoJS shows its own UI.
       // VideoJS will paint its own internal poster on top once the player
       // initialises; until then this <picture> is what the user sees.

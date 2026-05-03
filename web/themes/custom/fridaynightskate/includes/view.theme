@@ -86,11 +86,14 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
       }
     }
 
-    // data-fullsize / data-poster-picture: poster image for video, or image
+    // data-fullsize / poster_template: poster image for video, or image
     // file for image bundles. For videos we render the poster through the
     // responsive_image formatter so the modal can inject a real <picture>
     // element with srcset — letting the browser pick a viewport-appropriate
     // source instead of a single full-resolution image.
+    // The rendered <picture> is stored in a <template> element (keyed by
+    // data-video-id) rather than as an escaped HTML attribute, avoiding two
+    // parse passes and heavy attribute escaping.
     if ($entity->hasField('field_poster_image') && !$entity->get('field_poster_image')->isEmpty()) {
       $image_item = $entity->get('field_poster_image')->first();
       $image_file = $image_item ? $image_item->entity : NULL;
@@ -117,7 +120,10 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
           ];
           $picture_html = (string) \Drupal::service('renderer')->renderInIsolation($build);
           if ($picture_html !== '') {
-            $attributes->setAttribute('data-poster-picture', $picture_html);
+            // Store the picture HTML for the Twig template to render inside a
+            // <template> element — no attribute escaping, one parse pass.
+            $variables['rows'][$id]['poster_template'] = $picture_html;
+            $variables['rows'][$id]['poster_template_id'] = 'poster-picture-' . $id_prefix . $entity->id();
           }
         }
       }
