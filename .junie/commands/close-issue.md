@@ -6,7 +6,9 @@
 ```
 
 ## Purpose
-Full end-to-end flow for closing an issue: read → branch → implement → test → commit → push → PR → close.
+Full flow for working an issue: read → branch → implement → test → commit → push.
+
+> **Important:** Never merge PRs, auto-close issues, or run `gh pr create` automatically. Always stop after pushing. The user closes every GitHub issue manually.
 
 ## Steps
 
@@ -58,13 +60,12 @@ Full end-to-end flow for closing an issue: read → branch → implement → tes
     git add -A && git commit -m "Issue #<N>: <short description>"
     ```
 
-11. **Push and open PR**
+11. **Push to origin**
     ```bash
     git push origin issue/<N>-<slug>
-    gh pr create --base master --title "Issue #<N>: <title>" --body "Closes #<N>"
     ```
 
-12. **Close the issue** by merging the PR or marking it done in `ISSUES.md`.
+    Stop here. Do **not** open a PR, merge, or close the issue. The user handles all of that manually.
 
 ## Notes
 - All `ddev` commands run inside the v2 project directory only.
