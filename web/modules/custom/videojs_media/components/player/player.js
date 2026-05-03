@@ -608,7 +608,7 @@
               });
             },
             // phpcs:disable Generic.PHP.UpperCaseConstant
-            { rootMargin: '200px', threshold: 0 },
+            { rootMargin: '0px', threshold: 0.1 },
             // phpcs:enable Generic.PHP.UpperCaseConstant
           );
 
