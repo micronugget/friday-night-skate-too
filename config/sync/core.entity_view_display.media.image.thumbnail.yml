@@ -5,9 +5,10 @@ dependencies:
   config:
     - core.entity_view_mode.media.thumbnail
     - field.field.media.image.field_media_image
-    - image.style.archive_thumbnail
     - media.type.image
+    - responsive_image.styles.archive_responsive
   module:
+    - responsive_image
     - svg_image
 _core:
   default_config_hash: ceRep0KVUM0u_ywhviIBBNwvu_bGObVUqYMJtRS43Vw
@@ -17,10 +18,10 @@ bundle: image
 mode: thumbnail
 content:
   field_media_image:
-    type: image
+    type: responsive_image
     label: hidden
     settings:
-      image_style: archive_thumbnail
+      responsive_image_style: archive_responsive
       image_link: ''
       image_loading:
         attribute: lazy
