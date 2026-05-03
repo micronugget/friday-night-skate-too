@@ -339,7 +339,7 @@
           fluid: true,
           aspectRatio: '16:9',
           controls: true,
-          preload: 'auto',
+          preload: 'none',
         };
 
         // The videojs-youtube plugin registers itself as 'Youtube' (capital Y).
@@ -395,7 +395,8 @@
     img.src     = src;
     img.alt     = alt;
     img.className = 'fns-modal__image';
-    img.loading = 'eager';
+    img.loading = 'lazy';
+    img.decoding = 'async';
 
     wrapper.appendChild(img);
     mediaWrapEl.appendChild(wrapper);
