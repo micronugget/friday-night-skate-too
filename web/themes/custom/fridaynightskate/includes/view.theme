@@ -140,9 +140,31 @@ function fridaynightskate_preprocess_views_view_unformatted(&$variables) {
       }
     }
     elseif (!$is_video && $entity->hasField('field_media_image') && !$entity->get('field_media_image')->isEmpty()) {
-      $file = $entity->get('field_media_image')->entity;
-      if ($file) {
-        $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($file->getFileUri()));
+      $image_item = $entity->get('field_media_image')->first();
+      $image_file = $image_item ? $image_item->entity : NULL;
+      if ($image_file) {
+        // Fallback single URL for non-srcset consumers.
+        $attributes->setAttribute('data-fullsize', $file_url_generator->generateAbsoluteString($image_file->getFileUri()));
+
+        // Render a responsive <picture> so the modal receives a proper srcset
+        // instead of the raw full-resolution file.
+        $responsive_style_id = 'archive_responsive';
+        $responsive_style = \Drupal::entityTypeManager()
+          ->getStorage('responsive_image_style')
+          ->load($responsive_style_id);
+        if ($responsive_style) {
+          $build = [
+            '#theme' => 'responsive_image_formatter',
+            '#item' => $image_item,
+            '#item_attributes' => ['alt' => $entity->label(), 'class' => ['fns-modal__image']],
+            '#responsive_image_style_id' => $responsive_style_id,
+          ];
+          $picture_html = (string) \Drupal::service('renderer')->renderInIsolation($build);
+          if ($picture_html !== '') {
+            $variables['rows'][$id]['poster_template'] = $picture_html;
+            $variables['rows'][$id]['poster_template_id'] = 'poster-picture-' . $id_prefix . $entity->id();
+          }
+        }
       }
     }
     elseif (!$is_video && $entity->hasField('field_media_file') && !$entity->get('field_media_file')->isEmpty()) {
