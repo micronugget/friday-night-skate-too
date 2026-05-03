@@ -276,6 +276,22 @@
         }
       }
       renderVideo(videoUrl, videoId, fullsize, posterFragment);
+    } else if (videoId) {
+      // Still image: prefer the responsive <picture> from the <template> sibling.
+      const tmpl = document.getElementById('poster-picture-' + videoId);
+      if (tmpl) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'fns-modal__image-wrap';
+        wrapper.appendChild(tmpl.content.cloneNode(true));
+        mediaWrapEl.appendChild(wrapper);
+      } else if (fullsize) {
+        renderImage(fullsize, title || '');
+      } else {
+        const thumbImg = item.querySelector('img');
+        if (thumbImg) {
+          renderImage(thumbImg.src, thumbImg.alt || title || '');
+        }
+      }
     } else if (fullsize) {
       renderImage(fullsize, title || '');
     } else {
