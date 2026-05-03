@@ -6,9 +6,9 @@
 ```
 
 ## Purpose
-Full flow for working an issue: read → branch → implement → test → commit → push.
+Full flow for working an issue: read → branch → implement → test → commit → push → open PR.
 
-> **Important:** Never merge PRs, auto-close issues, or run `gh pr create` automatically. Always stop after pushing. The user closes every GitHub issue manually.
+> **Important:** Never auto-merge PRs or close GitHub issues. Always stop after opening the PR. The user approves and closes every GitHub issue manually.
 
 ## Steps
 
@@ -19,7 +19,7 @@ Full flow for working an issue: read → branch → implement → test → commi
 
 2. **Create a branch**
    ```bash
-   git checkout master && git pull origin master && git checkout -b issue/<N>-<slug>
+   git checkout main && git pull origin main && git checkout -b issue/<N>-<slug>
    ```
 
 3. **Read relevant `.junie` instructions**
@@ -65,10 +65,15 @@ Full flow for working an issue: read → branch → implement → test → commi
     git push origin issue/<N>-<slug>
     ```
 
-    Stop here. Do **not** open a PR, merge, or close the issue. The user handles all of that manually.
+12. **Open a PR for the user to approve**
+    ```bash
+    gh pr create --base main --title "Issue #<N>: <title>" --body "Closes #<N>"
+    ```
+
+    Stop here. Do **not** merge the PR or close the issue. The user handles all of that manually.
 
 ## Notes
 - All `ddev` commands run inside the v2 project directory only.
 - Never modify v1 (`/home/lee/ams_projects/2025/week-21/v2/fridaynightskate/`).
 - Branch naming: `issue/$N-<slug>` where slug is a short kebab-case title.
-- All PRs target `master`.
+- All PRs target `main`.
