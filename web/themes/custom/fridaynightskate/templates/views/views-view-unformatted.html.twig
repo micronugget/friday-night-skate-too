@@ -3,11 +3,19 @@
  * @file
  * Theme override to display a view of unformatted rows.
  *
+ * Extends the default unformatted rows template to render a <template> element
+ * as a sibling to each masonry item when a responsive poster picture is
+ * available. modal-viewer.js reads the template via cloneNode(true) instead of
+ * injecting escaped HTML via innerHTML, giving native one-pass parsing and
+ * smaller page weight.
+ *
  * Available variables:
  * - title: The title of this group of rows. May be empty.
  * - rows: A list of the view's row items.
  *   - attributes: The row's HTML attributes.
  *   - content: The row's content.
+ *   - poster_template: (optional) Raw <picture> HTML for the poster overlay.
+ *   - poster_template_id: (optional) The id attribute for the <template> element.
  * - view: The view object.
  * - default_row_class: A flag indicating whether default classes should be
  *   used on rows.
@@ -15,4 +23,14 @@
  * @see template_preprocess_views_view_unformatted()
  */
 #}
-{% include "radix:views-view--unformatted" %}
+{% if title %}
+  <h3>{{ title }}</h3>
+{% endif %}
+{% for row in rows %}
+  <div{{ row.attributes }}>
+    {{- row.content -}}
+  </div>
+  {% if row.poster_template %}
+    <template id="{{ row.poster_template_id }}">{{ row.poster_template|raw }}</template>
+  {% endif %}
+{% endfor %}
