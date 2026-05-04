@@ -85,9 +85,12 @@
           console.error('Error initializing videojs-hotkeys plugin:', e);
         }
 
-        // Initialize the mobile UI plugin
+        // Initialize the mobile UI plugin — touch devices only.
+        // The TouchOverlay component intercepts all clicks (even on desktop)
+        // and waits for tapTimeout before acting, causing a perceived
+        // "double-click to play" on non-touch devices. Gate on touch support.
         try {
-          if (player.mobileUi) {
+          if (player.mobileUi && (window.videojs.browser.IS_ANDROID || window.videojs.browser.IS_IOS || ('ontouchstart' in window))) {
             // phpcs:disable Generic.PHP.UpperCaseConstant
             player.mobileUi({
               fullscreen: {

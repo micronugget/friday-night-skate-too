@@ -307,98 +307,95 @@
     }
   }
   function renderVideo(src, videoId, poster, posterFragment) {
-    // Always use a unique element ID to avoid VideoJS conflicts when the same
-    // video is opened more than once in a session.
-    var uid = "fns-modal-video-".concat(Date.now());
     var isYoutube = src.includes('youtube.com') || src.includes('youtu.be');
-    var wrapper = document.createElement('div');
-    wrapper.className = 'fns-modal__video-wrap';
+
+    // Create the VideoJS Media SDC-style facade.
+    // This allows the videojs_media module's behavior to handle initialization.
+    var facade = document.createElement('div');
+    facade.className = 'videojs-lazy-facade';
+    facade.setAttribute('data-lazy-player', 'true');
+    facade.setAttribute('data-lazy-player-click-only', 'true'); // Don't auto-init via IntersectionObserver
+
+    // Poster
+    if (posterFragment) {
+      var posterWrapper = document.createElement('div');
+      posterWrapper.className = 'videojs-lazy-facade__poster';
+      posterWrapper.setAttribute('aria-hidden', 'true');
+      posterWrapper.appendChild(posterFragment);
+      facade.appendChild(posterWrapper);
+    } else if (poster) {
+      var posterImg = document.createElement('img');
+      posterImg.className = 'videojs-lazy-facade__poster';
+      posterImg.src = poster;
+      posterImg.setAttribute('aria-hidden', 'true');
+      facade.appendChild(posterImg);
+    }
+
+    // Play button - the "look" will be handled by SCSS to match thumbnails
+    var playBtn = document.createElement('button');
+    playBtn.className = 'videojs-lazy-facade__play-btn';
+    playBtn.type = 'button';
+    playBtn.setAttribute('aria-label', Drupal.t('Play video'));
+    playBtn.innerHTML = "<span class=\"videojs-lazy-facade__play-icon\" aria-hidden=\"true\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M8 5v14l11-7z\"/></svg></span>";
+    facade.appendChild(playBtn);
+
+    // Hidden video element
     var video = document.createElement('video');
-    video.id = uid;
-    video.className = 'video-js vjs-default-skin vjs-big-play-centered';
+    video.className = 'video-js videojs-lazy-target vjs-default-skin vjs-big-play-centered';
+    video.setAttribute('preload', 'none');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
-
-    // Poster strategy:
-    //   1. If a responsive <picture> fragment was cloned from the <template>
-    //      sibling, do NOT set `video.poster` (which only takes a single URL
-    //      and triggers a full-res download). Instead, inject the <picture> as
-    //      an overlay so the browser resolves the srcset natively.
-    //   2. Otherwise, fall back to the single-URL `poster` attribute.
-    if (!posterFragment && poster) {
-      video.poster = poster;
-    }
     var source = document.createElement('source');
     source.src = src;
     source.type = isYoutube ? 'video/youtube' : 'video/mp4';
     video.appendChild(source);
-    wrapper.appendChild(video);
-    if (posterFragment) {
-      var posterOverlay = document.createElement('div');
-      posterOverlay.className = 'fns-modal__video-poster';
-      posterOverlay.setAttribute('aria-hidden', 'true');
-      posterOverlay.appendChild(posterFragment);
-      // The overlay sits over the video until VideoJS shows its own UI.
-      // VideoJS will paint its own internal poster on top once the player
-      // initialises; until then this <picture> is what the user sees.
-      wrapper.appendChild(posterOverlay);
-    }
+    facade.appendChild(video);
+    var wrapper = document.createElement('div');
+    wrapper.className = 'fns-modal__video-wrap';
+    wrapper.appendChild(facade);
     mediaWrapEl.appendChild(wrapper);
 
-    // Initialise VideoJS if available.
-    if (typeof videojs !== 'undefined') {
-      setTimeout(function () {
-        var options = {
-          fluid: true,
-          aspectRatio: '16:9',
-          controls: true,
-          preload: 'none'
+    // Initialise via the VideoJS Media behavior
+    if (Drupal.behaviors.videojsMediablockPlayerInit) {
+      // We don't autoplay immediately because we want the user to see the play icon
+      // and click it, as requested in the issue.
+      Drupal.behaviors.videojsMediablockPlayerInit.initPlayerFromFacade(facade, false);
+
+      // Grab the player instance once initialized
+      var vjsEl = facade.querySelector('.videojs-lazy-target');
+      if (vjsEl && vjsEl.player) {
+        vjsPlayer = vjsEl.player;
+        setupModalPlayerHotkeys();
+      } else {
+        // If it's not ready immediately, wait for the event
+        var _onPlayerReady = function onPlayerReady(e) {
+          if (e.detail.el() === vjsEl) {
+            vjsPlayer = e.detail;
+            setupModalPlayerHotkeys();
+            document.removeEventListener('videojs-player-ready', _onPlayerReady);
+          }
         };
-
-        // The videojs-youtube plugin registers itself as 'Youtube' (capital Y).
-        // For YouTube sources it must be first in techOrder; for plain mp4 we
-        // only need html5.
-        if (isYoutube) {
-          options.techOrder = ['youtube', 'html5'];
-          // youtube tech requires the src on the options object, not just the
-          // <source> element, to initialise correctly.
-          options.sources = [{
-            src: src,
-            type: 'video/youtube'
-          }];
-        } else {
-          options.techOrder = ['html5'];
+        document.addEventListener('videojs-player-ready', _onPlayerReady);
+      }
+    }
+  }
+  function setupModalPlayerHotkeys() {
+    if (!vjsPlayer) return;
+    try {
+      vjsPlayer.hotkeys({
+        volumeStep: 0.1,
+        seekStep: 5,
+        enableModifiersForNumbers: false,
+        enableVolumeScroll: false,
+        enableHoverScroll: false,
+        alwaysCaptureHotkeys: true,
+        captureDocumentHotkeys: true,
+        documentHotkeysFocusElementFilter: function documentHotkeysFocusElementFilter() {
+          return modalEl && modalEl.classList.contains('is-open');
         }
-        vjsPlayer = videojs(uid, options);
-
-        // Register with the videojs_media behavior so mobile-ui and
-        // one-at-a-time playback are initialised on this player instance.
-        vjsPlayer.ready(function () {
-          if (Drupal.behaviors.videojsMediablockPlayer) {
-            Drupal.behaviors.videojsMediablockPlayer.registerPlayer(vjsPlayer);
-          }
-          // Re-initialise hotkeys with alwaysCaptureHotkeys so they work
-          // inside the modal regardless of which element holds focus.
-          // This overrides the default hotkeys setup from registerPlayer.
-          try {
-            vjsPlayer.hotkeys({
-              volumeStep: 0.1,
-              seekStep: 5,
-              enableModifiersForNumbers: false,
-              enableVolumeScroll: false,
-              enableHoverScroll: false,
-              alwaysCaptureHotkeys: true,
-              captureDocumentHotkeys: true,
-              documentHotkeysFocusElementFilter: function documentHotkeysFocusElementFilter() {
-                // Accept hotkeys when any element inside the modal has focus.
-                return modalEl && modalEl.classList.contains('is-open');
-              }
-            });
-          } catch (e) {
-            // Fallback: hotkeys plugin not available.
-          }
-        });
-      }, 50);
+      });
+    } catch (e) {
+      /* ignore */
     }
   }
   function renderImage(src, alt) {
