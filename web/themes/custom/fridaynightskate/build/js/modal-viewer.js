@@ -355,29 +355,56 @@
     wrapper.appendChild(facade);
     mediaWrapEl.appendChild(wrapper);
 
-    // Initialise via the VideoJS Media behavior
-    if (Drupal.behaviors.videojsMediablockPlayerInit) {
-      // We don't autoplay immediately because we want the user to see the play icon
-      // and click it, as requested in the issue.
-      Drupal.behaviors.videojsMediablockPlayerInit.initPlayerFromFacade(facade, false);
-
-      // Grab the player instance once initialized
-      var vjsEl = facade.querySelector('.videojs-lazy-target');
-      if (vjsEl && vjsEl.player) {
-        vjsPlayer = vjsEl.player;
-        setupModalPlayerHotkeys();
-      } else {
-        // If it's not ready immediately, wait for the event
-        var _onPlayerReady = function onPlayerReady(e) {
-          if (e.detail.el() === vjsEl) {
-            vjsPlayer = e.detail;
-            setupModalPlayerHotkeys();
-            document.removeEventListener('videojs-player-ready', _onPlayerReady);
-          }
-        };
-        document.addEventListener('videojs-player-ready', _onPlayerReady);
+    // Wire up the play button.
+    //
+    // We deliberately do NOT eagerly call initPlayerFromFacade() here:
+    // doing so immediately hides the facade poster + play button (see
+    // videojs_media/components/player/player.js initPlayerFromFacade,
+    // lines 477–485), which defeats the whole purpose of showing the
+    // golden play icon as a click-to-play affordance.
+    //
+    // Instead, we attach the same click handler that the videojs_media
+    // module's own behavior would attach (player.js line 570):
+    // initPlayerFromFacade(facade, /*autoplay*/ true). Because the call
+    // happens inside a real user-gesture handler, the browser's autoplay
+    // policy is satisfied and VideoJS starts playback in a single click.
+    //
+    // We bypass Drupal.attachBehaviors() because the videojs_media
+    // behavior uses once('videojs-facade-click', ...). The Drupal `once`
+    // registry is shared globally, and on busy pages it can already have
+    // registered other facades, so re-attaching against a wrapper does
+    // not always re-run the click-binding for new modal facades.
+    // Calling initPlayerFromFacade() directly is the canonical action
+    // and avoids that ambiguity entirely.
+    var onPlayClick = function onModalFacadeActivate(e) {
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
       }
-    }
+      if (Drupal.behaviors.videojsMediablockPlayerInit) {
+        Drupal.behaviors.videojsMediablockPlayerInit.initPlayerFromFacade(facade, true);
+      }
+    };
+    playBtn.addEventListener('click', onPlayClick);
+    playBtn.addEventListener('keydown', function onModalFacadeKey(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onPlayClick();
+      }
+    });
+
+    // Capture the player instance for hotkeys + cleanup once VideoJS is ready.
+    var onPlayerReady = function onModalPlayerReady(evt) {
+      var player = evt.detail;
+      if (!player) return;
+      var vjsEl = facade.querySelector('.videojs-lazy-target');
+      if (player.el() === vjsEl || vjsEl && vjsEl.contains(player.el())) {
+        vjsPlayer = player;
+        setupModalPlayerHotkeys();
+        document.removeEventListener('videojs-player-ready', onPlayerReady);
+      }
+    };
+    document.addEventListener('videojs-player-ready', onPlayerReady);
   }
   function setupModalPlayerHotkeys() {
     if (!vjsPlayer) return;
