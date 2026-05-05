@@ -278,6 +278,18 @@
         margin-left: 10%; // optical centre for play triangle
       }
     }
+
+    // Once the videojs_media SDC API has initialised the player it sets
+    // `data-videojs-facade-initialized` on the facade. At that point the
+    // poster + play-button must disappear permanently (matching the
+    // inline display:none the API also sets — this CSS guarantees the
+    // outcome regardless of any nested-selector specificity).
+    &[data-videojs-facade-initialized] {
+      .videojs-lazy-facade__poster,
+      .videojs-lazy-facade__play-btn {
+        display: none !important;
+      }
+    }
   }
 
   // ── VideoJS — Starry Night skin ──────────────────────────────────────────
@@ -331,33 +343,11 @@
       color: var(--starry-golden, #ffd700);
     }
 
-    // Big play button — centred, gold ring
+    // Big play button — hidden in the modal. Our golden facade button is
+    // the sole click-to-play affordance; the native VJS big-play-button
+    // would otherwise flash briefly between click and playback start.
     .vjs-big-play-button {
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 72px;
-      height: 72px;
-      line-height: 72px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 215, 0, 0.7);
-      background: rgba(4, 6, 14, 0.65);
-      color: var(--starry-golden, #ffd700);
-      transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-
-      .vjs-icon-placeholder::before {
-        color: var(--starry-golden, #ffd700);
-        font-size: 2rem;
-        line-height: 72px;
-      }
-
-      &:hover,
-      &:focus {
-        background: rgba(255, 215, 0, 0.15);
-        border-color: var(--starry-golden, #ffd700);
-        box-shadow: 0 0 28px rgba(255, 215, 0, 0.4);
-        outline: none;
-      }
+      display: none !important;
     }
 
     // Time display

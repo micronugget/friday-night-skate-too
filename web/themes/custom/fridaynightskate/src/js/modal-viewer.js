@@ -380,8 +380,54 @@
         e.preventDefault();
         e.stopPropagation();
       }
-      if (Drupal.behaviors.videojsMediablockPlayerInit) {
-        Drupal.behaviors.videojsMediablockPlayerInit.initPlayerFromFacade(facade, true);
+      const behavior = Drupal.behaviors.videojsMediablockPlayerInit;
+      if (!behavior || typeof window.videojs === 'undefined') {
+        return;
+      }
+
+      // ── Step 1: Kick-start native playback SYNCHRONOUSLY inside the
+      // user-gesture call stack so the browser's autoplay-policy token
+      // is captured before any async work begins.
+      //
+      // VideoJS wraps the *existing* <video> element rather than replacing
+      // it, so the in-flight play promise initiated here survives the
+      // VideoJS init and the browser considers the subsequent play() calls
+      // from within the VideoJS `ready` callback as continuation of the
+      // same gesture.
+      const videoEl = facade.querySelector('.videojs-lazy-target');
+      if (videoEl) {
+        videoEl.setAttribute('preload', 'auto');
+        const nativePlay = videoEl.play();
+        if (nativePlay && typeof nativePlay.catch === 'function') {
+          nativePlay.catch(function () { /* blocked by policy — VideoJS ready() will retry */ });
+        }
+      }
+
+      // ── Step 2: Hand off to the videojs_media SDC API.
+      // initPlayerFromFacade(facade, false) hides the poster + play button,
+      // wraps the <video> in a VideoJS instance, and wires up all the
+      // module's event plumbing. We pass autoplay=false because we already
+      // started native playback above; passing true would trigger a second
+      // async play() via `autoplay: 'any'` which can race with our own.
+      behavior.initPlayerFromFacade(facade, false);
+
+      // ── Step 3: Belt-and-suspenders inside the VideoJS ready callback.
+      // By the time this fires the browser's gesture token may technically
+      // be expired, but most browsers honour the *continuation* of a play
+      // call started synchronously in the same gesture. We hide the native
+      // big-play-button (our facade button is the only affordance) and
+      // call play() if the native kick-start was blocked.
+      if (videoEl) {
+        try {
+          const playerInstance = window.videojs(videoEl);
+          playerInstance.ready(function readyPlay() {
+            this.bigPlayButton.hide();
+            if (this.paused()) {
+              const p = this.play();
+              if (p && typeof p.catch === 'function') { p.catch(function () {}); }
+            }
+          });
+        } catch (_) { /* ignore */ }
       }
     };
     playBtn.addEventListener('click', onPlayClick);
@@ -399,6 +445,17 @@
       const vjsEl = facade.querySelector('.videojs-lazy-target');
       if (player.el() === vjsEl || (vjsEl && vjsEl.contains(player.el()))) {
         vjsPlayer = player;
+        // Ensure the native big-play-button is hidden in the modal — our
+        // golden facade button is the sole play affordance.
+        try { vjsPlayer.bigPlayButton.hide(); } catch (_) { /* ignore */ }
+        // If the player is still paused (autoplay was silently blocked),
+        // start playback now. The `videojs-player-ready` event fires from
+        // inside the VideoJS `ready` callback, which is still within the
+        // original user-gesture call stack on most browsers.
+        if (vjsPlayer.paused()) {
+          const p = vjsPlayer.play();
+          if (p && typeof p.catch === 'function') { p.catch(function () {}); }
+        }
         setupModalPlayerHotkeys();
         document.removeEventListener('videojs-player-ready', onPlayerReady);
       }
