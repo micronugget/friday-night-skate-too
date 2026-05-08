@@ -43,6 +43,12 @@
         "drupal/geofield": "^10",
         "drupal/linkit": "^7",
         "drupal/matomo": "^2.0@alpha",
+        "drupal/migrate_devel": "^3",
+        "drupal/migrate_file": "3.0.0-alpha1",
+        "drupal/migrate_plus": "^6",
+        "drupal/migrate_source_csv": "^3",
+        "drupal/migrate_tools": "^6",
+        "drupal/migration_tools": "^2",
         "drupal/modeler_api": "^1",
         "drupal/pathauto": "^1.13",
         "drupal/radix": "^6",
@@ -55,7 +61,10 @@
         "drupal/trash": "^3.0.13",
         "drupal/webform": "@beta",
         "google/apiclient": "^2",
-        "php-ffmpeg/php-ffmpeg": "^1"
+        "league/csv": "^9",
+        "php-ffmpeg/php-ffmpeg": "^1",
+        "symfony/css-selector": "^7",
+        "symfony/dom-crawler": "^7"
     },
     "require-dev": {
         "drupal/coder": "^8.3",
