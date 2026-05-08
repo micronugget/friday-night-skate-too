@@ -1,0 +1,16 @@
+name: 'Friday Night Skate Content Migration'
+type: module
+description: 'Imports legacy fridaynightskate.com content (routes, skates, news, pages, media).'
+core_version_requirement: ^11.3
+package: 'Friday Night Skate'
+dependencies:
+  - drupal:migrate
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools
+  - migration_tools:migration_tools
+  - drupal:node
+  - drupal:taxonomy
+  - drupal:media
+  - drupal:file
+  - drupal:path_alias
+  - redirect:redirect

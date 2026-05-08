@@ -1,0 +1,9 @@
+id: fns
+label: 'Friday Night Skate v1 → v2'
+description: 'All content imported from fridaynightskate.com.'
+source_type: 'fridaynightskate.com (HTML/JSON)'
+shared_configuration:
+  source:
+    constants:
+      base_url: 'https://fridaynightskate.com'
+      cache_dir: 'private://fns_migrate_cache'

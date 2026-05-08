@@ -1,0 +1,16 @@
+uuid: 652a1864-8b36-4236-ad21-e87d387d840f
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: OdsPkTGysNF2rX0pDNnT61zgFovpa-SOe_sVY564SgU
+id: fns
+label: 'Friday Night Skate v1 → v2'
+description: 'All content imported from fridaynightskate.com.'
+source_type: 'fridaynightskate.com (HTML/JSON)'
+module: null
+shared_configuration:
+  source:
+    constants:
+      base_url: 'https://fridaynightskate.com'
+      cache_dir: 'private://fns_migrate_cache'

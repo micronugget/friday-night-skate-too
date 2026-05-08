@@ -44,6 +44,7 @@ module:
   file_upload_secure_validator: 0
   filter: 0
   fns_archive: 0
+  fns_migrate: 0
   focal_point: 0
   friendlycaptcha: 0
   geofield: 0
