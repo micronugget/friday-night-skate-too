@@ -30,6 +30,7 @@ content:
     region: content
 hidden:
   created: true
+  field_skate_date: true
   name: true
   thumbnail: true
   uid: true
