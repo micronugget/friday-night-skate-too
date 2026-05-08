@@ -1,0 +1,23 @@
+uuid: 2f5ad495-6635-4d5b-9ac7-45ab3cd9d7c5
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: Ggc3BCkigix90f0TKPBzyC26jGm6SzFD2zL23l-VFAQ
+id: node.field_legacy_id
+field_name: field_legacy_id
+entity_type: node
+type: string
+settings:
+  max_length: 64
+  case_sensitive: false
+  is_ascii: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

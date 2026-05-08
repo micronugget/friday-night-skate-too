@@ -1,0 +1,31 @@
+uuid: 43c20cb6-200b-4e9c-9017-834cd52c4303
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_collections
+    - node.type.route
+    - taxonomy.vocabulary.route_collection
+_core:
+  default_config_hash: qsozSTKbO6mCH2DGXUhOGvPRjYgUSjvcILNB5Eu4tPA
+id: node.route.field_collections
+field_name: field_collections
+entity_type: node
+bundle: route
+label: Collections
+description: 'Route collections this route belongs to (e.g. Friday Night Skate, Sunday Morning, Amsterdam).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      route_collection: route_collection
+    sort:
+      field: name
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

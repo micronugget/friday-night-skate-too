@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_point
+    - node.type.route
+  module:
+    - geofield
+id: node.route.field_start_point
+field_name: field_start_point
+entity_type: node
+bundle: route
+label: 'Start point'
+description: 'GPS coordinates of the route start, derived from the first <trkpt> in the GPX file.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  backend: geofield_backend_default
+field_type: geofield

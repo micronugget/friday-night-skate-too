@@ -1,0 +1,22 @@
+uuid: 3990ee38-6b5c-427a-b769-4f732a0e0f2a
+langcode: en
+status: true
+dependencies:
+  module:
+    - geofield
+    - node
+_core:
+  default_config_hash: xNQkgVHsQE4UirhMBeN85nPpDHDDhWCH8L0i4cjeOvw
+id: node.field_track_geometry
+field_name: field_track_geometry
+entity_type: node
+type: geofield
+settings:
+  backend: geofield_backend_default
+module: geofield
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

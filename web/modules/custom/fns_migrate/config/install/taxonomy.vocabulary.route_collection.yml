@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_migrate
+name: 'Route Collection'
+vid: route_collection
+description: 'Groupings for skating routes (e.g. Friday Night Skate, Sunday Morning, Amsterdam).'
+weight: 0
+new_revision: true

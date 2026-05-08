@@ -1,0 +1,25 @@
+uuid: ab5d3c0e-77c9-4b37-963e-c6eb13874cb4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_distance_km
+    - node.type.route
+_core:
+  default_config_hash: Kabgh0Cdyxyr0SofuaWbFUr7KYK5PSh8OIybgS072Jk
+id: node.route.field_distance_km
+field_name: field_distance_km
+entity_type: node
+bundle: route
+label: 'Distance (km)'
+description: 'Total length of the route in kilometres (e.g. 21.48).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ' km'
+field_type: decimal

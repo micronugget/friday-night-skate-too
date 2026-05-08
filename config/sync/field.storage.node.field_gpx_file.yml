@@ -1,0 +1,25 @@
+uuid: f09ebb62-95b0-49f5-a860-67b5da06d62e
+langcode: en
+status: true
+dependencies:
+  module:
+    - file
+    - node
+_core:
+  default_config_hash: Cbs3EV913z9DBGw1Fwk5q_DX6DsuTtIYdWC2tUSrnMo
+id: node.field_gpx_file
+field_name: field_gpx_file
+entity_type: node
+type: file
+settings:
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  target_type: file
+module: file
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,38 @@
+uuid: 20084e96-f140-4888-a522-a3728714c474
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+_core:
+  default_config_hash: EtihI0zcsCne_bN1GDjBOSrOf7L8aCXWbCPOrmio7qU
+id: node.field_difficulty
+field_name: field_difficulty
+entity_type: node
+type: list_integer
+settings:
+  allowed_values:
+    -
+      value: 1
+      label: '1/5 — Easy'
+    -
+      value: 2
+      label: '2/5 — Easy/Moderate'
+    -
+      value: 3
+      label: '3/5 — Moderate'
+    -
+      value: 4
+      label: '4/5 — Hard'
+    -
+      value: 5
+      label: '5/5 — Very Hard'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

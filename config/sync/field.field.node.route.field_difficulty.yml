@@ -1,0 +1,23 @@
+uuid: e079929c-ed10-4da0-834e-ce31f832af62
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_difficulty
+    - node.type.route
+  module:
+    - options
+_core:
+  default_config_hash: N6SA33tpeCNJFEjI1QryR8Q3jfFZeQepHDbve_iU7QE
+id: node.route.field_difficulty
+field_name: field_difficulty
+entity_type: node
+bundle: route
+label: Difficulty
+description: 'Difficulty rating from 1 (easy) to 5 (very hard), matching the legacy v1 1/5 … 5/5 scale.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_integer

@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Install/uninstall hooks for the Friday Night Skate Content Migration module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\NodeType;
+
+/**
+ * Implements hook_install().
+ *
+ * Adds the shared core "body" field to the route content type. The body field
+ * storage lives in the Standard install profile, not the node module, so we
+ * cannot ship it as plain config/install/ YAML — we (re)create the storage
+ * if missing and attach a bundle instance to the route content type.
+ */
+function fns_migrate_install(): void {
+  $route = NodeType::load('route');
+  if ($route === NULL) {
+    return;
+  }
+
+  // Ensure the shared node.body storage exists.
+  $storage = FieldStorageConfig::loadByName('node', 'body');
+  if ($storage === NULL) {
+    $storage = FieldStorageConfig::create([
+      'field_name' => 'body',
+      'entity_type' => 'node',
+      'type' => 'text_with_summary',
+      'cardinality' => 1,
+    ]);
+    $storage->save();
+  }
+
+  // Attach a body instance to the route bundle.
+  $instance = FieldConfig::loadByName('node', 'route', 'body');
+  if ($instance === NULL) {
+    FieldConfig::create([
+      'field_storage' => $storage,
+      'bundle' => 'route',
+      'label' => 'Body',
+      'settings' => [
+        'display_summary' => TRUE,
+        'allowed_formats' => [],
+      ],
+    ])->save();
+  }
+}

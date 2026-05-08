@@ -1,0 +1,22 @@
+uuid: 2ec7f62c-8a21-4244-b4e3-49f7458683f4
+langcode: en
+status: true
+dependencies:
+  module:
+    - geofield
+    - node
+_core:
+  default_config_hash: 6tBaoU6el6oXq98fC5aP-Yk_8UYjs0-ZSD67ipoCay8
+id: node.field_start_point
+field_name: field_start_point
+entity_type: node
+type: geofield
+settings:
+  backend: geofield_backend_default
+module: geofield
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

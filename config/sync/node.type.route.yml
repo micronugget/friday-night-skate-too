@@ -1,0 +1,16 @@
+uuid: 71b9565f-9d63-4b36-9ec5-07fafd079545
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_migrate
+_core:
+  default_config_hash: yojA62W8lWvn9j2JRzcNl_pIMWLtlB9Ny-1eaCLDoqA
+name: Route
+type: route
+description: 'A skating route imported from the legacy Friday Night Skate site. Includes distance, difficulty, GPX track and start point.'
+help: 'Create a skating route. Upload a GPX file to generate the track geometry and start point. Provide a hero image, difficulty rating and distance in kilometres.'
+new_revision: true
+preview_mode: 1
+display_submitted: true

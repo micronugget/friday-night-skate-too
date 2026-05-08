@@ -1,0 +1,14 @@
+uuid: 2cd34cfc-3996-4e14-a4cc-2733511e9793
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_migrate
+_core:
+  default_config_hash: 4soocs7d0CqcRnzB1OJcavBcQ77ktuIe8Uv6nPLO1_8
+name: 'Route Collection'
+vid: route_collection
+description: 'Groupings for skating routes (e.g. Friday Night Skate, Sunday Morning, Amsterdam).'
+weight: 0
+new_revision: true
