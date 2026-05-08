@@ -1,0 +1,7 @@
+# Services for the fns_migrate module.
+#
+# Why: services are wired here as the scaffold for later issues (HTTP client
+# wrapper, link rewriter, etc.). Concrete services are added per their owning
+# migration issue (#M-3+). Constructor injection only — no \Drupal::service()
+# calls inside service classes.
+services: {}
