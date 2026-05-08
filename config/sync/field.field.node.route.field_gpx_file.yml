@@ -1,0 +1,29 @@
+uuid: df1cf276-bbd4-4960-bc09-6fc10c1ff539
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gpx_file
+    - node.type.route
+  module:
+    - file
+_core:
+  default_config_hash: X8xhmSnaojB_ClueLIlAh8R7B4MKf53NM6YysSpnC0c
+id: node.route.field_gpx_file
+field_name: field_gpx_file
+entity_type: node
+bundle: route
+label: 'Track (GPX)'
+description: 'GPX file containing the route track. Used to derive the start point and track geometry.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: 'routes/[date:custom:Y]-[date:custom:m]'
+  file_extensions: gpx
+  max_filesize: '8 MB'
+  description_field: false
+field_type: file

@@ -1,0 +1,23 @@
+uuid: 62334dc8-e0e8-41f2-891b-09d78fa2e1eb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_point
+    - node.type.route
+  module:
+    - geofield
+_core:
+  default_config_hash: wMP9MywW_Rn6OyeiToa4Aoip3mE4Idv1qj8nwQ-CCJQ
+id: node.route.field_start_point
+field_name: field_start_point
+entity_type: node
+bundle: route
+label: 'Start point'
+description: 'GPS coordinates of the route start, derived from the first <trkpt> in the GPX file.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geofield

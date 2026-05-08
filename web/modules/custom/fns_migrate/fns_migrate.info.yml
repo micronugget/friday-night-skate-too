@@ -12,5 +12,9 @@ dependencies:
   - drupal:taxonomy
   - drupal:media
   - drupal:file
+  - drupal:options
+  - drupal:link
+  - drupal:text
   - drupal:path_alias
+  - geofield:geofield
   - redirect:redirect

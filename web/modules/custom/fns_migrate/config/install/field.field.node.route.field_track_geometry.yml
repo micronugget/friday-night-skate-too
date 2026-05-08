@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_track_geometry
+    - node.type.route
+  module:
+    - geofield
+id: node.route.field_track_geometry
+field_name: field_track_geometry
+entity_type: node
+bundle: route
+label: 'Track geometry'
+description: 'Linestring of all <trkpt> coordinates parsed from the GPX file.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  backend: geofield_backend_default
+field_type: geofield

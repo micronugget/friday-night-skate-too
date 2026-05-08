@@ -1,0 +1,31 @@
+uuid: 31abc356-0c6f-4df9-91d8-e43c7312f0ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_hero_image
+    - media.type.image
+    - node.type.route
+_core:
+  default_config_hash: 7sUlTq-6zb381cKq108-tOxGDrVBMjivnzDx2g9Nugs
+id: node.route.field_hero_image
+field_name: field_hero_image
+entity_type: node
+bundle: route
+label: 'Hero image'
+description: "Hero image for the route, scraped from the legacy site's og:image meta tag."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
