@@ -29,7 +29,11 @@ use Symfony\Component\DomCrawler\Crawler;
  * Configuration keys (all optional, sensible defaults):
  *   base_url:    Origin of the legacy site. Default
  *                'https://fridaynightskate.com'.
- *   index_path:  Path of the paginated index. Default '/skate'.
+ *   ids:         Optional explicit list of numeric event IDs to fetch. When
+ *                provided the paginated index is skipped entirely and each
+ *                ID is fetched as `{base_url}/skate/{id}`.
+ *   index_path:  Path of the paginated index. Default '/skate'. Ignored
+ *                when `ids` is provided.
  *   page_query:  Query parameter used for pagination. Default 'page'.
  *   first_page:  First page number. Default 1.
  *   max_pages:   Hard cap on pages to walk (safety net). Default 50.
@@ -72,6 +76,13 @@ class FnsSkateEventHtml extends SourcePluginBase implements ContainerFactoryPlug
   protected int $maxPages;
 
   /**
+   * Explicit ID list (bypasses index crawl when non-empty).
+   *
+   * @var int[]
+   */
+  protected array $ids;
+
+  /**
    * Constructs a FnsSkateEventHtml source plugin.
    *
    * @param array $configuration
@@ -98,6 +109,7 @@ class FnsSkateEventHtml extends SourcePluginBase implements ContainerFactoryPlug
     $this->pageQuery = (string) ($configuration['page_query'] ?? self::DEFAULT_PAGE_QUERY);
     $this->firstPage = (int) ($configuration['first_page'] ?? 1);
     $this->maxPages = (int) ($configuration['max_pages'] ?? self::DEFAULT_MAX_PAGES);
+    $this->ids = array_map('intval', (array) ($configuration['ids'] ?? []));
   }
 
   /**
@@ -158,6 +170,11 @@ class FnsSkateEventHtml extends SourcePluginBase implements ContainerFactoryPlug
    * See issues-blogger-content-migration.md for rationale.
    */
   protected function initializeIterator(): \Iterator {
+    if ($this->ids !== []) {
+      yield from $this->iterateIds();
+      return;
+    }
+
     $seen = [];
     $page = $this->firstPage;
     $walked = 0;
@@ -204,6 +221,24 @@ class FnsSkateEventHtml extends SourcePluginBase implements ContainerFactoryPlug
 
       $page++;
       $walked++;
+    }
+  }
+
+  /**
+   * Iterate over the explicit ID list, fetching each detail page directly.
+   */
+  protected function iterateIds(): \Iterator {
+    foreach ($this->ids as $id) {
+      $slug = (string) $id;
+      $detailUrl = $this->baseUrl . '/skate/' . $slug;
+      $detailHtml = $this->httpClient->fetch($detailUrl, 'skates', $slug);
+      if ($this->isLiveTrackerPage($detailHtml)) {
+        continue;
+      }
+      $row = $this->parseDetail($detailUrl, $slug, $detailHtml);
+      if ($row !== NULL) {
+        yield $row;
+      }
     }
   }
 

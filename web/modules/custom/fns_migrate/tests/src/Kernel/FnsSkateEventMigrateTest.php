@@ -65,10 +65,8 @@ class FnsSkateEventMigrateTest extends MigrateTestBase {
     $fixtures = __DIR__ . '/../../fixtures/skates';
     $base = 'https://legacy.test';
     $stub = new FixtureSkateEventHttpClient([
-      $base . '/skate'          => $fixtures . '/index-1.html',
-      $base . '/skate?page=2'   => $fixtures . '/index-2.html',
-      $base . '/skate/friday-night-canal-run'   => $fixtures . '/friday-night-canal-run.html',
-      $base . '/skate/old-town-evening-skate'   => $fixtures . '/old-town-evening-skate.html',
+      $base . '/skate/1' => $fixtures . '/friday-night-canal-run.html',
+      $base . '/skate/2' => $fixtures . '/old-town-evening-skate.html',
     ]);
     $this->container->set('fns_migrate.http_client', $stub);
   }
@@ -80,6 +78,7 @@ class FnsSkateEventMigrateTest extends MigrateTestBase {
     $migration = $this->getMigration('fns_skate_event');
     $source = $migration->getSourceConfiguration();
     $source['base_url'] = 'https://legacy.test';
+    $source['ids'] = [1, 2];
     $migration->set('source', $source);
     $this->executeMigration($migration);
 
@@ -88,7 +87,7 @@ class FnsSkateEventMigrateTest extends MigrateTestBase {
       ->accessCheck(FALSE)
       ->execute();
 
-    // Two unique slugs from the fixtures (duplicate + /live URL are skipped).
+    // Two events fetched directly by ID from fixtures.
     $this->assertCount(2, $nids, 'Two event nodes created.');
 
     $nodes = Node::loadMultiple($nids);
