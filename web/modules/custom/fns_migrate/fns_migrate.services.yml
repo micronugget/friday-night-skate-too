@@ -4,4 +4,14 @@
 # wrapper, link rewriter, etc.). Concrete services are added per their owning
 # migration issue (#M-3+). Constructor injection only — no \Drupal::service()
 # calls inside service classes.
-services: {}
+services:
+  logger.channel.fns_migrate:
+    parent: logger.channel_base
+    arguments: ['fns_migrate']
+
+  fns_migrate.http_client:
+    class: Drupal\fns_migrate\Service\FnsHttpClient
+    arguments:
+      - '@http_client'
+      - '@file_system'
+      - '@logger.channel.fns_migrate'
