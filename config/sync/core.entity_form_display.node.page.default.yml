@@ -6,9 +6,12 @@ dependencies:
     - field.field.node.page.field_content
     - field.field.node.page.field_description
     - field.field.node.page.field_featured_image
+    - field.field.node.page.field_legacy_id
+    - field.field.node.page.field_legacy_url
     - field.field.node.page.field_tags
     - node.type.page
   module:
+    - content_moderation
     - media_library
     - path
     - scheduler
@@ -150,4 +153,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_legacy_id: true
+  field_legacy_url: true
   url_redirects: true

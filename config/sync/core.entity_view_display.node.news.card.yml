@@ -7,6 +7,8 @@ dependencies:
     - field.field.node.news.field_content
     - field.field.node.news.field_description
     - field.field.node.news.field_featured_image
+    - field.field.node.news.field_legacy_id
+    - field.field.node.news.field_legacy_url
     - field.field.node.news.field_tags
     - node.type.news
   module:
@@ -37,5 +39,7 @@ content:
 hidden:
   content_moderation_control: true
   field_content: true
+  field_legacy_id: true
+  field_legacy_url: true
   field_tags: true
   links: true

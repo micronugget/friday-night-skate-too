@@ -1,0 +1,16 @@
+uuid: 573db288-a008-43b8-b18c-d62fdd84fbbb
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - fns_migrate
+_core:
+  default_config_hash: aeVsVXt0RxZu41x65WKAPA-4RX6eD0YdrGw2F1BU_qQ
+name: 'Skate event'
+type: event
+description: 'A weekly Friday Night Skate event imported from the legacy site. Captures the event date, meeting point, status and the route being skated.'
+help: 'Create a skate event. Set the date and time (Europe/Amsterdam), pick the route, mark the status (confirmed / cancelled / tentative) and provide a hero image.'
+new_revision: true
+preview_mode: 1
+display_submitted: true

@@ -1,0 +1,21 @@
+uuid: 75fdd1de-65c3-450b-97a0-c2b1182bb2b0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_legacy_id
+    - node.type.news
+_core:
+  default_config_hash: zJTopVYiWbCdJyy22rjiUxZ0-tGHYJQBT2lPRv_7peo
+id: node.news.field_legacy_id
+field_name: field_legacy_id
+entity_type: node
+bundle: news
+label: 'Legacy ID'
+description: 'Stable identifier from the legacy v1 site, used for migration map lookup.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

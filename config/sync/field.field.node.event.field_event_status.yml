@@ -1,0 +1,25 @@
+uuid: 1de9b962-4694-4f80-897d-bdbe9f93a277
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_status
+    - node.type.event
+  module:
+    - options
+_core:
+  default_config_hash: 9wsqRRfO2dPmVMm750p1H4UyElgmJN_UiLL1YUfjApU
+id: node.event.field_event_status
+field_name: field_event_status
+entity_type: node
+bundle: event
+label: Status
+description: 'Whether the skate is confirmed, cancelled or still tentative. Reused by the newsletter pipeline.'
+required: true
+translatable: false
+default_value:
+  -
+    value: tentative
+default_value_callback: ''
+settings: {  }
+field_type: list_string

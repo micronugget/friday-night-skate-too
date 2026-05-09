@@ -15,6 +15,7 @@ dependencies:
   - drupal:options
   - drupal:link
   - drupal:text
+  - drupal:datetime
   - drupal:path_alias
   - geofield:geofield
   - redirect:redirect

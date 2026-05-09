@@ -1,0 +1,23 @@
+uuid: 424fd74b-17e7-40c3-a442-79f2bc5ef141
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_event_datetime
+    - node.type.event
+  module:
+    - datetime
+_core:
+  default_config_hash: GYrWxAHq8QZXNjb7YKteOHV6Sz8q4tloSPoagGdzlUU
+id: node.event.field_event_datetime
+field_name: field_event_datetime
+entity_type: node
+bundle: event
+label: 'Date and time'
+description: 'Date and time of the skate, in Europe/Amsterdam timezone. Defaults to 20:00 on the configured day.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime
