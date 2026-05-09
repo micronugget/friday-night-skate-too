@@ -4,10 +4,14 @@ migration_group: fns
 source:
   plugin: fns_page_html
   base_url: 'https://fridaynightskate.com'
-  index_path: /pages
-  page_query: page
-  first_page: 1
-  max_pages: 50
+  slugs:
+    - about
+    - contact
+    - faq
+    - privacy
+    - safety
+    - specials
+    - sponsors
 process:
   title: title
   field_legacy_id: id

@@ -25,7 +25,11 @@ use Symfony\Component\DomCrawler\Crawler;
  * Configuration keys (all optional, sensible defaults):
  *   base_url:    Origin of the legacy site. Default
  *                'https://fridaynightskate.com'.
- *   index_path:  Path of the paginated index. Default '/pages'.
+ *   slugs:       Optional explicit list of page slugs to fetch. When
+ *                provided the paginated index is skipped entirely and each
+ *                slug is fetched as `{base_url}/pages/{slug}`.
+ *   index_path:  Path of the paginated index. Default '/pages'. Ignored
+ *                when `slugs` is provided.
  *   page_query:  Query parameter used for pagination. Default 'page'.
  *   first_page:  First page number. Default 1.
  *   max_pages:   Hard cap on pages to walk (safety net). Default 50.
@@ -68,6 +72,13 @@ class FnsPageHtml extends SourcePluginBase implements ContainerFactoryPluginInte
   protected int $maxPages;
 
   /**
+   * Explicit slug list (bypasses index crawl when non-empty).
+   *
+   * @var string[]
+   */
+  protected array $slugs;
+
+  /**
    * Constructs a FnsPageHtml source plugin.
    *
    * @param array $configuration
@@ -94,6 +105,7 @@ class FnsPageHtml extends SourcePluginBase implements ContainerFactoryPluginInte
     $this->pageQuery = (string) ($configuration['page_query'] ?? self::DEFAULT_PAGE_QUERY);
     $this->firstPage = (int) ($configuration['first_page'] ?? 1);
     $this->maxPages = (int) ($configuration['max_pages'] ?? self::DEFAULT_MAX_PAGES);
+    $this->slugs = (array) ($configuration['slugs'] ?? []);
   }
 
   /**
@@ -145,11 +157,17 @@ class FnsPageHtml extends SourcePluginBase implements ContainerFactoryPluginInte
   /**
    * {@inheritdoc}
    *
-   * Walks the paginated index, then yields one parsed row per detail page.
+   * When `slugs` is configured, fetches each slug directly without crawling
+   * the paginated index. Otherwise walks the paginated index as before.
    * Every HTTP fetch goes through the cached {@see FnsHttpClient}, so a second
    * run replays disk-backed responses and never hits the network.
    */
   protected function initializeIterator(): \Iterator {
+    if ($this->slugs !== []) {
+      yield from $this->iterateSlugs();
+      return;
+    }
+
     $seen = [];
     $page = $this->firstPage;
     $walked = 0;
@@ -185,6 +203,21 @@ class FnsPageHtml extends SourcePluginBase implements ContainerFactoryPluginInte
 
       $page++;
       $walked++;
+    }
+  }
+
+  /**
+   * Iterate over the explicit slug list, fetching each detail page directly.
+   */
+  protected function iterateSlugs(): \Iterator {
+    foreach ($this->slugs as $slug) {
+      $slug = (string) $slug;
+      $detailUrl = $this->baseUrl . '/pages/' . ltrim($slug, '/');
+      $detailHtml = $this->httpClient->fetch($detailUrl, 'pages', $slug);
+      $row = $this->parseDetail($detailUrl, $slug, $detailHtml);
+      if ($row !== NULL) {
+        yield $row;
+      }
     }
   }
 

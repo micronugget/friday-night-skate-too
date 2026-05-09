@@ -65,8 +65,6 @@ class FnsPageMigrateTest extends MigrateTestBase {
     $fixtures = __DIR__ . '/../../fixtures/pages';
     $base = 'https://legacy.test';
     $stub = new FixturePageExecuteHttpClient([
-      $base . '/pages'          => $fixtures . '/index-1.html',
-      $base . '/pages?page=2'   => $fixtures . '/index-2.html',
       $base . '/pages/about'        => $fixtures . '/about.html',
       $base . '/pages/safety-guide' => $fixtures . '/safety-guide.html',
     ]);
@@ -80,6 +78,7 @@ class FnsPageMigrateTest extends MigrateTestBase {
     $migration = $this->getMigration('fns_page');
     $source = $migration->getSourceConfiguration();
     $source['base_url'] = 'https://legacy.test';
+    $source['slugs'] = ['about', 'safety-guide'];
     $migration->set('source', $source);
     $this->executeMigration($migration);
 
