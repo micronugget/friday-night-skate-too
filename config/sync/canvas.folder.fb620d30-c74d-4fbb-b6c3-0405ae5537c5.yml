@@ -10,8 +10,10 @@ items:
   - block.views_block.blog-all
   - block.views_block.blog-latest
   - block.views_block.blog-related
+  - block.views_block.content_recent-block_1
   - block.views_block.news-all
   - block.views_block.news-latest
   - block.views_block.news-related
   - block.views_block.person_profiles-all
   - block.views_block.recent_pages-block_recent_pages
+  - block.views_block.who_s_online-who_s_online_block
