@@ -1,0 +1,21 @@
+uuid: 53ff2302-06d4-4fcc-a3e4-67852fea1f3a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+_core:
+  default_config_hash: FIMfsa5Er9r4mHbFffx68vvmsqTSptz2Msalp1IDUt4
+id: node.field_route
+field_name: field_route
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

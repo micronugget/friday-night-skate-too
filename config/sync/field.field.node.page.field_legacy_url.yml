@@ -1,0 +1,25 @@
+uuid: 1a76a3fd-5d06-4592-a1d2-8e94568eb45e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_legacy_url
+    - node.type.page
+  module:
+    - link
+_core:
+  default_config_hash: JpBnqjwACagOX4e3TZIeX_G2_14JTLoJbsL6GXbOxPg
+id: node.page.field_legacy_url
+field_name: field_legacy_url
+entity_type: node
+bundle: page
+label: 'Legacy URL'
+description: 'Original URL on the legacy v1 site, used for redirect mapping.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 0
+field_type: link

@@ -1,0 +1,32 @@
+uuid: dda43394-482e-4640-80a3-5ff47bc763e2
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+_core:
+  default_config_hash: epwcsaWNGiCWlB49w_4BqHWAFIAhbIRtrAMDqXe8vxs
+id: node.field_event_status
+field_name: field_event_status
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: confirmed
+      label: Confirmed
+    -
+      value: cancelled
+      label: Cancelled
+    -
+      value: tentative
+      label: Tentative
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

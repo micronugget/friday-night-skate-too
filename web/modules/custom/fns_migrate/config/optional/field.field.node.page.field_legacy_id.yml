@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_legacy_id
+    - node.type.page
+id: node.page.field_legacy_id
+field_name: field_legacy_id
+entity_type: node
+bundle: page
+label: 'Legacy ID'
+description: 'Stable identifier from the legacy v1 site, used for migration map lookup.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

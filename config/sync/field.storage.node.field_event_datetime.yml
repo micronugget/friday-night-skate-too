@@ -1,0 +1,22 @@
+uuid: 81bacdbb-ef0c-4948-91f5-e3e93c5a12bc
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - node
+_core:
+  default_config_hash: VUyLJbpi02JnbJkCjnzjiuis8os8kEtFOq5ZRcqxxJQ
+id: node.field_event_datetime
+field_name: field_event_datetime
+entity_type: node
+type: datetime
+settings:
+  datetime_type: datetime
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

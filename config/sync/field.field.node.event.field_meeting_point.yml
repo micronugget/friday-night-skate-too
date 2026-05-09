@@ -1,0 +1,23 @@
+uuid: 7876157e-d562-4e3b-ae6a-9f6ca31b2d2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_meeting_point
+    - node.type.event
+  module:
+    - geofield
+_core:
+  default_config_hash: 1edvfd0JKhjSy-AcrYYkSg1uL6A2YprGeBMtJ4K-OYM
+id: node.event.field_meeting_point
+field_name: field_meeting_point
+entity_type: node
+bundle: event
+label: 'Meeting point'
+description: 'GPS coordinates of the meeting point. Defaults to Vondelpark when the source page does not specify one.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: geofield

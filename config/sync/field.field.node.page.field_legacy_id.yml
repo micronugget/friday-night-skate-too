@@ -1,0 +1,21 @@
+uuid: 4303fe0a-c860-4123-9db4-8c30dbdf28f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_legacy_id
+    - node.type.page
+_core:
+  default_config_hash: fZLj_8e33Mbk5hjfsPICGNZAh5pAvZgoJkeJjzcn9rY
+id: node.page.field_legacy_id
+field_name: field_legacy_id
+entity_type: node
+bundle: page
+label: 'Legacy ID'
+description: 'Stable identifier from the legacy v1 site, used for migration map lookup.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

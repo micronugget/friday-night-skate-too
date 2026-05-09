@@ -20,11 +20,6 @@ use Drupal\node\Entity\NodeType;
  * if missing and attach a bundle instance to the route content type.
  */
 function fns_migrate_install(): void {
-  $route = NodeType::load('route');
-  if ($route === NULL) {
-    return;
-  }
-
   // Ensure the shared node.body storage exists.
   $storage = FieldStorageConfig::loadByName('node', 'body');
   if ($storage === NULL) {
@@ -37,12 +32,17 @@ function fns_migrate_install(): void {
     $storage->save();
   }
 
-  // Attach a body instance to the route bundle.
-  $instance = FieldConfig::loadByName('node', 'route', 'body');
-  if ($instance === NULL) {
+  // Attach a body instance to each fns_migrate-shipped bundle that exists.
+  foreach (['route', 'event'] as $bundle) {
+    if (NodeType::load($bundle) === NULL) {
+      continue;
+    }
+    if (FieldConfig::loadByName('node', $bundle, 'body') !== NULL) {
+      continue;
+    }
     FieldConfig::create([
       'field_storage' => $storage,
-      'bundle' => 'route',
+      'bundle' => $bundle,
       'label' => 'Body',
       'settings' => [
         'display_summary' => TRUE,
