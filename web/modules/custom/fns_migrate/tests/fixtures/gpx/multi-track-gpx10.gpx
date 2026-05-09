@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="FNS Test"
+     xmlns="http://www.topografix.com/GPX/1/0">
+  <trk>
+    <name>Old Town Loop — Part 1</name>
+    <trkseg>
+      <trkpt lat="51.5100" lon="-0.1200"/>
+      <trkpt lat="51.5110" lon="-0.1190"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Old Town Loop — Part 2</name>
+    <trkseg>
+      <trkpt lat="51.5120" lon="-0.1180"/>
+      <trkpt lat="51.5130" lon="-0.1170"/>
+    </trkseg>
+  </trk>
+</gpx>
