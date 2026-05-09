@@ -233,7 +233,12 @@ class FnsRouteHtml extends SourcePluginBase implements ContainerFactoryPluginInt
     $path = parse_url($url, PHP_URL_PATH) ?: '';
     $tail = substr($path, strlen($this->indexPath . '/'));
     // A slug is a single path segment with no further slashes.
-    return $tail !== '' && !str_contains($tail, '/');
+    if ($tail === '' || str_contains($tail, '/')) {
+      return FALSE;
+    }
+    // Exclude known non-route landing pages that share the /routes/ prefix.
+    $excluded = ['collections', 'create', 'new'];
+    return !in_array(strtolower($tail), $excluded, TRUE);
   }
 
   /**
@@ -288,23 +293,13 @@ class FnsRouteHtml extends SourcePluginBase implements ContainerFactoryPluginInt
       'url' => $url,
       'title' => $title,
       'distance_km' => $this->extractDistanceKm($crawler),
-      'difficulty' => $this->firstText($crawler, [
-        '.route-difficulty',
-        '[data-field="difficulty"]',
-      ]),
-      'gpx_url' => $this->firstAttr($crawler, [
-        'a.route-gpx[href]',
-        'a[href$=".gpx"]',
-      ], 'href', TRUE),
-      'hero_image_url' => $this->firstAttr($crawler, [
-        '.route-hero img[src]',
-        'article img[src]',
-        'img[src]',
-      ], 'src', TRUE),
+      'difficulty' => $this->extractDifficulty($crawler),
+      'gpx_url' => $this->extractGpxUrl($crawler),
+      'hero_image_url' => $this->extractHeroImageUrl($crawler),
       'body_html' => $this->firstHtml($crawler, [
         '.route-body',
         'article .body',
-        'article',
+        '.route-description',
       ]),
       'collections' => $this->extractCollections($crawler),
     ];
@@ -384,21 +379,105 @@ class FnsRouteHtml extends SourcePluginBase implements ContainerFactoryPluginInt
    * a normalised float string (or '' when the value can't be parsed).
    */
   protected function extractDistanceKm(Crawler $crawler): string {
-    $candidates = [
+    // Modern markup: a generic <span>NN.NN km</span> sits in the meta row
+    // immediately after the H1. Fallback to legacy `.route-distance` etc.
+    $selectors = [
+      'h1 + div span',
       '.route-distance',
       '[data-field="distance"]',
       '.distance',
+      'main span',
     ];
-    foreach ($candidates as $selector) {
-      $text = $this->firstText($crawler, [$selector]);
-      if ($text === '') {
+    foreach ($selectors as $selector) {
+      $node = $crawler->filter($selector);
+      if ($node->count() === 0) {
         continue;
       }
-      if (preg_match('/(\d+(?:[.,]\d+)?)\s*km/i', $text, $m) === 1) {
-        return str_replace(',', '.', $m[1]);
+      foreach ($node as $domNode) {
+        $text = trim($domNode->textContent ?? '');
+        if (preg_match('/(\d+(?:[.,]\d+)?)\s*km/i', $text, $m) === 1) {
+          return str_replace(',', '.', $m[1]);
+        }
       }
     }
     return '';
+  }
+
+  /**
+   * Extract a 1-5 difficulty integer from the modern markup.
+   *
+   * The legacy site renders `<span title="Difficulty 3/5">…<span>3/5</span>`,
+   * so we read the title attribute first and the inner "N/5" text as fallback.
+   */
+  protected function extractDifficulty(Crawler $crawler): string {
+    // Legacy textual markup: <span class="route-difficulty">Easy</span>.
+    $legacy = $this->firstText($crawler, [
+      '.route-difficulty',
+      '[data-field="difficulty"]',
+    ]);
+    if ($legacy !== '') {
+      return $legacy;
+    }
+
+    // Modern markup: title="Difficulty 3/5" on the wrapper span.
+    $titled = $crawler->filter('[title^="Difficulty"]');
+    if ($titled->count() > 0) {
+      $title = (string) $titled->first()->attr('title');
+      if (preg_match('/(\d+)\s*\/\s*5/', $title, $m) === 1) {
+        return $m[1];
+      }
+    }
+
+    // Fallback: a literal "N/5" span anywhere in the document.
+    foreach ($crawler->filter('span') as $domNode) {
+      $text = trim($domNode->textContent ?? '');
+      if (preg_match('/^([1-5])\s*\/\s*5$/', $text, $m) === 1) {
+        return $m[1];
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Extract the GPX download URL.
+   *
+   * Modern markup exposes the URL on `[data-gpx]` and on a download anchor.
+   * Falls back to the legacy `a[href$=.gpx]` selector.
+   */
+  protected function extractGpxUrl(Crawler $crawler): string {
+    $selectors = [
+      ['[data-gpx]', 'data-gpx'],
+      ['a[href$=".gpx"]', 'href'],
+      ['a.route-gpx[href]', 'href'],
+    ];
+    foreach ($selectors as [$selector, $attr]) {
+      $node = $crawler->filter($selector);
+      if ($node->count() > 0) {
+        $value = (string) $node->first()->attr($attr);
+        if ($value !== '') {
+          return $this->absolutize($value);
+        }
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Extract the hero image URL (preferring the og:image meta tag).
+   */
+  protected function extractHeroImageUrl(Crawler $crawler): string {
+    $og = $crawler->filter('meta[property="og:image"]');
+    if ($og->count() > 0) {
+      $content = (string) $og->first()->attr('content');
+      if ($content !== '') {
+        return $this->absolutize($content);
+      }
+    }
+    return $this->firstAttr($crawler, [
+      '.route-hero img[src]',
+      'article img[src]',
+      'main img[src]',
+    ], 'src', TRUE);
   }
 
   /**

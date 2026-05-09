@@ -44,10 +44,10 @@ v1 contains proven implementations of `videojs_media`, `fns_archive`, `skating_v
 All issues use a standard GitHub flow:
 
 ```bash
-git checkout master && git pull origin master && git checkout -b issue/$N-<slug>
+git checkout main && git pull origin main && git checkout -b issue/$N-<slug>
 ```
 
-PR target: `master` on GitHub via `gh pr create --base master`.
+PR target: `main` on GitHub via `gh pr create --base main`.
 
 **Branch naming:** `issue/$N-<slug>` where `$N` is the issue number and `<slug>` is a short kebab-case title.
 
@@ -61,7 +61,7 @@ Before writing any code for an issue:
 3. **Diff v1 vs v2** — identify what is missing, changed, or needs porting.
 4. **Work only in v2.**
 5. **Do not alter v1** under any circumstance.
-6. **Branch off `master`** for all issues.
+6. **Branch off `main`** for all issues.
 
 ---
 
@@ -155,6 +155,59 @@ Read these before working in their respective areas:
 |------|------|
 | Custom modules (`videojs_media`, `fns_archive`, `skating_video_uploader`) | `.junie/instructions/custom-modules.md` |
 | `fridaynightskate` theme | `.junie/instructions/theme-fridaynightskate.md` |
+
+---
+
+## How Junie Makes Changes — and What You Need to Save
+
+This section explains exactly where every type of change lands so you always know what to commit.
+
+### The two places changes live
+
+| Where | What lives there | How to persist it |
+|-------|-----------------|-------------------|
+| **Filesystem files** (PHP, YAML, JS, CSS, templates, migration YAMLs, test fixtures) | Custom module code, migration definitions, theme files, test files | Already in git — `git add` + `git commit` as normal |
+| **Drupal database** (MariaDB inside DDEV) | Active configuration, content, enabled modules, field definitions, pathauto patterns, views, blocks, menus | Must be exported with `ddev drush cex` before committing |
+
+### What Junie does — and what it touches
+
+**Writing PHP/YAML/JS files directly** (via the file editor tools)
+- Changes land on disk immediately as tracked or untracked git files.
+- `git status` will show them as modified or new.
+- No `ddev drush cex` needed — these are already code.
+- You commit them with `git add … && git commit`.
+
+**Running `ddev drush cim -y`** (importing config from `config/sync/` into the DB)
+- Reads YAML files from `config/sync/` and writes them into the live database.
+- The filesystem files are unchanged; the DB is now in sync with them.
+- No extra export step needed unless you then make further UI changes.
+
+**Running `ddev drush cex -y`** (exporting config from DB into `config/sync/`)
+- Reads the live database and writes/updates YAML files in `config/sync/`.
+- These files then appear as modified or new in `git status`.
+- You must `git add config/sync/ && git commit` to persist them.
+
+**Running `ddev drush mim` / `ddev drush mr`** (migrate import / rollback)
+- Creates or deletes *content* (nodes, media, files, taxonomy terms) in the DB.
+- Does **not** touch `config/sync/` — no export needed.
+- The migration YAML definitions themselves are filesystem files already in git.
+
+**Running `ddev drush en <module>`** (enabling a module)
+- Writes to the DB (marks module enabled, may install default config).
+- Any new config objects the module installs will appear as untracked files after `ddev drush cex`.
+- Always run `ddev drush cex` after enabling a module and commit the result.
+
+**Making changes via the Drupal admin UI** (e.g. creating a view, editing a pathauto pattern)
+- Changes land only in the DB — nothing on disk changes.
+- You **must** run `ddev drush cex` to export them to `config/sync/` before committing.
+
+### The golden rule
+
+> Any time the Drupal database changes — via `ddev drush cim`, enabling a module, or using the admin UI — always follow up with `ddev drush cex` and commit `config/sync/`.
+
+### Why the working tree sometimes gets dirty unexpectedly
+
+Drupal's config system re-normalises config objects when it re-saves them (e.g. after a module update adds a new schema field, or `cim` resolves dependencies). This causes on-disk YAML files to differ from what was last committed even though *you* didn't touch them. The fix is always the same: `ddev drush cex -y && git add config/sync/ && git commit -m "chore: sync config normalisation"`.
 
 ---
 
