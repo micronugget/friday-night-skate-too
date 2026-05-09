@@ -1,0 +1,55 @@
+id: fns_media
+label: 'FNS: Legacy /media page → media entities + article nodes'
+migration_group: fns
+
+# Why: the /media page is a mixed gallery. The source plugin classifies each
+# item into a bundle type (image | youtube | local_video | remote_video | press)
+# so the process pipeline can route rows to the correct destination entity.
+# Press items (bundle = press) are handled by a separate sub-migration
+# (fns_media_press) to keep destination plugins clean.
+
+source:
+  plugin: fns_media_html
+  base_url: 'https://fridaynightskate.com'
+  index_path: /media
+
+process:
+  # Stable legacy identifier — stored for rollback and re-import idempotency.
+  field_legacy_id: id
+
+  # The source URL of the original item (album, video, or article).
+  field_legacy_url: url
+
+  # Title / caption of the item.
+  name: title
+
+  # Thumbnail / hero image URL — stored as a plain text field so editors can
+  # decide whether to fetch the bytes into managed files later.
+  # Why: Facebook CDN URLs are session-scoped and may expire; we record the
+  # URL at migration time and let editors re-fetch if needed.
+  field_thumbnail_url: thumbnail_url
+
+  # Direct media URL (YouTube link or video file URL).
+  field_media_url: media_url
+
+  # Author / photographer credit.
+  field_author: author
+
+  # Source label (e.g. "Facebook", "AT5").
+  field_source_label: source_label
+
+  # Bundle routing: the source plugin sets `bundle` to one of the values below.
+  # The destination plugin uses `default_bundle` as a fallback; individual
+  # bundle overrides are handled by running separate derivative migrations per
+  # bundle type if finer-grained control is needed in future.
+
+destination:
+  # Why: most /media items are media entities (image or videojs_media bundles).
+  # Press items (bundle = press) should be migrated via fns_media_press instead.
+  plugin: entity:media
+  default_bundle: image
+
+migration_dependencies:
+  required: []
+  optional:
+    - fns_media_press
