@@ -1,0 +1,107 @@
+id: fns_routes
+label: 'FNS: Legacy routes → node/route'
+migration_group: fns
+
+source:
+  plugin: fns_route_html
+  base_url: 'https://fridaynightskate.com'
+  index_path: /routes
+  page_query: page
+  first_page: 1
+  max_pages: 50
+  constants:
+    route_alias_prefix: '/route/'
+
+process:
+  type:
+    plugin: default_value
+    default_value: route
+
+  title: title
+
+  'body/value': body_html
+  'body/format':
+    plugin: default_value
+    default_value: full_html
+
+  field_distance_km:
+    plugin: skip_on_empty
+    method: process
+    source: distance_km
+
+  field_difficulty:
+    plugin: skip_on_empty
+    method: process
+    source: difficulty
+
+  # Resolve the GPX file id (created by `fns_route_gpx_files`).
+  'field_gpx_file/target_id':
+    plugin: migration_lookup
+    migration: fns_route_gpx_files
+    source: slug
+
+  # `gpx_to_geofield` expects a real filesystem path. Resolve the file id
+  # we just looked up to a real path before handing it off.
+  _gpx_file_path:
+    -
+      plugin: migration_lookup
+      migration: fns_route_gpx_files
+      source: slug
+    -
+      plugin: file_id_to_realpath
+
+  field_track_geometry:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: '@_gpx_file_path'
+    -
+      plugin: gpx_to_geofield
+      source: '@_gpx_file_path'
+
+  # Hero image media reference.
+  'field_hero_image/target_id':
+    plugin: migration_lookup
+    migration: fns_route_hero_media
+    source: slug
+
+  # Route collections (taxonomy terms migrated by `fns_route_collections`).
+  field_collections:
+    plugin: entity_lookup
+    entity_type: taxonomy_term
+    value_key: name
+    bundle_key: vid
+    bundle: route_collection
+    source: collections
+
+  # Legacy URL preserved on the node so we can build redirect maps later.
+  'field_legacy_url/uri': url
+  'field_legacy_url/title': title
+
+  field_legacy_id: id
+
+  # Path alias mirrors the legacy `/route/<slug>` shape. Disable pathauto so
+  # our explicit alias is not overwritten by the default node pattern.
+  'path/alias':
+    plugin: concat
+    source:
+      - constants/route_alias_prefix
+      - slug
+  'path/pathauto':
+    plugin: default_value
+    default_value: 0
+
+  status:
+    plugin: default_value
+    default_value: 1
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: route
+
+migration_dependencies:
+  required:
+    - fns_route_collections
+    - fns_route_gpx_files
+    - fns_route_hero_media
+  optional: []

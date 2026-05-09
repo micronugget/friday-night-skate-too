@@ -1,0 +1,60 @@
+id: fns_route_gpx_files
+label: 'FNS: Legacy route GPX files → managed File entities'
+migration_group: fns
+
+# Reuses the canonical route source plugin so pagination, caching and parsing
+# logic live in one place. Rows without a `gpx_url` are skipped (some legacy
+# routes never published a downloadable track).
+source:
+  plugin: fns_route_html
+  base_url: 'https://fridaynightskate.com'
+  index_path: /routes
+  page_query: page
+  first_page: 1
+  max_pages: 50
+  constants:
+    destination_dir: 'private://routes/gpx/'
+    extension: '.gpx'
+
+process:
+  # Skip rows that have no GPX download advertised on the legacy detail page.
+  _skip_no_gpx:
+    plugin: skip_on_empty
+    method: row
+    source: gpx_url
+
+  # Compose the destination URI: `private://routes/gpx/<slug>.gpx`.
+  uri:
+    plugin: concat
+    source:
+      - constants/destination_dir
+      - slug
+      - constants/extension
+
+  filename:
+    plugin: concat
+    source:
+      - slug
+      - constants/extension
+
+  # Download (or copy from cache) the source GPX into `private://routes/gpx/`.
+  # `file_copy` is provided by the `migrate_file` contrib module.
+  destination_full_path:
+    plugin: file_copy
+    source:
+      - gpx_url
+      - '@uri'
+    file_exists: replace
+    move: false
+
+  status:
+    plugin: default_value
+    default_value: 1
+
+destination:
+  plugin: 'entity:file'
+  source_path_property: destination_full_path
+
+migration_dependencies:
+  required: []
+  optional: []
