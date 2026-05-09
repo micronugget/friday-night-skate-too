@@ -33,7 +33,7 @@ function fns_migrate_install(): void {
   }
 
   // Attach a body instance to each fns_migrate-shipped bundle that exists.
-  foreach (['route', 'event'] as $bundle) {
+  foreach (['route', 'event', 'news', 'page'] as $bundle) {
     if (NodeType::load($bundle) === NULL) {
       continue;
     }
