@@ -1,0 +1,21 @@
+id: fns_route_collections
+label: 'FNS: Legacy route collections → taxonomy/route_collection'
+migration_group: fns
+source:
+  plugin: fns_route_collections_html
+  base_url: 'https://fridaynightskate.com'
+  index_path: /routes/collections
+process:
+  vid:
+    plugin: default_value
+    default_value: route_collection
+  name: name
+  description/value: description
+  description/format:
+    plugin: default_value
+    default_value: plain_text
+destination:
+  plugin: 'entity:taxonomy_term'
+migration_dependencies:
+  required: []
+  optional: []
