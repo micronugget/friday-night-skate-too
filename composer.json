@@ -96,7 +96,12 @@
         "optimize-autoloader": true,
         "audit": {
             "ignore": {
-                "PKSA-dwsq-ppd2-mb1x": "symfony/polyfill-intl-idn v1.37.0 IDN bypass (CVE-2026-46644); low risk in this context, blocked by Drupal 11.3.10 pin. Remove when Drupal bumps polyfill constraint."
+                "PKSA-dwsq-ppd2-mb1x": "symfony/polyfill-intl-idn v1.37.0 IDN bypass (CVE-2026-46644); low risk in this context, blocked by Drupal 11.3.10 pin. Remove when Drupal bumps polyfill constraint.",
+                "PKSA-fbvq-z33h-r2np": "twig/twig v3.26.0 sandbox-related advisory; Drupal does not expose Twig sandbox to untrusted templates. Blocked by Drupal 11.3.10 pin (~v3.26.0). Remove when Drupal bumps twig constraint.",
+                "PKSA-g9zw-qxh8-pq8w": "twig/twig v3.26.0 sandbox-related advisory; Drupal does not expose Twig sandbox to untrusted templates. Blocked by Drupal 11.3.10 pin (~v3.26.0). Remove when Drupal bumps twig constraint.",
+                "PKSA-yd6k-t2gh-1m43": "twig/twig v3.26.0 sandbox-related advisory; Drupal does not expose Twig sandbox to untrusted templates. Blocked by Drupal 11.3.10 pin (~v3.26.0). Remove when Drupal bumps twig constraint.",
+                "PKSA-1tmc-rt7x-12w6": "twig/twig v3.26.0 sandbox-related advisory; Drupal does not expose Twig sandbox to untrusted templates. Blocked by Drupal 11.3.10 pin (~v3.26.0). Remove when Drupal bumps twig constraint.",
+                "PKSA-xx6c-6d96-db2w": "twig/twig v3.26.0 sandbox-related advisory; Drupal does not expose Twig sandbox to untrusted templates. Blocked by Drupal 11.3.10 pin (~v3.26.0). Remove when Drupal bumps twig constraint."
             }
         }
     },
