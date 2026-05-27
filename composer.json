@@ -93,7 +93,12 @@
         },
         "bin-dir": "vendor/bin",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "audit": {
+            "ignore": {
+                "PKSA-dwsq-ppd2-mb1x": "symfony/polyfill-intl-idn v1.37.0 IDN bypass (CVE-2026-46644); low risk in this context, blocked by Drupal 11.3.10 pin. Remove when Drupal bumps polyfill constraint."
+            }
+        }
     },
     "extra": {
         "drupal-scaffold": {
